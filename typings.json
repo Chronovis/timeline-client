@@ -1,0 +1,11 @@
+{
+  "globalDependencies": {
+    "bluebird": "registry:dt/bluebird#2.0.0+20160701023356",
+    "form-data": "registry:dt/form-data#0.0.0+20160724024111",
+    "node": "registry:dt/node#6.0.0+20160720070758",
+    "request": "registry:dt/request#0.0.0+20160724024111",
+    "request-promise": "registry:dt/request-promise#3.0.0+20160628092802",
+    "rsync": "registry:dt/rsync#0.4.0+20160112131024",
+    "sax": "registry:dt/sax#0.0.0+20160316155526"
+  }
+}

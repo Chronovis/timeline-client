@@ -1,0 +1,22 @@
+# ~/.tmuxinator/project.yml
+
+name: project
+root: ~/timeline-client
+tmux_command: tmux -2
+windows:
+  - server:
+      layout: even-horizontal
+      panes:
+        - npm run watch
+        - node dist/index.js
+      root: ~/timeline-server
+  - psql:
+      layout: even-horizontal
+      panes:
+        - psql -U docker -h db
+      root: ~/timeline-server
+  - client:
+      layout: even-horizontal
+      panes:
+        - npm start
+        - npm run watch
