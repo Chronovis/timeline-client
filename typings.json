@@ -1,11 +1,13 @@
 {
   "globalDependencies": {
-    "bluebird": "registry:dt/bluebird#2.0.0+20160701023356",
-    "form-data": "registry:dt/form-data#0.0.0+20160724024111",
-    "node": "registry:dt/node#6.0.0+20160720070758",
-    "request": "registry:dt/request#0.0.0+20160724024111",
-    "request-promise": "registry:dt/request-promise#3.0.0+20160628092802",
-    "rsync": "registry:dt/rsync#0.4.0+20160112131024",
-    "sax": "registry:dt/sax#0.0.0+20160316155526"
+    "react": "registry:dt/react#0.14.0+20160801203155",
+    "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
+    "react-redux": "registry:dt/react-redux#4.4.0+20160724070751",
+    "react-router": "registry:dt/react-router#2.0.0+20160621215300",
+    "react-router-redux": "registry:dt/react-router-redux#4.0.0+20160724070902",
+    "react-router/history": "registry:dt/react-router/history#2.0.0+20160608102730",
+    "redux": "registry:dt/redux#3.5.2+20160703092728",
+    "redux-thunk": "registry:dt/redux-thunk#2.1.0+20160703120921",
+    "whatwg-fetch": "registry:dt/whatwg-fetch#0.0.0+20160728142841"
   }
 }

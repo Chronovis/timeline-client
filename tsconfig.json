@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "module": "commonjs",
     "outDir": "dist",
     "removeComments": true,
@@ -10,12 +11,21 @@
     "node_modules"
   ],
   "filesGlob": [
-    "src/**/*.tsx",
-    "typings/index.d.ts"
+    "typings/index.d.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx"
   ],
   "files": [
+    "typings/index.d.ts",
+    "src/interfaces/interfaces.d.ts",
+    "src/actions/events.tsx",
+    "src/app.tsx",
     "src/index.tsx",
-    "typings/index.d.ts"
+    "src/reducers/events.tsx",
+    "src/reducers/index.tsx",
+    "src/routes/history.tsx",
+    "src/routes/index.tsx",
+    "src/store/index.tsx"
   ],
   "atom": {
     "rewriteTsconfig": true
