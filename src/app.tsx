@@ -4,11 +4,11 @@ import { getEvents } from './actions/events';
 import { Link } from 'react-router';
 
 interface IEventsProps {
-	parent: {},
-	events: Array<any>,
-	getEvents: (string) => void,
-	routeParams: { slug: string },
-};
+	events: IEvent[];
+	getEvents: (slug: string) => void;
+	root: IEvent;
+	routeParams: { slug: string };
+}
 
 class Events extends React.Component<IEventsProps, {}> {
 	public componentDidMount() {
@@ -24,7 +24,7 @@ class Events extends React.Component<IEventsProps, {}> {
 	public render() {
 		return (
 			<div className="events">
-				<h1>Timeline of {this.props.parent}</h1>
+				<h1>Timeline of {this.props.root.title}</h1>
 				{
 					this.props.events.map((event, i) =>
 						<li key={i}>
@@ -38,8 +38,8 @@ class Events extends React.Component<IEventsProps, {}> {
 
 export default connect(
 	state => ({
-		parent: state.events.parent,
 		events: state.events.events,
+		root: state.events.root,
 	}),
 	{
 		getEvents,

@@ -8,8 +8,9 @@
   "scripts": {
     "build": "scripts/build.sh",
     "prepublish": "typings install && npm run build",
-    "watch": "watchify src/index.tsx -p tsify -o dist/index.js -v"
+    "watch": "watchify src/index.ts -p tsify -o dist/index.js -v"
   },
+  "types": "src/interfaces/interfaces.d.ts",
   "devDependencies": {
     "browserify": "^13.1.0",
     "tsify": "^1.0.3",

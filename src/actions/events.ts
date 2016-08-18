@@ -2,20 +2,20 @@ import 'whatwg-fetch';
 
 export const getEvents = (slug: string) => (dispatch, getState) =>
 	fetch('/api/events', {
-		method: 'POST',
+		body: JSON.stringify({
+			event: slug,
+		}),
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({
-			event: slug,
-		}),
+		method: 'POST',
 	})
 		.then((response) => response.json())
-		.then(({ parent, children }) =>
+		.then(({ root, events }) =>
 			dispatch({
+				events,
+				root,
 				type: 'RECEIVE_EVENTS',
-				parent,
-				children
 			})
 		);

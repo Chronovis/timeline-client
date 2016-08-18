@@ -13,19 +13,20 @@
   "filesGlob": [
     "typings/index.d.ts",
     "src/**/*.d.ts",
-    "src/**/*.tsx"
+    "src/**/*.tsx",
+    "src/**/*.ts"
   ],
   "files": [
-    "typings/index.d.ts",
-    "src/interfaces/interfaces.d.ts",
-    "src/actions/events.tsx",
+    "src/actions/events.ts",
     "src/app.tsx",
-    "src/index.tsx",
-    "src/reducers/events.tsx",
-    "src/reducers/index.tsx",
-    "src/routes/history.tsx",
+    "src/index.ts",
+    "src/reducers/events.d.ts",
+    "src/reducers/events.ts",
+    "src/reducers/index.ts",
+    "src/routes/history.ts",
     "src/routes/index.tsx",
-    "src/store/index.tsx"
+    "src/store/index.ts",
+    "typings/index.d.ts"
   ],
   "atom": {
     "rewriteTsconfig": true
