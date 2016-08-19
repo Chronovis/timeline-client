@@ -14,7 +14,7 @@ export default (state = defaultState, action) => {
 	switch (action.type) {
 		case 'RECEIVE_EVENTS': {
 			nextState = {
-				events: action.children,
+				events: action.events,
 				root: action.root,
 			};
 			break;

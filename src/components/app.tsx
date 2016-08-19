@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { getEvents } from './actions/events';
+import { getEvents } from '../actions/events';
 import { Link } from 'react-router';
+import Timeline from './timeline';
 
 interface IEventsProps {
 	events: IEvent[];
@@ -22,15 +23,18 @@ class Events extends React.Component<IEventsProps, {}> {
 	}
 
 	public render() {
+		const { root, events } = this.props;
+
 		return (
 			<div className="events">
-				<h1>Timeline of {this.props.root.title}</h1>
+				<h1>Timeline of {root.title}</h1>
 				{
-					this.props.events.map((event, i) =>
+					events.map((event, i) =>
 						<li key={i}>
 							<Link to={`/timelines/${event.slug}`}>{event.title}</Link>
 						</li>)
 				}
+				<Timeline root={root} />
 			</div>
 		);
 	}
