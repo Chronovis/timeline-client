@@ -8,7 +8,8 @@
   "scripts": {
     "build": "scripts/build.sh",
     "prepublish": "typings install && npm run build",
-    "watch": "watchify src/index.ts -p tsify -o dist/js/index.js -v",
+    "watch-typescript": "watchify src/index.ts -p tsify -o dist/js/index.js -v",
+    "watch-stylus": "stylus --watch --out ./dist/css/index.css ./src/index.styl",
     "server": "scripts/server.js"
   },
   "types": "src/interfaces/interfaces.d.ts",
@@ -33,6 +34,7 @@
     "react-router-redux": "^4.0.5",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
+    "stylus": "^0.54.5",
     "typescript": "^2.1.0-dev.20160803",
     "whatwg-fetch": "^1.0.0"
   }
