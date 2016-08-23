@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "build/server",
+    "removeComments": true,
+    "target": "es6",
+    "rootDir": "src/server"
+  }
+}

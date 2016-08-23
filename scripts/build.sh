@@ -1,8 +1,6 @@
 #! /bin/bash
 
-rm -rf dist
-mkdir -p dist/js
-mkdir dist/css
-browserify src/index.ts -p tsify -o dist/js/index.js
-
-cp -r static/* dist/
+rm -rf build
+mkdir -p build/server build/client/js build/client/css
+browserify src/client/index.ts -p tsify -o build/client/js/index.js
+cp -r static/* build/client/
