@@ -1,9 +1,16 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "outDir": "build/server",
+    "outDir": "../../build/server",
     "removeComments": true,
-    "target": "es6",
-    "rootDir": "src/server"
-  }
+    "target": "es6"
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "./index.ts",
+    "./parse-event.ts",
+    "../../typings/index.d.ts"
+  ]
 }

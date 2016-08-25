@@ -2,33 +2,16 @@
   "compilerOptions": {
     "jsx": "react",
     "module": "commonjs",
-    "outDir": "../.",
+    "outDir": "../../build/client",
     "removeComments": true,
     "target": "es6"
   },
-  "compileOnSave": true,
   "exclude": [
-    "../."
-  ],
-  "filesGlob": [
-    "typings/index.d.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.ts"
+    "node_modules"
   ],
   "files": [
-    "actions/events.ts",
-    "src/client/components/app.tsx",
-    "src/client/index.ts",
-    "src/client/reducers/events.d.ts",
-    "src/client/reducers/events.ts",
-    "src/client/reducers/index.ts",
-    "src/client/routes/history.ts",
-    "src/client/routes/index.tsx",
-    "src/client/store/index.ts",
-    "typings/index.d.ts"
-  ],
-  "atom": {
-    "rewriteTsconfig": true
-  }
+    "index.ts",
+    "./reducers/events.d.ts",
+    "../../typings/index.d.ts"
+  ]
 }

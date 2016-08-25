@@ -6,7 +6,7 @@ var debounce = require('lodash.debounce');
 var proxy = require('proxy-middleware');
 var url = require('url');
 
-var baseDir = './dist';
+var baseDir = './build/client';
 var watchFiles = [
 	baseDir + '/js/*.js',
 	baseDir + '/css/*.css',

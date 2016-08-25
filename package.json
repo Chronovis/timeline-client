@@ -8,9 +8,12 @@
   "scripts": {
     "build": "scripts/build.sh",
     "prepublish": "typings install && npm run build",
-    "watch-typescript": "watchify src/index.ts -p tsify -o dist/js/index.js -v",
-    "watch-stylus": "stylus --watch --out ./dist/css/index.css ./src/index.styl",
-    "server": "scripts/server.js"
+    "watch-client": "watchify src/client/index.ts -p [ tsify --project src/client/tsconfig.json ] -o build/client/js/index.js -v",
+    "watch-stylus": "stylus --watch --out ./build/client/css/index.css ./src/client/index.styl",
+    "client-server": "scripts/server.js",
+    "watch-server": "tsc -w -p src/server/",
+    "server": "node build/server",
+    "database": "docker run --rm -e POSTGRES_USER=docker -e POSTGRES_PASSWORD=docker -e PGDATA=/pgdata -v timeline-data:/pgdata -p 5432:5432 gijsjan/postgresql:1.0"
   },
   "types": "src/interfaces/interfaces.d.ts",
   "devDependencies": {
@@ -19,9 +22,10 @@
     "connect-modrewrite": "^0.9.0",
     "lodash.debounce": "^4.0.8",
     "proxy-middleware": "^0.15.0",
+    "stylus": "^0.54.5",
     "tsify": "^1.0.3",
     "tslint": "^3.13.0",
-    "typescript": "^1.8.10",
+    "typescript": "^2.0.0",
     "typings": "^1.3.2",
     "url": "^0.11.0",
     "watchify": "^3.7.0"
@@ -37,8 +41,6 @@
     "react-router-redux": "^4.0.5",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
-    "stylus": "^0.54.5",
-    "typescript": "^2.1.0-dev.20160803",
     "whatwg-fetch": "^1.0.0"
   }
 }
