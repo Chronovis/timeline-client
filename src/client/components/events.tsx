@@ -1,16 +1,26 @@
 import * as React from 'react';
+import * as cx from 'classnames';
 import { Link } from 'react-router';
 import { countDays, countDaysInRange } from '../utils/dates';
 
-const PointInTime = ({ event, root, pixelsPerDay }) =>
-	<li
-		className="point-in-time"
-		style={{
-				left: `${countDays(root.dateRange.from, event.date != null ? event.date : event.dateUncertain.from) * pixelsPerDay}px`,
-			}}
-	>
-		{event.title}
-	</li>;
+const PointInTime = ({ clientWidth, event, root, pixelsPerDay }) => {
+	const toDate =  event.date != null ? event.date : event.dateUncertain.from;
+	const left = countDays(root.dateRange.from, toDate) * pixelsPerDay;
+	const flip = left > (clientWidth - 240);
+	const style = flip ?
+		{ right: `${clientWidth - left }px`} :
+		{ left: `${left}px` };
+
+	return (
+		<li
+			className={cx('point-in-time', { flip }, event.types)}
+			style={style}
+			title={event.title}
+		>
+			{event.title}
+		</li>
+	);
+};
 
 const IntervalOfTime = ({ event, root, pixelsPerDay }) => {
 	return (
@@ -20,6 +30,7 @@ const IntervalOfTime = ({ event, root, pixelsPerDay }) => {
 				left: `${countDays(root.dateRange.from, event.dateRange.from) * pixelsPerDay}px`,
 				width: `${countDaysInRange(event.dateRange) * pixelsPerDay}px`,
 			}}
+			title={event.title}
 		>
 			<Link to={`/timelines/${event.slug}`}>{event.title}</Link>
 		</li>
@@ -35,18 +46,19 @@ interface IEventsState {
 	pixelsPerDay: number;
 }
 
-// TODO width of <ul class="events"> is 95% of clientWidth
-const pixelsPerDay = (root: IEvent): number => {
-	const clientWidth = document.documentElement.clientWidth;
+const pixelsPerDay = (root: IEvent, clientWidth: number): number => {
 	const daysCount = countDaysInRange(root.dateRange);
-
 	return clientWidth / daysCount;
 };
 
 class Events extends React.Component<IEventsProps, IEventsState> {
-	public state = {
-		pixelsPerDay: pixelsPerDay(this.props.root),
-	};
+	public state = (() => {
+		const clientWidth = document.documentElement.clientWidth * 0.98;
+		return ({
+			clientWidth,
+			pixelsPerDay: pixelsPerDay(this.props.root, clientWidth),
+		});
+	})();
 
 	public render() {
 		const { events, root } = this.props;
