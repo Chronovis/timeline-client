@@ -3,6 +3,7 @@ import { Router, Route } from 'react-router';
 import { Provider } from 'react-redux';
 import store from '../store';
 import App from '../components/app';
+import AddEvent from '../components/add-event';
 import history from './history';
 
 export default (
@@ -12,6 +13,10 @@ export default (
 				component={App}
 				path="/timelines/:slug"
 			>
+				<Route
+					component={AddEvent}
+					path="add-event"
+				/>
 			</Route>
 		</Router>
 	</Provider>

@@ -22,13 +22,9 @@ class Events extends React.Component<IEventsProps, {}> {
 	}
 
 	public render() {
-		const { root, events } = this.props;
+		const { children, events, root } = this.props;
 
-		return (
-			<div className="events">
-				<Timeline root={root} events={events} />
-			</div>
-		);
+		return <Timeline root={root} events={events} children={children}/>;
 	}
 }
 

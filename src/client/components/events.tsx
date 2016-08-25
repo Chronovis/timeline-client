@@ -3,12 +3,14 @@ import * as cx from 'classnames';
 import { Link } from 'react-router';
 import { countDays, countDaysInRange } from '../utils/dates';
 
-const PointInTime = ({ clientWidth, event, root, pixelsPerDay }) => {
+const eventsWidth = (): number => document.documentElement.clientWidth * 0.98;
+
+const PointInTime = ({ event, root, pixelsPerDay }) => {
 	const toDate =  event.date != null ? event.date : event.dateUncertain.from;
 	const left = countDays(root.dateRange.from, toDate) * pixelsPerDay;
-	const flip = left > (clientWidth - 240);
+	const flip = left > (eventsWidth() - 240);
 	const style = flip ?
-		{ right: `${clientWidth - left }px`} :
+		{ right: `${eventsWidth() - left }px`} :
 		{ left: `${left}px` };
 
 	return (
@@ -46,19 +48,23 @@ interface IEventsState {
 	pixelsPerDay: number;
 }
 
-const pixelsPerDay = (root: IEvent, clientWidth: number): number => {
+const pixelsPerDay = (root: IEvent): number => {
 	const daysCount = countDaysInRange(root.dateRange);
-	return clientWidth / daysCount;
+	return eventsWidth() / daysCount;
 };
 
 class Events extends React.Component<IEventsProps, IEventsState> {
 	public state = (() => {
-		const clientWidth = document.documentElement.clientWidth * 0.98;
 		return ({
-			clientWidth,
-			pixelsPerDay: pixelsPerDay(this.props.root, clientWidth),
+			pixelsPerDay: pixelsPerDay(this.props.root),
 		});
 	})();
+
+	public componentWillReceiveProps(nextProps) {
+		this.setState({
+			pixelsPerDay: pixelsPerDay(nextProps.root),
+		});
+	}
 
 	public render() {
 		const { events, root } = this.props;

@@ -1,10 +1,12 @@
 import * as React from 'react';
+import { Link } from 'react-router';
 import { formatDateInDaterange } from '../utils/dates';
 import Events from './events';
 
 interface ITimelineProps {
-	root: IEvent;
+	children?: any;
 	events: IEvent[];
+	root: IEvent;
 }
 
 interface ITimelineState {
@@ -13,7 +15,7 @@ interface ITimelineState {
 
 class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 	public render() {
-		const { root } = this.props;
+		const { children, root } = this.props;
 
 		if (root.title === '') return null;
 
@@ -22,9 +24,13 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 				<header>
 					<div className="pre-title">TIMELINE OF</div>
 					<h2>{root.title}</h2>
+					<Link to={`/timelines/${root.slug}/add-event`}>+</Link>
 					<div className="from">{formatDateInDaterange(root.dateRange, 'from')}</div>
 					<div className="to">{formatDateInDaterange(root.dateRange, 'to')}</div>
 				</header>
+				<div className="chil">
+					{children}
+				</div>
 				<Events {...this.props} />
 			</div>
 		);

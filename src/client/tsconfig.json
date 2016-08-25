@@ -11,6 +11,7 @@
   ],
   "files": [
     "index.ts",
+    "index.d.ts",
     "./reducers/events.d.ts",
     "../../typings/index.d.ts"
   ]

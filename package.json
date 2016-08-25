@@ -8,7 +8,7 @@
   "scripts": {
     "build": "scripts/build.sh",
     "prepublish": "typings install && npm run build",
-    "watch-client": "watchify src/client/index.ts -p [ tsify --project src/client/tsconfig.json ] -o build/client/js/index.js -v",
+    "watch-client": "watchify src/client/index.ts -p [ tsify --project src/client/tsconfig.json ] -o build/client/js/index.js --external react --external react-dom --external classnames --external react-router -v",
     "watch-stylus": "stylus --watch --out ./build/client/css/index.css ./src/client/index.styl",
     "client-server": "scripts/server.js",
     "watch-server": "tsc -w -p src/server/",
@@ -34,6 +34,7 @@
     "body-parser": "^1.15.2",
     "classnames": "^2.2.5",
     "express": "^4.14.0",
+    "hire-forms-input": "^2.1.0",
     "pg": "^6.1.0",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
