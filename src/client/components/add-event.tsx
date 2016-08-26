@@ -1,5 +1,6 @@
 import * as React from 'react';
-import * as Input from 'hire-forms-input';
+// import * as Input from 'hire-forms-input';
+const Input = require('hire-forms-input').default;
 
 class AddEvent extends React.Component<{}, {}> {
 	public state = {

@@ -28,10 +28,9 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 					<div className="from">{formatDateInDaterange(root.dateRange, 'from')}</div>
 					<div className="to">{formatDateInDaterange(root.dateRange, 'to')}</div>
 				</header>
-				<div className="chil">
-					{children}
-				</div>
+				{/*<Rulers {...this.props} />*/}
 				<Events {...this.props} />
+				{children}
 			</div>
 		);
 	}

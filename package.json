@@ -9,7 +9,7 @@
     "build": "scripts/build.sh",
     "prepublish": "typings install && npm run build",
     "watch-client": "watchify src/client/index.ts -p [ tsify --project src/client/tsconfig.json ] -o build/client/js/index.js --external react --external react-dom --external classnames --external react-router -v",
-    "watch-stylus": "stylus --watch --out ./build/client/css/index.css ./src/client/index.styl",
+    "watch-stylus": "stylus --watch --out ./build/client/css/index.css ./src/client/stylus/index.styl",
     "client-server": "scripts/server.js",
     "watch-server": "tsc -w -p src/server/",
     "server": "node build/server",
