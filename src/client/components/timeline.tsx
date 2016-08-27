@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import { formatDateInDaterange } from '../utils/dates';
 import Events from './events';
+import Rulers from './rulers';
+import { countDaysInRange, formatDateInDaterange } from '../utils/dates';
+
+const timelineWidth = (): number => document.documentElement.clientWidth * 0.98;
 
 interface ITimelineProps {
 	children?: any;
@@ -10,10 +13,22 @@ interface ITimelineProps {
 }
 
 interface ITimelineState {
-	clientWidth: number;
+	daysCount: number;
+	timelineWidth?: number;
 }
 
 class Timeline extends React.Component<ITimelineProps, ITimelineState> {
+	public state = {
+		daysCount: countDaysInRange(this.props.root.dateRange),
+		timelineWidth: timelineWidth(),
+	};
+
+	public componentWillReceiveProps(nextProps) {
+		this.setState({
+			daysCount: countDaysInRange(nextProps.root.dateRange),
+		});
+	}
+
 	public render() {
 		const { children, root } = this.props;
 
@@ -28,10 +43,17 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 					<div className="from">{formatDateInDaterange(root.dateRange, 'from')}</div>
 					<div className="to">{formatDateInDaterange(root.dateRange, 'to')}</div>
 				</header>
-				<div className="chil">
-					{children}
-				</div>
-				<Events {...this.props} />
+				<Rulers
+					{...this.props}
+					{...this.state}
+					pixelsPerDay={this.state.timelineWidth / this.state.daysCount}
+				/>
+				<Events
+					{...this.props}
+					{...this.state}
+					pixelsPerDay={this.state.timelineWidth / this.state.daysCount}
+				/>
+				{children}
 			</div>
 		);
 	}

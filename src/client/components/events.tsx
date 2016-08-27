@@ -3,14 +3,12 @@ import * as cx from 'classnames';
 import { Link } from 'react-router';
 import { countDays, countDaysInRange } from '../utils/dates';
 
-const eventsWidth = (): number => document.documentElement.clientWidth * 0.98;
-
-const PointInTime = ({ event, root, pixelsPerDay }) => {
+const PointInTime = ({ event, root, pixelsPerDay, timelineWidth }) => {
 	const toDate =  event.date != null ? event.date : event.dateUncertain.from;
 	const left = countDays(root.dateRange.from, toDate) * pixelsPerDay;
-	const flip = left > (eventsWidth() - 240);
+	const flip = left > (timelineWidth - 240);
 	const style = flip ?
-		{ right: `${eventsWidth() - left }px`} :
+		{ right: `${timelineWidth - left }px`} :
 		{ left: `${left}px` };
 
 	return (
@@ -40,32 +38,13 @@ const IntervalOfTime = ({ event, root, pixelsPerDay }) => {
 };
 
 interface IEventsProps {
-	root: IEvent;
 	events: IEvent[];
-}
-
-interface IEventsState {
 	pixelsPerDay: number;
+	root: IEvent;
+	timelineWidth: number;
 }
 
-const pixelsPerDay = (root: IEvent): number => {
-	const daysCount = countDaysInRange(root.dateRange);
-	return eventsWidth() / daysCount;
-};
-
-class Events extends React.Component<IEventsProps, IEventsState> {
-	public state = (() => {
-		return ({
-			pixelsPerDay: pixelsPerDay(this.props.root),
-		});
-	})();
-
-	public componentWillReceiveProps(nextProps) {
-		this.setState({
-			pixelsPerDay: pixelsPerDay(nextProps.root),
-		});
-	}
-
+class Events extends React.Component<IEventsProps, {}> {
 	public render() {
 		const { events, root } = this.props;
 
@@ -75,13 +54,13 @@ class Events extends React.Component<IEventsProps, IEventsState> {
 					events.map((event, index) =>
 						(event.date != null || event.dateUncertain != null) ?
 							<PointInTime
-								{...this.state}
+								{...this.props}
 								event={event}
 								key={index}
 								root={root}
 							/> :
 							<IntervalOfTime
-								{...this.state}
+								{...this.props}
 								event={event}
 								key={index}
 								root={root}

@@ -4,9 +4,9 @@ INSERT INTO event_type (title) VALUES ('person');
 INSERT INTO event_type (title) VALUES ('country');
 INSERT INTO event_type (title) VALUES ('other');
 INSERT INTO event_type (title) VALUES ('battle');
-INSERT INTO event_type (title) VALUES ('land battle');
-INSERT INTO event_type (title) VALUES ('naval battle');
-INSERT INTO event_type (title) VALUES ('aerial battle');
+INSERT INTO event_type (title) VALUES ('land-battle');
+INSERT INTO event_type (title) VALUES ('naval-battle');
+INSERT INTO event_type (title) VALUES ('aerial-battle');
 
 
 INSERT INTO event (slug, title, date_uncertain, coordinates) VALUES (

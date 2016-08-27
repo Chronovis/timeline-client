@@ -18,7 +18,7 @@ export const countDays = (from: Date, to: Date): number =>
 	Math.round(to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24);
 
 export const countDaysInRange = (dateRange: IDateRange): number =>
-	countDays(dateRange.from, dateRange.to);
+	dateRange == null ? null : countDays(dateRange.from, dateRange.to);
 
 export const formatDateInDaterange = (dateRange: IDateRange, dateToFormat: DateToFormat): string => {
 	const daysCount = countDaysInRange(dateRange);
