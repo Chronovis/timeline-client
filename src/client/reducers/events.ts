@@ -13,8 +13,14 @@ const defaultState: IDefaultState = {
 };
 
 const parseEvent = (event) => {
-	const parseDate = (date) => (date === 'infinity') ? new Date() : new Date(date);
-	const parseDateRange = (dateRange) => {
+	const parseDate = (date): Date => {
+		// TODO remove split('+') code. It is used to let the dates work under FF. Use different solution.
+		// Plus, there should be some sort of granularity. When a date does not need time information, the
+		// timezone can be skipped anyway.
+		date = date.split('+')[0];
+		return (date === 'infinity') ? new Date() : new Date(date);
+	}
+	const parseDateRange = (dateRange): IDateRange => {
 		return {
 			from: parseDate(dateRange.from),
 			infiniteTo: dateRange.to === 'infinity',
