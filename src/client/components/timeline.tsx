@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router';
+import * as debounce from 'lodash.debounce';
 import Events from './events';
 import Rulers from './rulers';
 import { countDaysInRange, formatDateInDaterange } from '../utils/dates';
@@ -13,7 +14,7 @@ interface ITimelineProps {
 }
 
 interface ITimelineState {
-	daysCount: number;
+	daysCount?: number;
 	timelineWidth?: number;
 }
 
@@ -23,10 +24,18 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 		timelineWidth: timelineWidth(),
 	};
 
+	public componentDidMount() {
+		window.addEventListener('resize', this.debouncedHandleResize);
+	}
+
 	public componentWillReceiveProps(nextProps) {
 		this.setState({
 			daysCount: countDaysInRange(nextProps.root.dateRange),
 		});
+	}
+
+	public componentWillUnmount() {
+		window.removeEventListener('resize', this.debouncedHandleResize);
 	}
 
 	public render() {
@@ -57,6 +66,12 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 			</div>
 		);
 	}
+
+	private handleResize = () => {
+		this.setState({ timelineWidth: timelineWidth() });
+
+	};
+	private debouncedHandleResize = debounce(this.handleResize, 200);
 }
 
 export default Timeline;
