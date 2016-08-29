@@ -4,31 +4,32 @@ DROP TABLE IF EXISTS event__event CASCADE;
 DROP TABLE IF EXISTS event__event_type CASCADE;
 
 CREATE TABLE event (
-	id serial primary key,
-	slug text UNIQUE,
-	title text,
-	body text,
-	date_range tstzrange,
-	date_range_uncertain tstzrange,
-	date timestamp with time zone,
-	date_uncertain tstzrange,
-	coordinates geography(POINT,4326)
+	id SERIAL PRIMARY KEY,
+	slug TEXT UNIQUE,
+	title TEXT,
+	body TEXT,
+	date_granularity SMALLINT,
+	date_range TSTZRANGE,
+	date_range_uncertain TSTZRANGE,
+	date TIMESTAMP WITH TIME ZONE,
+	date_uncertain TSTZRANGE,
+	coordinates GEOGRAPHY(POINT,4326)
 );
 
 CREATE TABLE event_type (
-	id serial primary key,
-	title text UNIQUE,
-	body text
+	id SERIAL primary key,
+	title TEXT UNIQUE,
+	body TEXT
 );
 
 CREATE TABLE event__event (
-	parent_event_id serial,
-	child_event_id serial,
-	primary key (parent_event_id, child_event_id)
+	parent_event_id SERIAL,
+	child_event_id SERIAL,
+	PRIMARY KEY (parent_event_id, child_event_id)
 );
 
 CREATE TABLE event__event_type (
-	event_id serial,
-	event_type_id serial,
-	primary key (event_id, event_type_id)
+	event_id SERIAL,
+	event_type_id SERIAL,
+	PRIMARY KEY (event_id, event_type_id)
 );

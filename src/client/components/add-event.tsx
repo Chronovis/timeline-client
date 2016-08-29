@@ -19,7 +19,11 @@ class AddEvent extends React.Component<{}, {}> {
 							placeholder="Title of new event..."
 							value={this.state.title}
 						/> :
-						<div className="new-event">{this.state.title}</div>
+						<div className="new-event-slide-area">
+							<div className="new-event">
+								{this.state.title}
+							</div>
+						</div>
 				}
 			</div>
 		);

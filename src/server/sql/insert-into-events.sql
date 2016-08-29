@@ -9,37 +9,42 @@ INSERT INTO event_type (title) VALUES ('naval-battle');
 INSERT INTO event_type (title) VALUES ('aerial-battle');
 
 
-INSERT INTO event (slug, title, date_uncertain, coordinates) VALUES (
+INSERT INTO event (slug, title, date_granularity, date_uncertain, coordinates) VALUES (
 	'birth-of-vasco-da-gama',
 	'Birth of Vasco da Gama',
+	3,
 	'[1460-01-01, 1469-12-31]',
 	ST_GeographyFromText('SRID=4326;POINT(37.954722 -8.864444)')
 );
 
-INSERT INTO event (slug, title, date, coordinates) VALUES (
+INSERT INTO event (slug, title, date_granularity, date, coordinates) VALUES (
 	'death-of-vasco-da-gama',
 	'Death of Vasco da Gama',
+	3,
 	'1524-12-24',
 	ST_GeographyFromText('SRID=4326;POINT(9.97 76.28)')
 );
 
-INSERT INTO event (slug, title, date_range, date_range_uncertain) VALUES (
+INSERT INTO event (slug, title, date_granularity, date_range, date_range_uncertain) VALUES (
 	'vasco-da-gama',
 	'Vasco da Gama',
+	3,
 	'[1460-01-01, 1524-12-24]',
 	'[1469-01-01, 1524-12-24]'
 );
 
-INSERT INTO event (slug, title, date_range, coordinates) VALUES (
+INSERT INTO event (slug, title, date_granularity, date_range, coordinates) VALUES (
 	'portugal',
 	'Portugal',
+	3,
 	'[1128-06-26, infinity)',
 	ST_GeographyFromText('SRID=4326;POINT(38.7 -9.183333)')
 );
 
-INSERT INTO event (slug, title, date, coordinates) VALUES (
+INSERT INTO event (slug, title, date_granularity, date, coordinates) VALUES (
 	'battle-of-sao-mamede',
 	'Battle of São Mamede',
+	3,
 	'1128-06-24',
 	ST_GeographyFromText('SRID=4326;POINT(41.45 -8.3)')
 );
