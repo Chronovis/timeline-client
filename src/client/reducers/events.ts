@@ -4,7 +4,9 @@ const defaultState: IDefaultState = {
 		body: '',
 		coordinates: [],
 		date: null,
+		dateGranularity: DateGranularity.DAY,
 		dateRange: null,
+		dateRangeGranularity: null,
 		dateRangeUncertain: null,
 		dateUncertain: null,
 		slug: '',
@@ -18,11 +20,13 @@ const parseEvent = (event) => {
 		// Plus, there should be some sort of granularity. When a date does not need time information, the
 		// timezone can be skipped anyway.
 		date = date.split('+')[0];
-		return (date === 'infinity') ? new Date() : new Date(date);
-	}
+		return (date === 'infinity') ? null : new Date(date);
+	};
+
 	const parseDateRange = (dateRange): IDateRange => {
 		return {
 			from: parseDate(dateRange.from),
+			infiniteFrom: dateRange.from === 'infinity',
 			infiniteTo: dateRange.to === 'infinity',
 			to: parseDate(dateRange.to),
 		};
@@ -32,6 +36,9 @@ const parseEvent = (event) => {
 	}
 	if (event.dateUncertain != null) {
 		event.dateUncertain = parseDateRange(event.dateUncertain);
+	}
+	if (event.dateRangeUncertain != null) {
+		event.dateRangeUncertain = parseDateRange(event.dateRangeUncertain);
 	}
 	if (event.date != null) event.date = parseDate(event.date);
 

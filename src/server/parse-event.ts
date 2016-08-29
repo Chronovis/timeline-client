@@ -18,5 +18,11 @@ export default (event) => {
 	event.dateRangeUncertain = parseDateRange(event.date_range_uncertain);
 	delete event.date_range_uncertain;
 
+	event.dateGranularity = event.date_granularity;
+	delete event.date_granularity;
+
+	event.dateRangeGranularity = event.date_range_granularity;
+	delete event.date_range_granularity;
+
 	return event;
 };

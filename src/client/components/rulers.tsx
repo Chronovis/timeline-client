@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { countDays } from '../utils/dates';
+import { countDays, getOldestDate } from '../utils/dates';
 
 const Ruler = ({ pixelsPerDay, root, year }) => {
 	const left = countDays(root.dateRange.from, new Date(year.toString())) * pixelsPerDay;
@@ -8,14 +8,14 @@ const Ruler = ({ pixelsPerDay, root, year }) => {
 			<span>{year}</span>
 		</li>
 	);
-}
-
+};
 
 class Rulers extends React.Component<any, any> {
 	public render() {
 		const { daysCount, root, pixelsPerDay } = this.props;
-		const fromYear = root.dateRange.from.getFullYear();
-		const toYear = root.dateRange.to.getFullYear();
+		const { from, to } = root.dateRange;
+		const fromYear = (from == null) ? getOldestDate().getFullYear() : from.getFullYear();
+		const toYear = (to == null) ? new Date().getFullYear() : to.getFullYear();
 		const rulers = [];
 
 		let i = fromYear + 1;
@@ -23,8 +23,7 @@ class Rulers extends React.Component<any, any> {
 			for (i; i <= toYear; i++) {
 				if (i % 100 === 0) rulers.push(i);
 			}
-		}
-		else if (daysCount > (30 * 365)) {
+		} else if (daysCount > (30 * 365)) {
 			for (i; i <= toYear; i++) {
 				if (i % 10 === 0) rulers.push(i);
 			}

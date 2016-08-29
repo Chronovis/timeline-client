@@ -8,10 +8,11 @@ CREATE TABLE event (
 	slug TEXT UNIQUE,
 	title TEXT,
 	body TEXT,
+	date TIMESTAMP WITH TIME ZONE,
 	date_granularity SMALLINT,
 	date_range TSTZRANGE,
+	date_range_granularity SMALLINT,
 	date_range_uncertain TSTZRANGE,
-	date TIMESTAMP WITH TIME ZONE,
 	date_uncertain TSTZRANGE,
 	coordinates GEOGRAPHY(POINT,4326)
 );

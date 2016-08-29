@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import * as debounce from 'lodash.debounce';
 import Events from './events';
 import Rulers from './rulers';
-import { countDaysInRange, formatDateInDaterange } from '../utils/dates';
+import { countDaysInRange, formatDate } from '../utils/dates';
 
 const timelineWidth = (): number => document.documentElement.clientWidth * 0.98;
 
@@ -49,8 +49,8 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 					<div className="pre-title">TIMELINE OF</div>
 					<h2>{root.title}</h2>
 					<Link to={`/timelines/${root.slug}/add-event`}>+</Link>
-					<div className="from">{formatDateInDaterange(root.dateRange, 'from')}</div>
-					<div className="to">{formatDateInDaterange(root.dateRange, 'to')}</div>
+					<div className="from">{formatDate(root, 'from')}</div>
+					<div className="to">{formatDate(root, 'to')}</div>
 				</header>
 				<Rulers
 					{...this.props}
