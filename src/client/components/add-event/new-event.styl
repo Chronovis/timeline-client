@@ -1,6 +1,57 @@
-.new-event-slide-area
-	position relative
+.new-event
+	.new-event-slide-area
+		height 30px
+		position relative
 
-	.new-event
-		margin-left 50%
-		position absolute
+		.handle
+			cursor move
+			margin-left 50%
+			position absolute
+
+			&.point-in-time:before
+				content '| '
+
+			&.interval-of-time
+				background timelineLighestBlue
+				border-radius 2px
+				box-shadow 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
+				padding 4px 4px
+
+				span
+					background rgba(0, 0, 0, 0.4)
+					border-radius 2px
+					color #DDD
+					padding 0 4px
+					text-decoration none
+
+	.form
+		inputHeight = 30px
+		height calc(100% - inputHeight)
+		padding 1em
+
+		.hire-select
+			margin-bottom 1em
+			position relative
+
+			.input-container
+				width 240px
+
+				.input, button
+					background white
+					height inputHeight
+					inline-block()
+				.input
+					line-height inputHeight
+					width 90%
+				button
+					border none
+					outline none
+					width 10%
+
+			.hire-options
+				background white
+				margin 0
+				padding 0
+				position absolute
+				top inputHeight
+

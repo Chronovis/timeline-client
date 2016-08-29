@@ -1,13 +1,14 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import history from '../../routes/history';
 import NewEvent from './new-event';
-import { hasDescendant } from '../../utils/dom';
 const Input = require('hire-forms-input').default;
 
 interface IAddEventProps {
 	params: {
 		slug: string;
 	};
+	root: IEvent;
 }
 
 class AddEvent extends React.Component<IAddEventProps, {}> {
@@ -40,7 +41,7 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 							placeholder="Title of new event..."
 							value={this.state.title}
 						/> :
-						<NewEvent {...this.state} />
+						<NewEvent {...this.props} {...this.state} />
 				}
 			</div>
 		);
@@ -48,8 +49,12 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 
 	private handleDocumentClick = (ev) => {
 		if (
-			!(hasDescendant(this.rootElement, ev.target) ||
-			this.rootElement === ev.target)) {
+			!(
+				this.rootElement.contains(ev.target) ||
+				this.rootElement === ev.target ||
+				ev.target.matches('li.hire-forms-option')
+			)
+		) {
 			history.push(`/timelines/${this.props.params.slug}`);
 		}
 	}
@@ -61,4 +66,8 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 	};
 }
 
-export default AddEvent;
+export default connect(
+	state => ({
+		root: state.events.root,
+	}),
+)(AddEvent);

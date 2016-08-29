@@ -3,8 +3,6 @@ type DateToFormat = 'from' | 'to';
 const isEqualDates = (date1: Date, date2: Date): boolean =>
 	date1.getTime() === date2.getTime();
 
-export const getOldestDate = () => new Date(-4713, 0, 1);
-
 const format = (date: Date, granularity: DateGranularity): string => {
 	if (date == null) return '∞';
 
@@ -27,13 +25,23 @@ const format = (date: Date, granularity: DateGranularity): string => {
 	return displayDate;
 };
 
+const oldestDate = () => new Date(-4713, 0, 1);
+
+export const middleDate = (date1: Date, date2: Date): Date =>
+	new Date((date1.getTime() + date2.getTime()) / 2);
+
+export const extractFromAndTo = (dateRange: IDateRange) => {
+	const from = dateRange.infiniteFrom ? oldestDate() : dateRange.from;
+	const to = dateRange.infiniteTo ? new Date() : dateRange.to;
+	return [from, to];
+};
+
 export const countDays = (from: Date, to: Date): number =>
 	Math.round(to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24);
 
 export const countDaysInRange = (dateRange: IDateRange): number => {
 	if (dateRange == null) return null;
-	const from = dateRange.infiniteFrom ? getOldestDate() : dateRange.from;
-	const to = dateRange.infiniteTo ? new Date() : dateRange.to;
+	const [from, to] = extractFromAndTo(dateRange);
 	return countDays(from, to);
 };
 
