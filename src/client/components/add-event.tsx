@@ -1,16 +1,36 @@
 import * as React from 'react';
-// import * as Input from 'hire-forms-input';
+import history from '../routes/history';
+import { hasDescendant } from '../utils/dom';
 const Input = require('hire-forms-input').default;
 
-class AddEvent extends React.Component<{}, {}> {
+interface IAddEventProps {
+	params: {
+		slug: string;
+	};
+}
+
+class AddEvent extends React.Component<IAddEventProps, {}> {
 	public state = {
 		editTitle: true,
 		title: '',
 	};
 
+	private rootElement;
+
+	public componentDidMount() {
+		document.addEventListener('click', this.handleDocumentClick);
+	}
+
+	public componentWillUnmount() {
+		document.removeEventListener('click', this.handleDocumentClick);
+	}
+
 	public render() {
 		return (
-			<div className="add-event">
+			<div
+				className="add-event"
+				ref={(el) => { if (el != null) this.rootElement = el; }}
+			>
 				{
 					this.state.editTitle ?
 						<Input
@@ -27,6 +47,14 @@ class AddEvent extends React.Component<{}, {}> {
 				}
 			</div>
 		);
+	}
+
+	private handleDocumentClick = (ev) => {
+		if (
+			!(hasDescendant(this.rootElement, ev.target) ||
+			this.rootElement === ev.target)) {
+			history.push(`/timelines/${this.props.params.slug}`);
+		}
 	}
 
 	private handleKeyUp = (ev) => {

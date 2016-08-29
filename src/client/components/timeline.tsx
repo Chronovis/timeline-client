@@ -69,8 +69,8 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 
 	private handleResize = () => {
 		this.setState({ timelineWidth: timelineWidth() });
-
 	};
+
 	private debouncedHandleResize = debounce(this.handleResize, 200);
 }
 

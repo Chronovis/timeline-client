@@ -14,7 +14,7 @@ const defaultState: IDefaultState = {
 	},
 };
 
-const parseEvent = (event) => {
+const parseEvent = (event): IEvent => {
 	const parseDate = (date): Date => {
 		// TODO remove split('+') code. It is used to let the dates work under FF. Use different solution.
 		// Plus, there should be some sort of granularity. When a date does not need time information, the
