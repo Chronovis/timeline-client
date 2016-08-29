@@ -1,6 +1,7 @@
 import * as React from 'react';
-import history from '../routes/history';
-import { hasDescendant } from '../utils/dom';
+import history from '../../routes/history';
+import NewEvent from './new-event';
+import { hasDescendant } from '../../utils/dom';
 const Input = require('hire-forms-input').default;
 
 interface IAddEventProps {
@@ -39,11 +40,7 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 							placeholder="Title of new event..."
 							value={this.state.title}
 						/> :
-						<div className="new-event-slide-area">
-							<div className="new-event">
-								{this.state.title}
-							</div>
-						</div>
+						<NewEvent {...this.state} />
 				}
 			</div>
 		);

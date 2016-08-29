@@ -3,7 +3,7 @@ import { Router, Route } from 'react-router';
 import { Provider } from 'react-redux';
 import store from '../store';
 import App from '../components/app';
-import AddEvent from '../components/add-event';
+import AddEvent from '../components/add-event/index';
 import history from './history';
 
 export default (
