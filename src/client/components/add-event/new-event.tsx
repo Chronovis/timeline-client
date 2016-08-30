@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as cx from 'classnames';
-import { middleDate } from '../../utils/dates';
+import {middleDate, extractFromAndTo} from '../../utils/dates';
 const Input = require('hire-forms-input').default;
 const Select = require('hire-forms-select').default;
 
@@ -16,12 +16,14 @@ interface INewEventState {
 }
 
 class NewEvent extends React.Component<INewEventProps, INewEventState> {
-	public state = {
-		// TODO use extractFromAndTo() in fromDate
-		fromDate: middleDate(this.props.root.dateRange.from, this.props.root.dateRange.to).toISOString(),
-		toDate: null,
-		type: 'Point in time',
-	};
+	public state = (() => {
+		const [from, to] = extractFromAndTo(this.props.root.dateRange);
+		return ({
+			fromDate: middleDate(from, to).toISOString(),
+			toDate: null,
+			type: 'Point in time',
+		});
+	})();
 
 	public render() {
 		return (
