@@ -4,7 +4,7 @@ import history from '../../routes/history';
 import NewEvent from './new-event';
 const Input = require('hire-forms-input').default;
 
-interface IAddEventProps {
+interface IAddEventProps extends IEventBoxProps {
 	params: {
 		slug: string;
 	};

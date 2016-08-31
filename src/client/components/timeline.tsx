@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import * as debounce from 'lodash.debounce';
 import Events from './events';
 import Rulers from './rulers';
-import { countDaysInRange, formatDate } from '../utils/dates';
+import {countDaysInRange, formatDate, countDays} from '../utils/dates';
 
 const timelineWidth = (): number => document.documentElement.clientWidth * 0.98;
 
@@ -19,6 +19,7 @@ interface ITimelineState {
 }
 
 class Timeline extends React.Component<ITimelineProps, ITimelineState> {
+	// TODO only have pixelsPerDay as state
 	public state = {
 		daysCount: countDaysInRange(this.props.root.dateRange),
 		timelineWidth: timelineWidth(),
@@ -34,8 +35,18 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 		});
 	}
 
-	public componentWillUnmount() {
+	public componentWillUnmount(): void {
 		window.removeEventListener('resize', this.debouncedHandleResize);
+	}
+
+	public eventLeftPosition = (fromDate: Date): number => {
+		const pixelsPerDay = this.state.timelineWidth / this.state.daysCount;
+		return countDays(this.props.root.dateRange.from, fromDate) * pixelsPerDay;
+	}
+
+	public eventWidth = (event: IEvent): number => {
+		const pixelsPerDay = this.state.timelineWidth / this.state.daysCount;
+		return countDaysInRange(event.dateRange) * pixelsPerDay;
 	}
 
 	public render() {
@@ -55,14 +66,20 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 				<Rulers
 					{...this.props}
 					{...this.state}
-					pixelsPerDay={this.state.timelineWidth / this.state.daysCount}
+					eventLeftPosition={this.eventLeftPosition}
 				/>
 				<Events
 					{...this.props}
 					{...this.state}
-					pixelsPerDay={this.state.timelineWidth / this.state.daysCount}
+					eventLeftPosition={this.eventLeftPosition}
+					eventWidth={this.eventWidth}
 				/>
-				{children}
+				{
+					this.props.children && React.cloneElement(children, {
+						eventLeftPosition: this.eventLeftPosition,
+						eventWidth: this.eventWidth,
+					})
+				}
 			</div>
 		);
 	}

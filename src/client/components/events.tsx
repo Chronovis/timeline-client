@@ -1,11 +1,9 @@
 import * as React from 'react';
 import * as cx from 'classnames';
 import { Link } from 'react-router';
-import { countDays, countDaysInRange } from '../utils/dates';
+import { extractFrom } from '../utils/dates';
 
-const PointInTime = ({ event, root, pixelsPerDay, timelineWidth }) => {
-	const toDate =  event.date != null ? event.date : event.dateUncertain.from;
-	const left = countDays(root.dateRange.from, toDate) * pixelsPerDay;
+const PointInTime = ({ event, left, timelineWidth }) => {
 	const flip = left > (timelineWidth - 240);
 	const style = flip ?
 		{ right: `${timelineWidth - left }px`} :
@@ -22,13 +20,13 @@ const PointInTime = ({ event, root, pixelsPerDay, timelineWidth }) => {
 	);
 };
 
-const IntervalOfTime = ({ event, root, pixelsPerDay }) => {
+const IntervalOfTime = ({ event, left, width }) => {
 	return (
 		<li
 			className="interval-of-time"
 			style={{
-				left: `${countDays(root.dateRange.from, event.dateRange.from) * pixelsPerDay}px`,
-				width: `${countDaysInRange(event.dateRange) * pixelsPerDay}px`,
+				left: `${left}px`,
+				width: `${width}px`,
 			}}
 			title={event.title}
 		>
@@ -37,16 +35,15 @@ const IntervalOfTime = ({ event, root, pixelsPerDay }) => {
 	);
 };
 
-interface IEventsProps {
+interface IEventsProps extends IEventBoxProps {
 	events: IEvent[];
-	pixelsPerDay: number;
 	root: IEvent;
 	timelineWidth: number;
 }
 
 class Events extends React.Component<IEventsProps, {}> {
 	public render() {
-		const { events, root } = this.props;
+		const { eventLeftPosition, events, eventWidth } = this.props;
 
 		return (
 			<ul className="events">
@@ -57,13 +54,13 @@ class Events extends React.Component<IEventsProps, {}> {
 								{...this.props}
 								event={event}
 								key={index}
-								root={root}
+								left={eventLeftPosition(extractFrom(event))}
 							/> :
 							<IntervalOfTime
-								{...this.props}
 								event={event}
 								key={index}
-								root={root}
+								left={eventLeftPosition(event.dateRange.from)}
+								width={eventWidth(event)}
 							/>
 					)
 				}

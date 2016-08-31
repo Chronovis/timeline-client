@@ -27,10 +27,25 @@ const format = (date: Date, granularity: DateGranularity): string => {
 
 const oldestDate = () => new Date(-4713, 0, 1);
 
-export const middleDate = (date1: Date, date2: Date): Date =>
-	new Date((date1.getTime() + date2.getTime()) / 2);
+// export const middleDate = (date1: Date, date2: Date): Date =>
+// 	new Date((date1.getTime() + date2.getTime()) / 2);
 
-export const extractFromAndTo = (dateRange: IDateRange) => {
+export const proportionalDate = (from: Date, to: Date, proportion: number): Date => {
+	if (proportion < 0 || proportion > 1) throw new Error('[proportionalDate] proportion should be between 0 and 1.');
+	if (from > to) throw new Error('[proportionalDate] `From date` should be lower than `to date`.');
+
+	const fromTime: number = from.getTime();
+	const toTime: number = to.getTime();
+
+	const newTime = fromTime + ((toTime - fromTime) * proportion);
+
+	return new Date(newTime);
+};
+
+export const extractFrom = (event): Date =>
+	event.date != null ? event.date : event.dateUncertain.from;
+
+export const extractFromAndTo = (dateRange: IDateRange): [Date, Date] => {
 	const from = dateRange.infiniteFrom ? oldestDate() : dateRange.from;
 	const to = dateRange.infiniteTo ? new Date() : dateRange.to;
 	return [from, to];

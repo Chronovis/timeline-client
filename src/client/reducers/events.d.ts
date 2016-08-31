@@ -26,3 +26,8 @@ interface IDefaultState {
 	events: IEvent[];
 	root: IEvent;
 }
+
+interface IEventBoxProps {
+	eventLeftPosition: (Date) => number;
+	eventWidth: (IEvent) => number;
+}

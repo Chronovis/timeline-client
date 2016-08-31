@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { countDays, extractFromAndTo } from '../utils/dates';
+import { extractFromAndTo, countDaysInRange } from '../utils/dates';
 
-const Ruler = ({ pixelsPerDay, root, year }) => {
-	const left = countDays(root.dateRange.from, new Date(year.toString())) * pixelsPerDay;
+const Ruler = ({ left, year }) => {
 	return (
 		<li style={{ left: `${left}px` }}>
 			<span>{year}</span>
@@ -12,10 +11,10 @@ const Ruler = ({ pixelsPerDay, root, year }) => {
 
 class Rulers extends React.Component<any, any> {
 	public render() {
-		const { daysCount, root, pixelsPerDay } = this.props;
-		const [from, to] = extractFromAndTo(root.dateRange)
-		const fromYear = from.getFullYear();
-		const toYear = to.getFullYear();
+		const { root, eventLeftPosition } = this.props;
+		const daysCount = countDaysInRange(root.dateRange);
+		const [from, to] = extractFromAndTo(root.dateRange);
+		const [fromYear, toYear] = [from.getFullYear(), to.getFullYear()];
 		const rulers = [];
 
 		let i = fromYear + 1;
@@ -32,15 +31,13 @@ class Rulers extends React.Component<any, any> {
 		return (
 			<ul className="rulers">
 				{
-					rulers.map((r, index) =>
+					rulers.map((year: number, index: number) =>
 						<Ruler
 							key={index}
-							pixelsPerDay={pixelsPerDay}
-							root={root}
-							year={r}
+							left={eventLeftPosition(new Date(year.toString()))}
+							year={year}
 						/>)
 				}
-
 			</ul>
 		);
 	}
