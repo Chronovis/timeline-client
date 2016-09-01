@@ -3,6 +3,9 @@ import * as cx from 'classnames';
 import { Link } from 'react-router';
 import { extractFrom } from '../utils/dates';
 
+// TODO move PointInTime and IntervalOfTime to seperate files
+
+// TODO outfactor timelineWidth
 const PointInTime = ({ event, left, timelineWidth }) => {
 	const flip = left > (timelineWidth - 240);
 	const style = flip ?
@@ -45,22 +48,23 @@ class Events extends React.Component<IEventsProps, {}> {
 	public render() {
 		const { eventLeftPosition, events, eventWidth } = this.props;
 
+		// TODO use extractFrom in left={}
 		return (
 			<ul className="events">
 				{
 					events.map((event, index) =>
-						(event.date != null || event.dateUncertain != null) ?
-							<PointInTime
-								{...this.props}
-								event={event}
-								key={index}
-								left={eventLeftPosition(extractFrom(event))}
-							/> :
+						(event.isInterval) ?
 							<IntervalOfTime
 								event={event}
 								key={index}
 								left={eventLeftPosition(event.dateRange.from)}
 								width={eventWidth(event)}
+							/> :
+							<PointInTime
+								{...this.props}
+								event={event}
+								key={index}
+								left={eventLeftPosition(extractFrom(event))}
 							/>
 					)
 				}

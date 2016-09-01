@@ -1,4 +1,4 @@
-const defaultState: IDefaultState = {
+export const defaultState: IDefaultState = {
 	events: [],
 	root: {
 		body: '',
@@ -9,6 +9,7 @@ const defaultState: IDefaultState = {
 		dateRangeGranularity: null,
 		dateRangeUncertain: null,
 		dateUncertain: null,
+		isInterval: false,
 		slug: '',
 		title: '',
 	},
@@ -31,16 +32,22 @@ const parseEvent = (event): IEvent => {
 			to: parseDate(dateRange.to),
 		};
 	};
+
 	if (event.dateRange != null) {
 		event.dateRange = parseDateRange(event.dateRange);
 	}
+
 	if (event.dateUncertain != null) {
 		event.dateUncertain = parseDateRange(event.dateUncertain);
 	}
+
 	if (event.dateRangeUncertain != null) {
 		event.dateRangeUncertain = parseDateRange(event.dateRangeUncertain);
 	}
+
 	if (event.date != null) event.date = parseDate(event.date);
+
+	if (event.dateRange != null) event.isInterval = true;
 
 	return event;
 };

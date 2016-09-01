@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as cx from 'classnames';
-import { extractFromAndTo, proportionalDate } from '../../utils/dates';
+import {middleDate, extractFromAndTo} from '../../utils/dates';
+import { defaultState as defaultEvent } from '../../reducers/events';
 const Input = require('hire-forms-input').default;
 const Select = require('hire-forms-select').default;
 
@@ -9,32 +10,33 @@ interface INewEventProps extends IEventBoxProps {
 	root: IEvent;
 }
 
-// TODO make fromDate and toDate Date instead of string
-interface INewEventState {
-	fromDate?: string;
-	toDate?: string;
-	type?: string;
-}
+// interface INewEventState {
+// 	fromDate?: string;
+// 	toDate?: string;
+// 	type?: string;
+// }
 
-class NewEvent extends React.Component<INewEventProps, INewEventState> {
-	public state = (() => {
-		const [from, to] = extractFromAndTo(this.props.root.dateRange);
-		return ({
-			fromDate: proportionalDate(from, to, 0.5).toISOString(),
-			toDate: null,
-			type: 'Point in time',
-		});
-	})();
+class NewEvent extends React.Component<INewEventProps, IEvent> {
+	// public state = (() => {
+	// 	const [from, to] = extractFromAndTo(this.props.root.dateRange);
+	// 	return ({
+	// 		fromDate: middleDate(from, to).toISOString(),
+	// 		toDate: null,
+	// 		type: 'Point in time',
+	// 	});
+	// })();
+	public state = defaultEvent.root;
 
 	public render() {
+
 		return (
 			<div className="new-event">
 				<div className="new-event-slide-area">
 					<div
-						className={cx('handle', this.state.type.toLowerCase().replace(/\s/g, '-'))}
-						style={{
-							left: this.props.eventLeftPosition(new Date(this.state.fromDate)),
-						}}
+						className={cx('handle', {
+							'interval-of-time': this.state.isInterval,
+							'point-in-time': !this.state.isInterval,
+						})}
 					>
 						<span className="title">{this.props.title}</span>
 					</div>
@@ -42,7 +44,7 @@ class NewEvent extends React.Component<INewEventProps, INewEventState> {
 				<div className="form">
 					<Select
 						onChange={this.handleChangeType}
-						value={this.state.type}
+						value={this.state.isInterval ? 'Interval of time' : 'Point in time'}
 						options={['Point in time', 'Interval of time']}
 					/>
 					<Input
@@ -50,7 +52,7 @@ class NewEvent extends React.Component<INewEventProps, INewEventState> {
 						value={this.state.fromDate}
 					/>
 					{
-						(this.state.type === 'Interval of time') ?
+						(this.state.isInterval) ?
 							<Input
 								onChange={(toDate) => this.setState({ toDate })}
 								value={this.state.toDate}

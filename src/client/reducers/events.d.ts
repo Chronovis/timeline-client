@@ -18,6 +18,7 @@ interface IEvent {
 	dateRangeGranularity: DateGranularity;
 	dateRangeUncertain: IDateRange;
 	dateUncertain: IDateRange;
+	isInterval: boolean;
 	slug: string;
 	title: string;
 }
