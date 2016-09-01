@@ -1,18 +1,22 @@
-export const defaultState: IDefaultState = {
+const defaultEvent: IEvent = {
+	body: '',
+	coordinates: [],
+	date: null,
+	dateGranularity: DateGranularity.DAY,
+	dateRange: null,
+	dateRangeGranularity: null,
+	dateRangeUncertain: null,
+	dateUncertain: null,
+	isInterval: false,
+	slug: '',
+	title: '',
+	types: [],
+};
+
+const defaultState: IDefaultState = {
 	events: [],
-	root: {
-		body: '',
-		coordinates: [],
-		date: null,
-		dateGranularity: DateGranularity.DAY,
-		dateRange: null,
-		dateRangeGranularity: null,
-		dateRangeUncertain: null,
-		dateUncertain: null,
-		isInterval: false,
-		slug: '',
-		title: '',
-	},
+	newEvent: defaultEvent,
+	root: defaultEvent,
 };
 
 const parseEvent = (event): IEvent => {
@@ -57,10 +61,16 @@ export default (state = defaultState, action) => {
 
 	switch (action.type) {
 		case 'RECEIVE_EVENTS': {
-			nextState = {
+			nextState = Object.assign({}, state, {
 				events: action.events.map(parseEvent),
 				root: parseEvent(action.root),
-			};
+			});
+			break;
+		}
+
+		case 'SET_EVENT_KEY_VALUES': {
+			const newEvent = Object.assign({}, state.newEvent, action.keyValues);
+			nextState = Object.assign({}, state, { newEvent	});
 			break;
 		}
 

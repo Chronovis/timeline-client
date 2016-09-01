@@ -1,13 +1,14 @@
 INSERT INTO event_type (title) VALUES ('birth');
 INSERT INTO event_type (title) VALUES ('death');
-INSERT INTO event_type (title) VALUES ('person');
+INSERT INTO event_type (title) VALUES ('sex-man');
 INSERT INTO event_type (title) VALUES ('country');
 INSERT INTO event_type (title) VALUES ('other');
 INSERT INTO event_type (title) VALUES ('battle');
 INSERT INTO event_type (title) VALUES ('land-battle');
 INSERT INTO event_type (title) VALUES ('naval-battle');
 INSERT INTO event_type (title) VALUES ('aerial-battle');
-
+INSERT INTO event_type (title) VALUES ('sex-woman');
+INSERT INTO event_type (title) VALUES ('sex-other');
 
 INSERT INTO event (slug, title, date_granularity, date_range_granularity, date_uncertain, coordinates) VALUES (
 	'birth-of-vasco-da-gama',

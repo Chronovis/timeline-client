@@ -1,11 +1,3 @@
-icons = {
-	birth: '★',
-	death: '✝',
-	battle: '⚔',
-	naval-battle: '⚓',
-	aerial-battle: '✈'
-}
-
 .timeline
 	ul.events
 		height 300px
@@ -46,21 +38,14 @@ icons = {
 			padding 4px 0
 			text-overflow ellipsis
 
-			&:before
-				content '| '
+// Put at root level, so it won't override icons.styl
+li.point-in-time
+	&:before
+		content '| '
 
-			&.flip
-				&:before
-					content ''
-				&:after
-					content ' |'
+	&.flip
+		&:before
+			content ''
+		&:after
+			content ' |'
 
-		for className, char in icons
-			& > li.{className}
-				&:before
-					content char + ' '
-				&.flip
-					&:before
-						content ''
-					&:after
-						content ' ' + char

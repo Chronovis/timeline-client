@@ -5,12 +5,11 @@ import { extractFrom } from '../utils/dates';
 
 // TODO move PointInTime and IntervalOfTime to seperate files
 
-// TODO outfactor timelineWidth
-const PointInTime = ({ event, left, timelineWidth }) => {
-	const flip = left > (timelineWidth - 240);
+const PointInTime = ({ event, flipPointInTime, left }) => {
+	const [flip, distance] = flipPointInTime(left);
 	const style = flip ?
-		{ right: `${timelineWidth - left }px`} :
-		{ left: `${left}px` };
+		{ right: `${distance}px`} :
+		{ left: `${distance}px` };
 
 	return (
 		<li
@@ -33,7 +32,12 @@ const IntervalOfTime = ({ event, left, width }) => {
 			}}
 			title={event.title}
 		>
-			<Link to={`/timelines/${event.slug}`}>{event.title}</Link>
+			<Link
+				to={`/timelines/${event.slug}`}
+				className={cx(event.types)}
+			>
+				{event.title}
+			</Link>
 		</li>
 	);
 };
@@ -41,12 +45,11 @@ const IntervalOfTime = ({ event, left, width }) => {
 interface IEventsProps extends IEventBoxProps {
 	events: IEvent[];
 	root: IEvent;
-	timelineWidth: number;
 }
 
 class Events extends React.Component<IEventsProps, {}> {
 	public render() {
-		const { eventLeftPosition, events, eventWidth } = this.props;
+		const { eventLeftPosition, events, eventWidth, flipPointInTime } = this.props;
 
 		// TODO use extractFrom in left={}
 		return (
@@ -57,12 +60,13 @@ class Events extends React.Component<IEventsProps, {}> {
 							<IntervalOfTime
 								event={event}
 								key={index}
-								left={eventLeftPosition(event.dateRange.from)}
+								left={eventLeftPosition(extractFrom(event))}
 								width={eventWidth(event)}
 							/> :
 							<PointInTime
 								{...this.props}
 								event={event}
+								flipPointInTime={flipPointInTime}
 								key={index}
 								left={eventLeftPosition(extractFrom(event))}
 							/>

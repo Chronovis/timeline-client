@@ -2,13 +2,17 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import history from '../../routes/history';
 import NewEvent from './new-event';
+import { setEventKeyValues } from '../../actions/events';
+import {extractFromAndTo, proportionalDate} from "../../utils/dates";
 const Input = require('hire-forms-input').default;
 
 interface IAddEventProps extends IEventBoxProps {
+	newEvent: IEvent;
 	params: {
 		slug: string;
 	};
 	root: IEvent;
+	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
 
 class AddEvent extends React.Component<IAddEventProps, {}> {
@@ -28,20 +32,36 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 	}
 
 	public render() {
+		const {
+			eventLeftPosition,
+			eventWidth,
+			flipPointInTime,
+			newEvent,
+			root,
+			setEventKeyValues,
+		} = this.props;
+
 		return (
 			<div
 				className="add-event"
 				ref={(el) => { if (el != null) this.rootElement = el; }}
 			>
 				{
-					this.state.editTitle ?
+					(newEvent.title === '') ?
 						<Input
 							onChange={(v) => this.setState({ title: v })}
 							onKeyUp={this.handleKeyUp}
 							placeholder="Title of new event..."
 							value={this.state.title}
 						/> :
-						<NewEvent {...this.props} {...this.state} />
+						<NewEvent
+							eventLeftPosition={eventLeftPosition}
+							eventWidth={eventWidth}
+							flipPointInTime={flipPointInTime}
+							newEvent={newEvent}
+							root={root}
+							setEventKeyValues={setEventKeyValues}
+						/>
 				}
 			</div>
 		);
@@ -61,13 +81,20 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 
 	private handleKeyUp = (ev) => {
 		if (ev.keyCode === 13) {
-			this.setState({ editTitle: false });
+			const [from, to] = extractFromAndTo(this.props.root);
+			this.props.setEventKeyValues({
+				title: this.state.title,
+				date: proportionalDate(from, to, 0.5),
+			});
 		}
 	};
 }
 
 export default connect(
 	state => ({
+		newEvent: state.events.newEvent,
 		root: state.events.root,
-	}),
+	}), {
+		setEventKeyValues,
+	}
 )(AddEvent);

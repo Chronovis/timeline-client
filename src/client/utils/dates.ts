@@ -43,20 +43,28 @@ export const proportionalDate = (from: Date, to: Date, proportion: number): Date
 };
 
 export const extractFrom = (event): Date =>
-	event.date != null ? event.date : event.dateUncertain.from;
+	(event.isInterval) ?
+		event.dateRange.infiniteFrom ? oldestDate() : event.dateRange.from :
+		event.date != null ?
+			event.date :
+			(event.dateUncertain != null) ?
+				event.dateUncertain.from :
+				null;
 
-export const extractFromAndTo = (dateRange: IDateRange): [Date, Date] => {
-	const from = dateRange.infiniteFrom ? oldestDate() : dateRange.from;
-	const to = dateRange.infiniteTo ? new Date() : dateRange.to;
-	return [from, to];
-};
+export const extractTo = (event): Date =>
+	(event.isInterval) ?
+		event.dateRange.infiniteTo ? new Date() : event.dateRange.to :
+		null;
+
+export const extractFromAndTo = (event: IEvent): [Date, Date] =>
+	[extractFrom(event), extractTo(event)];
 
 export const countDays = (from: Date, to: Date): number =>
 	Math.round(to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24);
 
-export const countDaysInRange = (dateRange: IDateRange): number => {
-	if (dateRange == null) return null;
-	const [from, to] = extractFromAndTo(dateRange);
+export const countDaysInRange = (event: IEvent): number => {
+	const [from, to] = extractFromAndTo(event);
+	if (to == null) return null;
 	return countDays(from, to);
 };
 

@@ -1,83 +1,79 @@
 import * as React from 'react';
-import * as cx from 'classnames';
-import { extractFromAndTo, proportionalDate } from '../../utils/dates';
-import { defaultState as defaultEvent } from '../../reducers/events';
+import {
+	extractFromAndTo,
+	proportionalDate,
+	extractFrom,
+	extractTo,
+} from '../../utils/dates';
+import Handle from './handle';
 const Input = require('hire-forms-input').default;
 const Select = require('hire-forms-select').default;
 
 interface INewEventProps extends IEventBoxProps {
-	title: string;
+	newEvent: IEvent;
 	root: IEvent;
+	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
 
-// interface INewEventState {
-// 	fromDate?: string;
-// 	toDate?: string;
-// 	type?: string;
-// }
+class NewEvent extends React.Component<INewEventProps, {}> {
+	public handleChangeEventType = (value) => {
+		const [from, to] = extractFromAndTo(this.props.root);
 
-class NewEvent extends React.Component<INewEventProps, IEvent> {
-	// public state = (() => {
-	// 	const [from, to] = extractFromAndTo(this.props.root.dateRange);
-	// 	return ({
-	// 		fromDate: middleDate(from, to).toISOString(),
-	// 		toDate: null,
-	// 		type: 'Point in time',
-	// 	});
-	// })();
-	public state = defaultEvent.root;
+		const keyValues = (value === 'Point in time') ?
+			{
+				date: proportionalDate(from, to, 0.5),
+				dateRange: null,
+				dateRangeUncertain: null,
+				dateUncertain: null,
+				isInterval: false,
+			} :
+			{
+				date: null,
+				dateRange: {
+					from: proportionalDate(from, to, 0.45),
+					to: proportionalDate(from, to, 0.55),
+				},
+				dateRangeUncertain: null,
+				dateUncertain: null,
+				isInterval: true,
+			};
+
+		this.props.setEventKeyValues(keyValues)
+	};
 
 	public render() {
+		const { eventLeftPosition, eventWidth, newEvent } = this.props;
 
 		return (
 			<div className="new-event">
 				<div className="new-event-slide-area">
-					<div
-						className={cx('handle', {
-							'interval-of-time': this.state.isInterval,
-							'point-in-time': !this.state.isInterval,
-						})}
-					>
-						<span className="title">{this.props.title}</span>
-					</div>
+					<Handle
+						event={newEvent}
+						eventLeftPosition={eventLeftPosition}
+						eventWidth={eventWidth}
+					/>
 				</div>
 				<div className="form">
 					<Select
-						onChange={this.handleChangeType}
-						value={this.state.isInterval ? 'Interval of time' : 'Point in time'}
+						onChange={this.handleChangeEventType}
+						value={newEvent.isInterval ? 'Interval of time' : 'Point in time'}
 						options={['Point in time', 'Interval of time']}
 					/>
 					<Input
-						onChange={(fromDate) => this.setState({ fromDate })}
-						value={this.state.fromDate}
+						onChange={(from: string) => console.log()}
+						value={extractFrom(newEvent).toISOString()}
 					/>
 					{
-						(this.state.isInterval) ?
+						(newEvent.isInterval) ?
 							<Input
-								onChange={(toDate) => this.setState({ toDate })}
-								value={this.state.toDate}
+								onChange={(to: string) => console.log()}
+								value={extractTo(newEvent).toISOString()}
 							/> :
 							null
 					}
 				</div>
 			</div>
 		);
-	}
-
-	private handleChangeType = (type) => {
-		const [from, to] = extractFromAndTo(this.props.root.dateRange);
-
-		const nextState = (type === 'Interval of time') ?
-			{
-				fromDate: proportionalDate(from, to, 0.4).toISOString(),
-				toDate: proportionalDate(from, to, 0.6).toISOString(),
-			} :
-			{
-				fromDate: proportionalDate(from, to, 0.5).toISOString(),
-				toDate: null,
-			};
-
-		this.setState(Object.assign(nextState, {type}));
 	}
 }
 

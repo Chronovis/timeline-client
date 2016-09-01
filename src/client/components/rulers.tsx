@@ -12,8 +12,8 @@ const Ruler = ({ left, year }) => {
 class Rulers extends React.Component<any, any> {
 	public render() {
 		const { root, eventLeftPosition } = this.props;
-		const daysCount = countDaysInRange(root.dateRange);
-		const [from, to] = extractFromAndTo(root.dateRange);
+		const daysCount = countDaysInRange(root);
+		const [from, to] = extractFromAndTo(root);
 		const [fromYear, toYear] = [from.getFullYear(), to.getFullYear()];
 		const rulers = [];
 

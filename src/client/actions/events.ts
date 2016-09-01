@@ -19,3 +19,9 @@ export const getEvents = (slug: string) => (dispatch, getState) =>
 				type: 'RECEIVE_EVENTS',
 			})
 		);
+
+export const setEventKeyValues = (keyValues: IKeyValues) => (dispatch, getState) =>
+	dispatch({
+		type: 'SET_EVENT_KEY_VALUES',
+		keyValues,
+	});

@@ -7,8 +7,6 @@ interface IDateRange {
 	to: Date;
 }
 
-// TODO add granularity. A date gets jan 1st, 00:00 when only entering a year. The granularity is lost
-// in the process, so it must be separately stored.
 interface IEvent {
 	body: string;
 	coordinates: Array<any>;
@@ -21,14 +19,22 @@ interface IEvent {
 	isInterval: boolean;
 	slug: string;
 	title: string;
+	types: string[];
 }
 
 interface IDefaultState {
 	events: IEvent[];
+	newEvent?: IEvent;
 	root: IEvent;
 }
 
 interface IEventBoxProps {
-	eventLeftPosition: (Date) => number;
-	eventWidth: (IEvent) => number;
+	eventLeftPosition: (date: Date) => number;
+	eventWidth: (event: IEvent) => number;
+	flipPointInTime: (left: number) => [boolean, number];
+}
+
+// TODO move to generic/global .d.ts?
+interface IKeyValues {
+	[propName: string]: any;
 }
