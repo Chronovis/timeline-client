@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as cx from 'classnames';
-import {middleDate, extractFromAndTo} from '../../utils/dates';
+import { extractFromAndTo, proportionalDate } from '../../utils/dates';
 import { defaultState as defaultEvent } from '../../reducers/events';
 const Input = require('hire-forms-input').default;
 const Select = require('hire-forms-select').default;
