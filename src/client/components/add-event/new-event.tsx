@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-	extractFromAndTo,
 	proportionalDate,
 	extractFrom,
 	extractTo,
@@ -9,7 +8,7 @@ import Handle from './handle';
 const Input = require('hire-forms-input').default;
 const Select = require('hire-forms-select').default;
 
-interface INewEventProps extends IEventBoxProps {
+interface INewEventProps extends IEventFunctions {
 	newEvent: IEvent;
 	root: IEvent;
 	setEventKeyValues: (keyValues: IKeyValues) => void;
@@ -17,11 +16,11 @@ interface INewEventProps extends IEventBoxProps {
 
 class NewEvent extends React.Component<INewEventProps, {}> {
 	public handleChangeEventType = (value) => {
-		const [from, to] = extractFromAndTo(this.props.root);
+		const { root } = this.props;
 
 		const keyValues = (value === 'Point in time') ?
 			{
-				date: proportionalDate(from, to, 0.5),
+				date: proportionalDate(root, 0.5),
 				dateRange: null,
 				dateRangeUncertain: null,
 				dateUncertain: null,
@@ -30,27 +29,37 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 			{
 				date: null,
 				dateRange: {
-					from: proportionalDate(from, to, 0.45),
-					to: proportionalDate(from, to, 0.55),
+					from: proportionalDate(root, 0.45),
+					to: proportionalDate(root, 0.55),
 				},
 				dateRangeUncertain: null,
 				dateUncertain: null,
 				isInterval: true,
 			};
 
-		this.props.setEventKeyValues(keyValues)
+		this.props.setEventKeyValues(keyValues);
 	};
 
 	public render() {
-		const { eventLeftPosition, eventWidth, newEvent } = this.props;
+		const {
+			dateAtLeftPosition,
+			eventLeftPosition,
+			eventWidth,
+			flipPointInTime,
+			newEvent,
+			setEventKeyValues,
+		} = this.props;
 
 		return (
 			<div className="new-event">
 				<div className="new-event-slide-area">
 					<Handle
+						dateAtLeftPosition={dateAtLeftPosition}
 						event={newEvent}
 						eventLeftPosition={eventLeftPosition}
 						eventWidth={eventWidth}
+						flipPointInTime={flipPointInTime}
+						setEventKeyValues={setEventKeyValues}
 					/>
 				</div>
 				<div className="form">

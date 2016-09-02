@@ -1,25 +1,20 @@
 import * as React from 'react';
-import * as cx from 'classnames';
 import { extractFrom } from '../../utils/dates';
+import IntervalOfTime from '../events/interval-of-time';
+import PointInTime from '../events/point-in-time';
 
-class Handle extends React.Component<any, any> {
+interface IHandleProps extends IEventFunctions {
+	event: IEvent;
+	setEventKeyValues: (keyValues: IKeyValues) => void;
+}
+
+class Handle extends React.Component<IHandleProps, any> {
 	public state = {
 		dragging: false,
-		left: null,
+		offset: null,
 	};
 
-	private handleMouseMove = (ev) => {
-		if (this.state.dragging) {
-			this.setState({left: ev.pageX});
-		}
-	};
-
-	private handleMouseUp = () => {
-		this.setState({
-			dragging: false,
-			left: null,
-		});
-	}
+	private rootElement: HTMLElement = null;
 
 	public componentDidMount() {
 		document.addEventListener('mousemove', this.handleMouseMove);
@@ -32,31 +27,86 @@ class Handle extends React.Component<any, any> {
 	}
 
 	public render() {
-		const { event, eventLeftPosition, eventWidth } = this.props;
+		const {
+			event,
+			eventLeftPosition,
+			eventWidth,
+			flipPointInTime,
+		} = this.props;
 
-		let handleStyle = (this.state.left != null) ?
-			{ left: this.state.left } :
-			{ left: eventLeftPosition(extractFrom(event)) };
-
-		if (event.isInterval) {
-			handleStyle = Object.assign(handleStyle, {
-				width: eventWidth(event),
-			});
-		}
+		const left = eventLeftPosition(extractFrom(event));
 
 		return (
-			<div
-				className={cx('handle', {
-					'interval-of-time': event.isInterval,
-					'point-in-time': !event.isInterval,
-				})}
-				style={handleStyle}
-				onMouseDown={() => this.setState({dragging: true})}
+			<ul
+				className="handle"
+				onMouseDown={this.handleMouseDown}
+				ref={(el) => {
+					if (el != null) {
+						this.rootElement = el;
+					}
+				}}
 			>
-				<span className="title">{event.title}</span>
-			</div>
+				{
+					event.isInterval ?
+						<IntervalOfTime
+							event={event}
+							left={left}
+							width={eventWidth(event)}
+						/> :
+						<PointInTime
+							event={event}
+							flipPointInTime={flipPointInTime}
+							left={left}
+						/>
+				}
+			</ul>
 		);
 	}
+
+	private handleMouseDown = (ev) => {
+		const { event, eventLeftPosition } = this.props;
+		const left = eventLeftPosition(extractFrom(event));
+
+		this.setState({
+			dragging: true,
+			offset: left - ev.pageX,
+		});
+
+		document.body.classList.add('user-select-none', 'cursor-move');
+	};
+
+	private handleMouseMove = (ev) => {
+		if (this.state.dragging) {
+			const left = ev.pageX + this.state.offset;
+			const from = this.props.dateAtLeftPosition(left);
+
+			// TODO fix
+			const to = this.props.dateAtLeftPosition(left + 200);
+
+			const keyValues = this.props.event.isInterval ?
+				{
+					dateRange: {
+						from,
+						to,
+					},
+				} :
+				{
+					date: from,
+				};
+
+			this.props.setEventKeyValues(keyValues);
+		}
+	};
+
+	private handleMouseUp = () => {
+		this.setState({
+			dragging: false,
+			left: null,
+			offset: null,
+		});
+
+		document.body.classList.remove('user-select-none', 'cursor-move');
+	};
 }
 
 export default Handle;

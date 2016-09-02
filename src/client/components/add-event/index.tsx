@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import history from '../../routes/history';
 import NewEvent from './new-event';
 import { setEventKeyValues } from '../../actions/events';
-import {extractFromAndTo, proportionalDate} from "../../utils/dates";
+import { proportionalDate } from '../../utils/dates';
 const Input = require('hire-forms-input').default;
 
-interface IAddEventProps extends IEventBoxProps {
+interface IAddEventProps extends IEventFunctions {
 	newEvent: IEvent;
 	params: {
 		slug: string;
@@ -33,6 +33,7 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 
 	public render() {
 		const {
+			dateAtLeftPosition,
 			eventLeftPosition,
 			eventWidth,
 			flipPointInTime,
@@ -55,6 +56,7 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 							value={this.state.title}
 						/> :
 						<NewEvent
+							dateAtLeftPosition={dateAtLeftPosition}
 							eventLeftPosition={eventLeftPosition}
 							eventWidth={eventWidth}
 							flipPointInTime={flipPointInTime}
@@ -81,10 +83,9 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 
 	private handleKeyUp = (ev) => {
 		if (ev.keyCode === 13) {
-			const [from, to] = extractFromAndTo(this.props.root);
 			this.props.setEventKeyValues({
+				date: proportionalDate(this.props.root, 0.5),
 				title: this.state.title,
-				date: proportionalDate(from, to, 0.5),
 			});
 		}
 	};

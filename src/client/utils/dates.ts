@@ -30,7 +30,8 @@ const oldestDate = () => new Date(-4713, 0, 1);
 // export const middleDate = (date1: Date, date2: Date): Date =>
 // 	new Date((date1.getTime() + date2.getTime()) / 2);
 
-export const proportionalDate = (from: Date, to: Date, proportion: number): Date => {
+export const proportionalDate = (event: IEvent, proportion: number): Date => {
+	const [from, to] = extractFromAndTo(event);
 	if (proportion < 0 || proportion > 1) throw new Error('[proportionalDate] proportion should be between 0 and 1.');
 	if (from > to) throw new Error('[proportionalDate] `From date` should be lower than `to date`.');
 

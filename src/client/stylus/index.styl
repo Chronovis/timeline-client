@@ -5,6 +5,14 @@ body
 	padding 0
 	width 100%
 
+	&.user-select-none
+		user-select none
+		-moz-user-select none
+		-webkit-user-select none
+
+	&.cursor-move
+		cursor move
+
 #container
 	height 100%
 
@@ -12,4 +20,3 @@ body
 @import 'functions.styl'
 @import 'icons.styl'
 @import '../components/**/*'
-

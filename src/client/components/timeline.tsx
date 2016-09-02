@@ -2,10 +2,11 @@ import * as React from 'react';
 import { Link } from 'react-router';
 import * as cx from 'classnames';
 import * as debounce from 'lodash.debounce';
-import Events from './events';
+import Events from './events/index';
 import Rulers from './rulers';
-import {countDaysInRange, formatDate, countDays, extractFrom} from '../utils/dates';
+import {countDaysInRange, formatDate, countDays, extractFrom, proportionalDate} from '../utils/dates';
 
+// TODO Move to constants.ts
 const timelineWidth = (): number => document.documentElement.clientWidth * 0.98;
 const eventWidth = 240;
 
@@ -20,7 +21,6 @@ interface ITimelineState {
 }
 
 class Timeline extends React.Component<ITimelineProps, ITimelineState> {
-	// TODO only have pixelsPerDay as state
 	public state = {
 		pixelsPerDay: this.pixelsPerDay(this.props.root),
 	};
@@ -45,12 +45,16 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 	public eventWidth = (event: IEvent): number =>
 		countDaysInRange(event) * this.state.pixelsPerDay;
 
+	// TODO move to point-in-time.tsx
 	public flipPointInTime = (left: number): [boolean, number] => {
 		const width = timelineWidth();
 		const flip = left > (width - eventWidth);
 		const distance = flip ? width - left : left;
 		return [flip, distance];
 	};
+
+	public dateAtLeftPosition = (position: number): Date =>
+		proportionalDate(this.props.root, position / timelineWidth());
 
 	public render() {
 		const { children, root } = this.props;
@@ -80,6 +84,7 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 				/>
 				{
 					this.props.children && React.cloneElement(children, {
+						dateAtLeftPosition: this.dateAtLeftPosition,
 						eventLeftPosition: this.eventLeftPosition,
 						eventWidth: this.eventWidth,
 						flipPointInTime: this.flipPointInTime,

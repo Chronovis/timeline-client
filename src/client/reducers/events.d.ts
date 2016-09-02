@@ -28,7 +28,8 @@ interface IDefaultState {
 	root: IEvent;
 }
 
-interface IEventBoxProps {
+interface IEventFunctions {
+	dateAtLeftPosition?: (position: number) => Date;
 	eventLeftPosition: (date: Date) => number;
 	eventWidth: (event: IEvent) => number;
 	flipPointInTime: (left: number) => [boolean, number];
