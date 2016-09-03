@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router';
 import * as cx from 'classnames';
 
-const IntervalOfTime = ({ event, left, width }) => {
+const IntervalOfTime = ({ isNewEvent = false, event, left, width }) => {
 	return (
 		<li
 			className="interval-of-time"
@@ -12,12 +12,24 @@ const IntervalOfTime = ({ event, left, width }) => {
 			}}
 			title={event.title}
 		>
-			<Link
-				to={`/timelines/${event.slug}`}
-				className={cx(event.types)}
-			>
-				{event.title}
-			</Link>
+			{
+				isNewEvent ?
+					<div className="handles">
+						<div className="w-resize-handle" />
+						<div className="move-handle">
+							<div className="title">
+								{event.title}
+							</div>
+						</div>
+						<div className="e-resize-handle" />
+					</div> :
+					<Link
+						to={`/timelines/${event.slug}`}
+						className={cx(event.types)}
+					>
+						{event.title}
+					</Link>
+			}
 		</li>
 	);
 };

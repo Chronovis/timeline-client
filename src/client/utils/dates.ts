@@ -3,28 +3,6 @@ type DateToFormat = 'from' | 'to';
 const isEqualDates = (date1: Date, date2: Date): boolean =>
 	date1.getTime() === date2.getTime();
 
-const format = (date: Date, granularity: DateGranularity): string => {
-	if (date == null) return '∞';
-
-	let displayDate = date.getFullYear().toString();
-
-	if (granularity >= DateGranularity.MONTH) {
-		const months = [
-			'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-			'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-		];
-		displayDate = `${months[date.getMonth()]} ${displayDate}`;
-	}
-	if (granularity >= DateGranularity.DAY) {
-		displayDate = `${date.getDay()} ${displayDate}`;
-	}
-	if (granularity === DateGranularity.TIME) {
-		displayDate = `${date.getHours()}:${date.getMinutes()} ${displayDate}`;
-	}
-
-	return displayDate;
-};
-
 const oldestDate = () => new Date(-4713, 0, 1);
 
 // export const middleDate = (date1: Date, date2: Date): Date =>
@@ -67,6 +45,28 @@ export const countDaysInRange = (event: IEvent): number => {
 	const [from, to] = extractFromAndTo(event);
 	if (to == null) return null;
 	return countDays(from, to);
+};
+
+const format = (date: Date, granularity: DateGranularity): string => {
+	if (date == null) return '∞';
+
+	let displayDate = date.getFullYear().toString();
+
+	if (granularity >= DateGranularity.MONTH) {
+		const months = [
+			'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+			'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+		];
+		displayDate = `${months[date.getMonth()]} ${displayDate}`;
+	}
+	if (granularity >= DateGranularity.DAY) {
+		displayDate = `${date.getDay()} ${displayDate}`;
+	}
+	if (granularity === DateGranularity.TIME) {
+		displayDate = `${date.getHours()}:${date.getMinutes()} ${displayDate}`;
+	}
+
+	return displayDate;
 };
 
 export const formatDate = (event: IEvent, dateToFormat: DateToFormat): string => {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { extractFrom } from '../../utils/dates';
+import {extractFrom, extractFromAndTo} from '../../utils/dates';
 import IntervalOfTime from '../events/interval-of-time';
 import PointInTime from '../events/point-in-time';
 
@@ -11,6 +11,7 @@ interface IHandleProps extends IEventFunctions {
 class Handle extends React.Component<IHandleProps, any> {
 	public state = {
 		dragging: false,
+		handle: null,
 		offset: null,
 	};
 
@@ -38,7 +39,7 @@ class Handle extends React.Component<IHandleProps, any> {
 
 		return (
 			<ul
-				className="handle"
+				className="slider"
 				onMouseDown={this.handleMouseDown}
 				ref={(el) => {
 					if (el != null) {
@@ -50,6 +51,7 @@ class Handle extends React.Component<IHandleProps, any> {
 					event.isInterval ?
 						<IntervalOfTime
 							event={event}
+							isNewEvent
 							left={left}
 							width={eventWidth(event)}
 						/> :
@@ -66,9 +68,15 @@ class Handle extends React.Component<IHandleProps, any> {
 	private handleMouseDown = (ev) => {
 		const { event, eventLeftPosition } = this.props;
 		const left = eventLeftPosition(extractFrom(event));
+		const handle = (ev.target.matches('.move-handle') || ev.target.matches('.move-handle .title')) ?
+			'move' :
+			(ev.target.matches('.w-resize-handle')) ?
+				'west-resize' :
+				'east-resize';
 
 		this.setState({
 			dragging: true,
+			handle,
 			offset: left - ev.pageX,
 		});
 
@@ -78,10 +86,18 @@ class Handle extends React.Component<IHandleProps, any> {
 	private handleMouseMove = (ev) => {
 		if (this.state.dragging) {
 			const left = ev.pageX + this.state.offset;
-			const from = this.props.dateAtLeftPosition(left);
+			let [from, to] = extractFromAndTo(this.props.event);
 
-			// TODO fix
-			const to = this.props.dateAtLeftPosition(left + 200);
+			if (this.state.handle === 'move') {
+				from = this.props.dateAtLeftPosition(left);
+
+				// TODO fix
+				to = this.props.dateAtLeftPosition(left + 200);
+			} else if (this.state.handle === 'west-resize') {
+				from = this.props.dateAtLeftPosition(left);
+			} else if (this.state.handle === 'east-resize') {
+				to = this.props.dateAtLeftPosition(ev.pageX);
+			}
 
 			const keyValues = this.props.event.isInterval ?
 				{
@@ -101,7 +117,7 @@ class Handle extends React.Component<IHandleProps, any> {
 	private handleMouseUp = () => {
 		this.setState({
 			dragging: false,
-			left: null,
+			handle: null,
 			offset: null,
 		});
 

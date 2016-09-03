@@ -27,7 +27,22 @@ li.interval-of-time
 	&:hover
 		box-shadow 0 4px 8px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.22)
 
+	.w-resize-handle, .e-resize-handle
+		background timelineLighestBlue
+		bottom 0
+		position absolute
+		top 0
+		width 4px
+
+	.w-resize-handle
+		cursor w-resize
+
+	.e-resize-handle
+		cursor e-resize
+		right 0
+
 	a
+	.title // TODO add pointer-events to .title to pass event through to .e-resize-handle
 		color #DDD
 		text-decoration none
 		background rgba(0, 0, 0, 0.4)
