@@ -8,6 +8,7 @@ interface IHandleProps extends IEventFunctions {
 	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
 
+// TODO rename to Slider
 class Handle extends React.Component<IHandleProps, any> {
 	public state = {
 		dragging: false,
