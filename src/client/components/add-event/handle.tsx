@@ -69,19 +69,20 @@ class Handle extends React.Component<IHandleProps, any> {
 	private handleMouseDown = (ev) => {
 		const { event, eventLeftPosition } = this.props;
 		const left = eventLeftPosition(extractFrom(event));
+		// TODO .move-handle isn't matched!
 		const handle = (ev.target.matches('.move-handle') || ev.target.matches('.move-handle .title')) ?
 			'move' :
 			(ev.target.matches('.w-resize-handle')) ?
 				'west-resize' :
 				'east-resize';
 
+		document.body.classList.add('user-select-none', handle);
+
 		this.setState({
 			dragging: true,
 			handle,
 			offset: left - ev.pageX,
 		});
-
-		document.body.classList.add('user-select-none', 'cursor-move');
 	};
 
 	private handleMouseMove = (ev) => {
@@ -116,13 +117,13 @@ class Handle extends React.Component<IHandleProps, any> {
 	};
 
 	private handleMouseUp = () => {
+		document.body.classList.remove('user-select-none', this.state.handle);
+
 		this.setState({
 			dragging: false,
 			handle: null,
 			offset: null,
 		});
-
-		document.body.classList.remove('user-select-none', 'cursor-move');
 	};
 }
 
