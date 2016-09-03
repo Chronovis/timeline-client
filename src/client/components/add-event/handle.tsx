@@ -69,8 +69,7 @@ class Handle extends React.Component<IHandleProps, any> {
 	private handleMouseDown = (ev) => {
 		const { event, eventLeftPosition } = this.props;
 		const left = eventLeftPosition(extractFrom(event));
-		// TODO .move-handle isn't matched!
-		const handle = (ev.target.matches('.move-handle') || ev.target.matches('.move-handle .title')) ?
+		const handle = (ev.target.matches('.move-handle') || ev.target.matches('.move-handle .title') || ev.target.matches('.interval-of-time')) ?
 			'move' :
 			(ev.target.matches('.w-resize-handle')) ?
 				'west-resize' :
