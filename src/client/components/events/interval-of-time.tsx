@@ -17,7 +17,9 @@ const IntervalOfTime = ({ isNewEvent = false, event, left, width }) => {
 					<div className="handles">
 						<div className="w-resize-handle" />
 						<div className="move-handle">
-							<div className="title">
+							<div
+								className={cx('title', event.types)}
+							>
 								{event.title}
 							</div>
 						</div>

@@ -60,6 +60,19 @@ app.post('/events', (req, res) => {
 	});
 });
 
+app.post('/event-types', (req, res) => {
+	pool.connect((connectionError, client, releaseClient) => {
+		if (connectionError) return console.error('Error fetching client from pool', connectionError);
+
+		client.query(`SELECT event_type.id as key, event_type.title as value, event_type.body FROM event_type WHERE event_type.title LIKE '%${req.body.query}%';`, (queryError, result) => {
+			if (queryError) return console.error('Error querying database', queryError);
+
+			res.send(result.rows);
+			releaseClient();
+		});
+	});
+});
+
 pool.on('error', function (err, client) {
   // if an error is encountered by a client while it sits idle in the pool
   // the pool itself will emit an error event with both the error and

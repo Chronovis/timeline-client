@@ -3,13 +3,12 @@ import {extractFrom, extractFromAndTo} from '../../utils/dates';
 import IntervalOfTime from '../events/interval-of-time';
 import PointInTime from '../events/point-in-time';
 
-interface IHandleProps extends IEventFunctions {
+interface ISliderProps extends IEventFunctions {
 	event: IEvent;
 	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
 
-// TODO rename to Slider
-class Handle extends React.Component<IHandleProps, any> {
+class Slider extends React.Component<ISliderProps, any> {
 	public state = {
 		dragging: false,
 		handle: null,
@@ -69,7 +68,13 @@ class Handle extends React.Component<IHandleProps, any> {
 	private handleMouseDown = (ev) => {
 		const { event, eventLeftPosition } = this.props;
 		const left = eventLeftPosition(extractFrom(event));
-		const handle = (ev.target.matches('.move-handle') || ev.target.matches('.move-handle .title') || ev.target.matches('.interval-of-time')) ?
+		console.log(ev.target.className)
+		const handle = (
+			ev.target.matches('.move-handle') ||
+			ev.target.matches('.move-handle .title') ||
+			ev.target.matches('.interval-of-time') ||
+			ev.target.matches('.point-in-time')
+		) ?
 			'move' :
 			(ev.target.matches('.w-resize-handle')) ?
 				'west-resize' :
@@ -91,9 +96,7 @@ class Handle extends React.Component<IHandleProps, any> {
 
 			if (this.state.handle === 'move') {
 				from = this.props.dateAtLeftPosition(left);
-
-				// TODO fix
-				to = this.props.dateAtLeftPosition(left + 200);
+				to = this.props.dateAtLeftPosition(left + this.props.eventWidth(this.props.event));
 			} else if (this.state.handle === 'west-resize') {
 				from = this.props.dateAtLeftPosition(left);
 			} else if (this.state.handle === 'east-resize') {
@@ -126,4 +129,4 @@ class Handle extends React.Component<IHandleProps, any> {
 	};
 }
 
-export default Handle;
+export default Slider;

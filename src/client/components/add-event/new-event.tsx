@@ -4,9 +4,11 @@ import {
 	extractFrom,
 	extractTo,
 } from '../../utils/dates';
-import Handle from './handle';
+import Slider from './slider';
+import { getEventTypes } from '../../actions/api';
 const Input = require('hire-forms-input').default;
 const Select = require('hire-forms-select').default;
+const AutocompleteList = require('hire-forms-autocomplete-list').default;
 
 interface INewEventProps extends IEventFunctions {
 	newEvent: IEvent;
@@ -53,7 +55,7 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 		return (
 			<div className="new-event">
 				<div className="new-event-slide-area">
-					<Handle
+					<Slider
 						dateAtLeftPosition={dateAtLeftPosition}
 						event={newEvent}
 						eventLeftPosition={eventLeftPosition}
@@ -67,6 +69,15 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 						onChange={this.handleChangeEventType}
 						value={newEvent.isInterval ? 'Interval of time' : 'Point in time'}
 						options={['Point in time', 'Interval of time']}
+					/>
+					<AutocompleteList
+						async={getEventTypes}
+						onChange={(values) => {
+							setEventKeyValues({
+								types: values.map((v) => v.value),
+							})
+						}}
+						values={newEvent.types.map((t) => ({key: t, value: t}))}
 					/>
 					<Input
 						onChange={(from: string) => console.log()}
