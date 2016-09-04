@@ -54,6 +54,7 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 			eventWidth,
 			flipPointInTime,
 			newEvent,
+			params,
 			resetEvent,
 			setEventKeyValues,
 		} = this.props;
@@ -102,7 +103,7 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 					<button
 						onClick={() => {
 							resetEvent();
-							history.push(`/timelines/${this.props.params.slug}`);
+							history.push(`/timelines/${params.slug}`);
 						}}
 					>
 						Cancel
