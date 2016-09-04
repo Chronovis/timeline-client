@@ -1,4 +1,5 @@
 import * as React from 'react';
+import history from '../../routes/history';
 import {
 	proportionalDate,
 	extractFrom,
@@ -12,6 +13,10 @@ const AutocompleteList = require('hire-forms-autocomplete-list').default;
 
 interface INewEventProps extends IEventFunctions {
 	newEvent: IEvent;
+	params: {
+		slug: string;
+	};
+	resetEvent: () => void;
 	root: IEvent;
 	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
@@ -49,6 +54,7 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 			eventWidth,
 			flipPointInTime,
 			newEvent,
+			resetEvent,
 			setEventKeyValues,
 		} = this.props;
 
@@ -75,7 +81,7 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 						onChange={(values) => {
 							setEventKeyValues({
 								types: values.map((v) => v.value),
-							})
+							});
 						}}
 						values={newEvent.types.map((t) => ({key: t, value: t}))}
 					/>
@@ -92,6 +98,17 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 							null
 					}
 				</div>
+				<footer>
+					<button
+						onClick={() => {
+							resetEvent();
+							history.push(`/timelines/${this.props.params.slug}`);
+						}}
+					>
+						Cancel
+					</button>
+					<button>Save</button>
+				</footer>
 			</div>
 		);
 	}

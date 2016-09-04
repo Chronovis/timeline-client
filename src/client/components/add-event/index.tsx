@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import history from '../../routes/history';
 import NewEvent from './new-event';
-import { setEventKeyValues } from '../../actions/events';
+import { setEventKeyValues, resetEvent } from '../../actions/events';
 import { proportionalDate } from '../../utils/dates';
 const Input = require('hire-forms-input').default;
 
@@ -11,6 +10,7 @@ interface IAddEventProps extends IEventFunctions {
 	params: {
 		slug: string;
 	};
+	resetEvent: () => void;
 	root: IEvent;
 	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
@@ -23,14 +23,6 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 
 	private rootElement;
 
-	public componentDidMount() {
-		document.addEventListener('click', this.handleDocumentClick);
-	}
-
-	public componentWillUnmount() {
-		document.removeEventListener('click', this.handleDocumentClick);
-	}
-
 	public render() {
 		const {
 			dateAtLeftPosition,
@@ -38,6 +30,8 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 			eventWidth,
 			flipPointInTime,
 			newEvent,
+			params,
+			resetEvent,
 			root,
 			setEventKeyValues,
 		} = this.props;
@@ -61,24 +55,14 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 							eventWidth={eventWidth}
 							flipPointInTime={flipPointInTime}
 							newEvent={newEvent}
+							params={params}
+							resetEvent={resetEvent}
 							root={root}
 							setEventKeyValues={setEventKeyValues}
 						/>
 				}
 			</div>
 		);
-	}
-
-	private handleDocumentClick = (ev) => {
-		if (
-			!(
-				this.rootElement.contains(ev.target) ||
-				this.rootElement === ev.target ||
-				ev.target.matches('li.hire-forms-option')
-			)
-		) {
-			history.push(`/timelines/${this.props.params.slug}`);
-		}
 	}
 
 	private handleKeyUp = (ev) => {
@@ -96,6 +80,7 @@ export default connect(
 		newEvent: state.events.newEvent,
 		root: state.events.root,
 	}), {
+		resetEvent,
 		setEventKeyValues,
 	}
 )(AddEvent);

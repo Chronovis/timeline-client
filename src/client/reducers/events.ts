@@ -74,6 +74,11 @@ export default (state = defaultState, action) => {
 			break;
 		}
 
+		case 'RESET_EVENT': {
+			nextState = Object.assign({}, state, { newEvent: defaultEvent });
+			break;
+		}
+
 		default:
 	}
 
