@@ -42,16 +42,23 @@ li.interval-of-time
 		right 0
 
 	a
-	.title // TODO add pointer-events to .title to pass event through to .e-resize-handle
+	.title
 		color #DDD
 		text-decoration none
 		background rgba(0, 0, 0, 0.4)
 		border-radius 2px
+		box-sizing border-box
+		max-width EVENT_MAX_WIDTH
+		overflow: hidden
+		text-overflow ellipsis
 		padding 0 4px
+
+		&.fill
+			max-width calc(100% - 8px)
 
 li.point-in-time
 	background-color timelineBlue
-	max-width 240px
+	max-width EVENT_MAX_WIDTH
 	overflow hidden
 	padding 4px 0
 	text-overflow ellipsis

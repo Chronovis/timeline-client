@@ -13,11 +13,9 @@ const AutocompleteList = require('hire-forms-autocomplete-list').default;
 
 interface INewEventProps extends IEventFunctions {
 	newEvent: IEvent;
-	params: {
-		slug: string;
-	};
 	resetEvent: () => void;
 	root: IEvent;
+	saveEvent: () => void;
 	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
 
@@ -54,8 +52,9 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 			eventWidth,
 			flipPointInTime,
 			newEvent,
-			params,
 			resetEvent,
+			root,
+			saveEvent,
 			setEventKeyValues,
 		} = this.props;
 
@@ -103,12 +102,17 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 					<button
 						onClick={() => {
 							resetEvent();
-							history.push(`/timelines/${params.slug}`);
+							history.push(`/timelines/${root.slug}`);
 						}}
 					>
 						Cancel
 					</button>
-					<button>Save</button>
+					<button
+						onClick={() => {
+							saveEvent();
+							history.push(`/timelines/${root.slug}`);
+						}}
+					>Save</button>
 				</footer>
 			</div>
 		);

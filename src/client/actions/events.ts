@@ -28,3 +28,6 @@ export const setEventKeyValues = (keyValues: IKeyValues) => (dispatch, getState)
 
 export const resetEvent = () => (dispatch, getState) =>
 	dispatch({ type: 'RESET_EVENT' });
+
+export const saveEvent = () => (dispatch, getState) =>
+	dispatch({ type: 'SAVE_EVENT' });

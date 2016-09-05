@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import * as cx from 'classnames';
+import { EVENT_MAX_WIDTH } from '../constants';
 
 const IntervalOfTime = ({ isNewEvent = false, event, left, width }) => {
 	return (
@@ -18,7 +19,9 @@ const IntervalOfTime = ({ isNewEvent = false, event, left, width }) => {
 						<div className="w-resize-handle" />
 						<div className="move-handle">
 							<div
-								className={cx('title', event.types)}
+								className={cx('title', event.types, {
+									fill: width > EVENT_MAX_WIDTH,
+								})}
 							>
 								{event.title}
 							</div>
@@ -26,8 +29,10 @@ const IntervalOfTime = ({ isNewEvent = false, event, left, width }) => {
 						<div className="e-resize-handle" />
 					</div> :
 					<Link
+						className={cx(event.types, {
+							fill: width > EVENT_MAX_WIDTH,
+						})}
 						to={`/timelines/${event.slug}`}
-						className={cx(event.types)}
 					>
 						{event.title}
 					</Link>

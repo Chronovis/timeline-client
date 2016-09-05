@@ -5,10 +5,7 @@ import * as debounce from 'lodash.debounce';
 import Events from './events/index';
 import Rulers from './rulers';
 import {countDaysInRange, formatDate, countDays, extractFrom, proportionalDate} from '../utils/dates';
-
-// TODO Move to constants.ts
-const timelineWidth = (): number => document.documentElement.clientWidth * 0.98;
-const eventWidth = 240;
+import { EVENT_MAX_WIDTH, timelineWidth } from './constants';
 
 interface ITimelineProps {
 	children?: any;
@@ -48,7 +45,7 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 	// TODO move to point-in-time.tsx
 	public flipPointInTime = (left: number): [boolean, number] => {
 		const width = timelineWidth();
-		const flip = left > (width - eventWidth);
+		const flip = left > (width - EVENT_MAX_WIDTH);
 		const distance = flip ? width - left : left;
 		return [flip, distance];
 	};

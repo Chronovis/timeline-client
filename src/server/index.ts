@@ -25,7 +25,13 @@ const sql = (event) => {
 		AND parentEvent.slug = '${event}'
 		AND event__event_type.event_id = childEvent.id
 		AND event__event_type.event_type_id = event_type.id
-	GROUP BY childEvent.id;`;
+	GROUP BY childEvent.id
+	ORDER BY LEAST(
+		childEvent.date,
+		lower(childEvent.date_range),
+		lower(childEvent.date_range_uncertain),
+		lower(childEvent.date_uncertain)
+	);`;
 	console.log(s);
 	return s;
 };
@@ -37,6 +43,16 @@ const selectRootSql = (slug) => `
 		AND event__event_type.event_id = event.id
 		AND event__event_type.event_type_id = event_type.id
 	GROUP BY event.id;`;
+
+const selectParentEventsSql = (slug) => `
+	SELECT parentEvent.*, array_agg(event_type.title) AS types
+	FROM event as childEvent, event as parentEvent, event_type, event__event_type, event__event
+	WHERE childEvent.slug = '${slug}'
+		AND event__event.child_event_id = childEvent.id
+		AND event__event.parent_event_id = parentEvent.id
+		AND event__event_type.event_id = parentEvent.id
+		AND event__event_type.event_type_id = event_type.id
+	GROUP BY parentEvent.id;`;
 
 const app = express();
 app.use(bodyParser.json());
@@ -56,6 +72,19 @@ app.post('/events', (req, res) => {
 				});
 				releaseClient();
 			});
+		});
+	});
+});
+
+app.post('/parent-events', (req, res) => {
+	pool.connect((connectionError, client, releaseClient) => {
+		if (connectionError) return console.error('Error fetching client from pool', connectionError);
+
+		client.query(selectParentEventsSql(req.body.event), (queryError, result) => {
+			if (queryError) return console.error('Error querying database', queryError);
+
+			res.send(result.rows.map(parseEvent));
+			releaseClient();
 		});
 	});
 });

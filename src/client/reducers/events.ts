@@ -79,6 +79,14 @@ export default (state = defaultState, action) => {
 			break;
 		}
 
+		case 'SAVE_EVENT': {
+			nextState = Object.assign({}, state, {
+				events: state.events.concat(state.newEvent),
+				newEvent: defaultEvent,
+			});
+			break;
+		}
+
 		default:
 	}
 

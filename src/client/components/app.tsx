@@ -10,7 +10,7 @@ interface IEventsProps {
 	routeParams: { slug: string };
 }
 
-class Events extends React.Component<IEventsProps, {}> {
+class App extends React.Component<IEventsProps, {}> {
 	public componentDidMount() {
 		this.props.getEvents(this.props.routeParams.slug);
 	}
@@ -36,4 +36,4 @@ export default connect(
 	{
 		getEvents,
 	},
-)(Events);
+)(App);

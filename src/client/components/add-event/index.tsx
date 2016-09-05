@@ -1,17 +1,15 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import NewEvent from './new-event';
-import { setEventKeyValues, resetEvent } from '../../actions/events';
+import { setEventKeyValues, resetEvent, saveEvent } from '../../actions/events';
 import { proportionalDate } from '../../utils/dates';
 const Input = require('hire-forms-input').default;
 
 interface IAddEventProps extends IEventFunctions {
 	newEvent: IEvent;
-	params: {
-		slug: string;
-	};
 	resetEvent: () => void;
 	root: IEvent;
+	saveEvent: () => void;
 	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
 
@@ -30,9 +28,9 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 			eventWidth,
 			flipPointInTime,
 			newEvent,
-			params,
 			resetEvent,
 			root,
+			saveEvent,
 			setEventKeyValues,
 		} = this.props;
 
@@ -55,9 +53,9 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 							eventWidth={eventWidth}
 							flipPointInTime={flipPointInTime}
 							newEvent={newEvent}
-							params={params}
 							resetEvent={resetEvent}
 							root={root}
+							saveEvent={saveEvent}
 							setEventKeyValues={setEventKeyValues}
 						/>
 				}
@@ -81,6 +79,7 @@ export default connect(
 		root: state.events.root,
 	}), {
 		resetEvent,
+		saveEvent,
 		setEventKeyValues,
 	}
 )(AddEvent);
