@@ -1,10 +1,12 @@
 import * as React from 'react';
-import {extractFrom, extractFromAndTo} from '../../utils/dates';
+import {extractFromAndTo, dateAtLeftPosition} from '../../utils/dates';
 import IntervalOfTime from '../events/interval-of-time';
 import PointInTime from '../events/point-in-time';
+import {eventWidth, eventLeftPosition} from '../../utils/event';
 
-interface ISliderProps extends IEventFunctions {
+interface ISliderProps {
 	event: IEvent;
+	root: IEvent;
 	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
 
@@ -28,14 +30,7 @@ class Slider extends React.Component<ISliderProps, any> {
 	}
 
 	public render() {
-		const {
-			event,
-			eventLeftPosition,
-			eventWidth,
-			flipPointInTime,
-		} = this.props;
-
-		const left = eventLeftPosition(extractFrom(event));
+		const { event } = this.props;
 
 		return (
 			<ul
@@ -52,13 +47,9 @@ class Slider extends React.Component<ISliderProps, any> {
 						<IntervalOfTime
 							event={event}
 							isNewEvent
-							left={left}
-							width={eventWidth(event)}
 						/> :
 						<PointInTime
 							event={event}
-							flipPointInTime={flipPointInTime}
-							left={left}
 						/>
 				}
 			</ul>
@@ -66,14 +57,14 @@ class Slider extends React.Component<ISliderProps, any> {
 	}
 
 	private handleMouseDown = (ev) => {
-		const { event, eventLeftPosition } = this.props;
-		const left = eventLeftPosition(extractFrom(event));
-		console.log(ev.target.className)
+		const { event, root } = this.props;
+		const left = eventLeftPosition(event, root);
 		const handle = (
 			ev.target.matches('.move-handle') ||
 			ev.target.matches('.move-handle .title') ||
 			ev.target.matches('.interval-of-time') ||
-			ev.target.matches('.point-in-time')
+			ev.target.matches('.point-in-time') ||
+			ev.target.matches('.point-in-time .title')
 		) ?
 			'move' :
 			(ev.target.matches('.w-resize-handle')) ?
@@ -92,15 +83,16 @@ class Slider extends React.Component<ISliderProps, any> {
 	private handleMouseMove = (ev) => {
 		if (this.state.dragging) {
 			const left = ev.pageX + this.state.offset;
-			let [from, to] = extractFromAndTo(this.props.event);
+			const { event, root } = this.props;
+			let [from, to] = extractFromAndTo(event);
 
 			if (this.state.handle === 'move') {
-				from = this.props.dateAtLeftPosition(left);
-				to = this.props.dateAtLeftPosition(left + this.props.eventWidth(this.props.event));
+				from = dateAtLeftPosition(left, root);
+				to = dateAtLeftPosition(left + eventWidth(event, root), root);
 			} else if (this.state.handle === 'west-resize') {
-				from = this.props.dateAtLeftPosition(left);
+				from = dateAtLeftPosition(left, root);
 			} else if (this.state.handle === 'east-resize') {
-				to = this.props.dateAtLeftPosition(ev.pageX);
+				to = dateAtLeftPosition(ev.pageX, root);
 			}
 
 			const keyValues = this.props.event.isInterval ?

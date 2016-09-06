@@ -1,5 +1,11 @@
+import {parseEvent, parseRootEvent, setBoundingBox, pixelsPerDay} from '../utils/event';
+
 const defaultEvent: IEvent = {
 	body: '',
+	boundingBox: {
+		left: null,
+		width: null,
+	},
 	coordinates: [],
 	date: null,
 	dateGranularity: DateGranularity.DAY,
@@ -8,6 +14,7 @@ const defaultEvent: IEvent = {
 	dateRangeUncertain: null,
 	dateUncertain: null,
 	isInterval: false,
+	pixelsPerDay: null,
 	slug: '',
 	title: '',
 	types: [],
@@ -19,57 +26,23 @@ const defaultState: IDefaultState = {
 	root: defaultEvent,
 };
 
-const parseEvent = (event): IEvent => {
-	const parseDate = (date): Date => {
-		// TODO remove split('+') code. It is used to let the dates work under FF. Use different solution.
-		// Plus, there should be some sort of granularity. When a date does not need time information, the
-		// timezone can be skipped anyway.
-		date = date.split('+')[0];
-		return (date === 'infinity') ? null : new Date(date);
-	};
-
-	const parseDateRange = (dateRange): IDateRange => {
-		return {
-			from: parseDate(dateRange.from),
-			infiniteFrom: dateRange.from === 'infinity',
-			infiniteTo: dateRange.to === 'infinity',
-			to: parseDate(dateRange.to),
-		};
-	};
-
-	if (event.dateRange != null) {
-		event.dateRange = parseDateRange(event.dateRange);
-	}
-
-	if (event.dateUncertain != null) {
-		event.dateUncertain = parseDateRange(event.dateUncertain);
-	}
-
-	if (event.dateRangeUncertain != null) {
-		event.dateRangeUncertain = parseDateRange(event.dateRangeUncertain);
-	}
-
-	if (event.date != null) event.date = parseDate(event.date);
-
-	if (event.dateRange != null) event.isInterval = true;
-
-	return event;
-};
-
 export default (state = defaultState, action) => {
 	let nextState = state;
 
 	switch (action.type) {
 		case 'RECEIVE_EVENTS': {
+			const root = parseRootEvent(action.root);
+
 			nextState = Object.assign({}, state, {
-				events: action.events.map(parseEvent),
-				root: parseEvent(action.root),
+				events: action.events.map(parseEvent(root)),
+				root,
 			});
 			break;
 		}
 
 		case 'SET_EVENT_KEY_VALUES': {
-			const newEvent = Object.assign({}, state.newEvent, action.keyValues);
+			let newEvent = Object.assign({}, state.newEvent, action.keyValues);
+			newEvent = setBoundingBox(newEvent, state.root);
 			nextState = Object.assign({}, state, { newEvent	});
 			break;
 		}
@@ -83,6 +56,13 @@ export default (state = defaultState, action) => {
 			nextState = Object.assign({}, state, {
 				events: state.events.concat(state.newEvent),
 				newEvent: defaultEvent,
+			});
+			break;
+		}
+
+		case 'RESIZE': {
+			nextState = Object.assign({}, state, {
+				root: Object.assign({}, state.root, { pixelsPerDay: pixelsPerDay(state.root) }),
 			});
 			break;
 		}

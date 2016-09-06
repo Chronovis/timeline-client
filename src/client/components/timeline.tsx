@@ -4,54 +4,23 @@ import * as cx from 'classnames';
 import * as debounce from 'lodash.debounce';
 import Events from './events/index';
 import Rulers from './rulers';
-import {countDaysInRange, formatDate, countDays, extractFrom, proportionalDate} from '../utils/dates';
-import { EVENT_MAX_WIDTH, timelineWidth } from './constants';
+import { formatDate } from '../utils/dates';
 
 interface ITimelineProps {
 	children?: any;
 	events: IEvent[];
+	resize: () => void;
 	root: IEvent;
 }
 
-interface ITimelineState {
-	pixelsPerDay: number;
-}
-
-class Timeline extends React.Component<ITimelineProps, ITimelineState> {
-	public state = {
-		pixelsPerDay: this.pixelsPerDay(this.props.root),
-	};
-
+class Timeline extends React.Component<ITimelineProps, null> {
 	public componentDidMount() {
 		window.addEventListener('resize', this.debouncedHandleResize);
-	}
-
-	public componentWillReceiveProps(nextProps) {
-		this.setState({
-			pixelsPerDay: this.pixelsPerDay(nextProps.root),
-		});
 	}
 
 	public componentWillUnmount(): void {
 		window.removeEventListener('resize', this.debouncedHandleResize);
 	}
-
-	public eventLeftPosition = (fromDate: Date): number =>
-		countDays(extractFrom(this.props.root), fromDate) * this.state.pixelsPerDay;
-
-	public eventWidth = (event: IEvent): number =>
-		countDaysInRange(event) * this.state.pixelsPerDay;
-
-	// TODO move to point-in-time.tsx
-	public flipPointInTime = (left: number): [boolean, number] => {
-		const width = timelineWidth();
-		const flip = left > (width - EVENT_MAX_WIDTH);
-		const distance = flip ? width - left : left;
-		return [flip, distance];
-	};
-
-	public dateAtLeftPosition = (position: number): Date =>
-		proportionalDate(this.props.root, position / timelineWidth());
 
 	public render() {
 		const { children, root } = this.props;
@@ -70,33 +39,19 @@ class Timeline extends React.Component<ITimelineProps, ITimelineState> {
 				<Rulers
 					{...this.props}
 					{...this.state}
-					eventLeftPosition={this.eventLeftPosition}
 				/>
 				<Events
 					{...this.props}
 					{...this.state}
-					eventLeftPosition={this.eventLeftPosition}
-					eventWidth={this.eventWidth}
-					flipPointInTime={this.flipPointInTime}
 				/>
-				{
-					this.props.children && React.cloneElement(children, {
-						dateAtLeftPosition: this.dateAtLeftPosition,
-						eventLeftPosition: this.eventLeftPosition,
-						eventWidth: this.eventWidth,
-						flipPointInTime: this.flipPointInTime,
-					})
-				}
+				{children}
 			</div>
 		);
 	}
 
-	private pixelsPerDay(root: IEvent): number {
-		return timelineWidth() / countDaysInRange(root);
-	};
-
 	private handleResize = () => {
-		this.setState({ pixelsPerDay: this.pixelsPerDay(this.props.root) });
+		this.props.resize();
+		// TODO implement resize
 	};
 
 	private debouncedHandleResize = debounce(this.handleResize, 200);

@@ -9,6 +9,10 @@ interface IDateRange {
 
 interface IEvent {
 	body: string;
+	boundingBox: {
+		left: number;
+		width: number;
+	};
 	coordinates: Array<any>;
 	date: Date;
 	dateGranularity: DateGranularity;
@@ -17,6 +21,7 @@ interface IEvent {
 	dateRangeUncertain: IDateRange;
 	dateUncertain: IDateRange;
 	isInterval: boolean;
+	pixelsPerDay: number;
 	slug: string;
 	title: string;
 	types: string[];
@@ -26,13 +31,6 @@ interface IDefaultState {
 	events: IEvent[];
 	newEvent?: IEvent;
 	root: IEvent;
-}
-
-interface IEventFunctions {
-	dateAtLeftPosition?: (position: number) => Date;
-	eventLeftPosition: (date: Date) => number;
-	eventWidth: (event: IEvent) => number;
-	flipPointInTime: (left: number) => [boolean, number];
 }
 
 // TODO move to generic/global .d.ts?

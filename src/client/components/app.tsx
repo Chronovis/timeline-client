@@ -2,10 +2,12 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { getEvents } from '../actions/events';
 import Timeline from './timeline';
+import {resize} from "../actions/dom";
 
 interface IEventsProps {
 	events: IEvent[];
 	getEvents: (slug: string) => void;
+	resize: () => void;
 	root: IEvent;
 	routeParams: { slug: string };
 }
@@ -22,9 +24,16 @@ class App extends React.Component<IEventsProps, {}> {
 	}
 
 	public render() {
-		const { children, events, root } = this.props;
+		const { children, events, resize, root } = this.props;
 
-		return <Timeline root={root} events={events} children={children}/>;
+		return (
+			<Timeline
+				children={children}
+				events={events}
+			  resize={resize}
+				root={root}
+			/>
+		);
 	}
 }
 
@@ -35,5 +44,6 @@ export default connect(
 	}),
 	{
 		getEvents,
+		resize,
 	},
 )(App);

@@ -5,7 +5,7 @@ import { setEventKeyValues, resetEvent, saveEvent } from '../../actions/events';
 import { proportionalDate } from '../../utils/dates';
 const Input = require('hire-forms-input').default;
 
-interface IAddEventProps extends IEventFunctions {
+interface IAddEventProps {
 	newEvent: IEvent;
 	resetEvent: () => void;
 	root: IEvent;
@@ -23,10 +23,6 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 
 	public render() {
 		const {
-			dateAtLeftPosition,
-			eventLeftPosition,
-			eventWidth,
-			flipPointInTime,
 			newEvent,
 			resetEvent,
 			root,
@@ -48,10 +44,6 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 							value={this.state.title}
 						/> :
 						<NewEvent
-							dateAtLeftPosition={dateAtLeftPosition}
-							eventLeftPosition={eventLeftPosition}
-							eventWidth={eventWidth}
-							flipPointInTime={flipPointInTime}
 							newEvent={newEvent}
 							resetEvent={resetEvent}
 							root={root}

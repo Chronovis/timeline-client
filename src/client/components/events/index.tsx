@@ -1,16 +1,26 @@
 import * as React from 'react';
-import { extractFrom } from '../../utils/dates';
 import IntervalOfTime from './interval-of-time';
 import PointInTime from './point-in-time';
 
-interface IEventsProps extends IEventFunctions {
+interface IEventsProps {
 	events: IEvent[];
 	root: IEvent;
 }
 
 class Events extends React.Component<IEventsProps, {}> {
+	public addRowData() {
+		const rowData = [];
+		const calc = (event) => {
+			// for (let i = 0; i < rowData.length; i++) {
+			//
+			// }
+			return event;
+		};
+		return this.props.events.map(calc);
+	}
+
 	public render() {
-		const { eventLeftPosition, events, eventWidth, flipPointInTime } = this.props;
+		const events = this.addRowData();
 
 		return (
 			<ul className="events">
@@ -20,15 +30,10 @@ class Events extends React.Component<IEventsProps, {}> {
 							<IntervalOfTime
 								event={event}
 								key={index}
-								left={eventLeftPosition(extractFrom(event))}
-								width={eventWidth(event)}
 							/> :
 							<PointInTime
-								{...this.props}
 								event={event}
-								flipPointInTime={flipPointInTime}
 								key={index}
-								left={eventLeftPosition(extractFrom(event))}
 							/>
 					)
 				}

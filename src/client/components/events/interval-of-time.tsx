@@ -3,7 +3,9 @@ import { Link } from 'react-router';
 import * as cx from 'classnames';
 import { EVENT_MAX_WIDTH } from '../constants';
 
-const IntervalOfTime = ({ isNewEvent = false, event, left, width }) => {
+const IntervalOfTime = ({ isNewEvent = false, event }) => {
+	const { left, width } = event.boundingBox;
+
 	return (
 		<li
 			className="interval-of-time"

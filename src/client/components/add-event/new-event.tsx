@@ -11,7 +11,7 @@ const Input = require('hire-forms-input').default;
 const Select = require('hire-forms-select').default;
 const AutocompleteList = require('hire-forms-autocomplete-list').default;
 
-interface INewEventProps extends IEventFunctions {
+interface INewEventProps {
 	newEvent: IEvent;
 	resetEvent: () => void;
 	root: IEvent;
@@ -47,10 +47,6 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 
 	public render() {
 		const {
-			dateAtLeftPosition,
-			eventLeftPosition,
-			eventWidth,
-			flipPointInTime,
 			newEvent,
 			resetEvent,
 			root,
@@ -62,11 +58,8 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 			<div className="new-event">
 				<div className="new-event-slide-area">
 					<Slider
-						dateAtLeftPosition={dateAtLeftPosition}
 						event={newEvent}
-						eventLeftPosition={eventLeftPosition}
-						eventWidth={eventWidth}
-						flipPointInTime={flipPointInTime}
+						root={root}
 						setEventKeyValues={setEventKeyValues}
 					/>
 				</div>

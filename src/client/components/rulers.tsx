@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { extractFromAndTo, countDaysInRange } from '../utils/dates';
+import {yearLeftPosition} from '../utils/event';
 
 const Ruler = ({ left, year }) => {
 	return (
@@ -11,7 +12,7 @@ const Ruler = ({ left, year }) => {
 
 class Rulers extends React.Component<any, any> {
 	public render() {
-		const { root, eventLeftPosition } = this.props;
+		const { root } = this.props;
 		const daysCount = countDaysInRange(root);
 		const [from, to] = extractFromAndTo(root);
 		const [fromYear, toYear] = [from.getFullYear(), to.getFullYear()];
@@ -34,7 +35,7 @@ class Rulers extends React.Component<any, any> {
 					rulers.map((year: number, index: number) =>
 						<Ruler
 							key={index}
-							left={eventLeftPosition(new Date(year.toString()))}
+							left={yearLeftPosition(year, root)}
 							year={year}
 						/>)
 				}

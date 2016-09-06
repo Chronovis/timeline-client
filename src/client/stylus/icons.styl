@@ -11,16 +11,9 @@ icons = {
 }
 
 for className, char in icons
-	li.point-in-time.{className}
+	li.point-in-time.{className} .point
 	li.interval-of-time > a.{className}
 	h2.{className}
 	.move-handle .title.{className}
 		&:before
 			content char + ' '
-
-	li.point-in-time.flip.{className}
-		&:before
-			content ''
-		&:after
-			content ' ' + char
-

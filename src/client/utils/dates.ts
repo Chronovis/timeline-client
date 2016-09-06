@@ -1,12 +1,10 @@
+import {timelineWidth} from "../components/constants";
 type DateToFormat = 'from' | 'to';
 
 const isEqualDates = (date1: Date, date2: Date): boolean =>
 	date1.getTime() === date2.getTime();
 
 const oldestDate = () => new Date(-4713, 0, 1);
-
-// export const middleDate = (date1: Date, date2: Date): Date =>
-// 	new Date((date1.getTime() + date2.getTime()) / 2);
 
 export const proportionalDate = (event: IEvent, proportion: number): Date => {
 	const [from, to] = extractFromAndTo(event);
@@ -21,6 +19,9 @@ export const proportionalDate = (event: IEvent, proportion: number): Date => {
 	return new Date(newTime);
 };
 
+export const dateAtLeftPosition = (position: number, root: IEvent): Date =>
+	proportionalDate(root, position / timelineWidth());
+
 export const extractFrom = (event): Date =>
 	(event.isInterval) ?
 		event.dateRange.infiniteFrom ? oldestDate() : event.dateRange.from :
@@ -33,7 +34,9 @@ export const extractFrom = (event): Date =>
 export const extractTo = (event): Date =>
 	(event.isInterval) ?
 		event.dateRange.infiniteTo ? new Date() : event.dateRange.to :
-		null;
+		(event.dateUncertain != null) ?
+			event.dateUncertain.to :
+			null;
 
 export const extractFromAndTo = (event: IEvent): [Date, Date] =>
 	[extractFrom(event), extractTo(event)];
@@ -100,4 +103,21 @@ export const formatDate = (event: IEvent, dateToFormat: DateToFormat): string =>
 	}
 
 	return format(date, granularity);
+};
+
+export const parseDate = (date: string): Date => {
+	// TODO remove split('+') code. It is used to let the dates work under FF. Use different solution.
+	// Plus, there should be some sort of granularity. When a date does not need time information, the
+	// timezone can be skipped anyway.
+	date = date.split('+')[0];
+	return (date === 'infinity') ? null : new Date(date);
+};
+
+export const parseDateRange = (dateRange): IDateRange => {
+	return {
+		from: parseDate(dateRange.from),
+		infiniteFrom: dateRange.from === 'infinity',
+		infiniteTo: dateRange.to === 'infinity',
+		to: parseDate(dateRange.to),
+	};
 };

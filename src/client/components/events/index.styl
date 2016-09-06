@@ -58,19 +58,24 @@ li.interval-of-time
 
 li.point-in-time
 	background-color timelineBlue
-	max-width EVENT_MAX_WIDTH
-	overflow hidden
 	padding 4px 0
-	text-overflow ellipsis
+
+	.point
+		display inline-block
+		text-align center
+		vertical-align top
+
+		&.uncertain
+			background linear-gradient(to right, timelineBlue, timelineLighestBlue, timelineBlue)
+
+	.title
+		display inline-block
+		max-width EVENT_MAX_WIDTH
+		overflow hidden
+		padding-left 8px
+		text-overflow ellipsis
 
 // Put at root level, so it won't override icons.styl
-li.point-in-time
+li.point-in-time .point
 	&:before
 		content '| '
-
-	&.flip
-		&:before
-			content ''
-		&:after
-			content ' |'
-
