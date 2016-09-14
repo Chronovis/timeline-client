@@ -1,9 +1,10 @@
-import {parseEvent, parseRootEvent, setBoundingBox, pixelsPerDay} from '../utils/event';
+import {parseEvent, parseRootEvent, setBoundingBox, pixelsPerDay, addTop} from '../utils/event';
 
 const defaultEvent: IEvent = {
 	body: '',
 	boundingBox: {
 		left: null,
+		top: null,
 		width: null,
 	},
 	coordinates: [],
@@ -32,11 +33,10 @@ export default (state = defaultState, action) => {
 	switch (action.type) {
 		case 'RECEIVE_EVENTS': {
 			const root = parseRootEvent(action.root);
+			const parsedEvents= action.events.map(parseEvent(root));
+			const events = addTop(parsedEvents);
 
-			nextState = Object.assign({}, state, {
-				events: action.events.map(parseEvent(root)),
-				root,
-			});
+			nextState = Object.assign({}, state, { events, root });
 			break;
 		}
 
@@ -62,9 +62,11 @@ export default (state = defaultState, action) => {
 
 		case 'RESIZE': {
 			const root = Object.assign({}, state.root, { pixelsPerDay: pixelsPerDay(state.root) });
+			const parsedEvents = state.events.map(setBoundingBox(root));
+			const events = addTop(parsedEvents);
 			nextState = Object.assign({}, state, {
 				root,
-				events: state.events.map(setBoundingBox(root)),
+				events,
 			});
 			break;
 		}

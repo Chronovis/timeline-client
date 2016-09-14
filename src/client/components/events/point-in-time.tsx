@@ -12,14 +12,16 @@ const flipPointInTime = (left: number): [boolean, number] => {
 interface IPointInTimeStyle {
 	left?: string;
 	right?: string;
+	top?: string;
 }
 
 const PointInTime = ({ event }) => {
-	let { left, width } = event.boundingBox;
+	let { left, top, width } = event.boundingBox;
 	const [flip, distance] = flipPointInTime(left);
 	const style: IPointInTimeStyle = flip ?
 		{ right: `${distance}px`} :
 		{ left: `${distance}px` };
+	style.top = `${top}px`;
 
 	if (width > 0 && width < 12) width = 12;
 	const pointStyle = (width > 0) ? { width: `${width}px`} : null;
@@ -41,7 +43,8 @@ const PointInTime = ({ event }) => {
 		>
 			{flip ? null : point}
 			<div
-				className="title" style={titleStyle}
+				className="title"
+				style={titleStyle}
 			>
 				{event.title}
 			</div>

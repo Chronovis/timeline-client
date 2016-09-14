@@ -11,6 +11,7 @@ interface IEvent {
 	body: string;
 	boundingBox: {
 		left: number;
+		top: number;
 		width: number;
 	};
 	coordinates: Array<any>;

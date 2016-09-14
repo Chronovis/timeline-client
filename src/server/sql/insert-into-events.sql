@@ -1,14 +1,15 @@
-INSERT INTO event_type (title) VALUES ('birth');
-INSERT INTO event_type (title) VALUES ('death');
-INSERT INTO event_type (title) VALUES ('sex-man');
-INSERT INTO event_type (title) VALUES ('country');
-INSERT INTO event_type (title) VALUES ('other');
-INSERT INTO event_type (title) VALUES ('battle');
-INSERT INTO event_type (title) VALUES ('land-battle');
-INSERT INTO event_type (title) VALUES ('naval-battle');
-INSERT INTO event_type (title) VALUES ('aerial-battle');
-INSERT INTO event_type (title) VALUES ('sex-woman');
-INSERT INTO event_type (title) VALUES ('sex-other');
+INSERT INTO event_type (title) VALUES ('birth'); -- 1
+INSERT INTO event_type (title) VALUES ('death'); -- 2
+INSERT INTO event_type (title) VALUES ('sex-man'); -- 3
+INSERT INTO event_type (title) VALUES ('country'); -- 4
+INSERT INTO event_type (title) VALUES ('other'); -- 5
+INSERT INTO event_type (title) VALUES ('battle'); -- 6
+INSERT INTO event_type (title) VALUES ('land-battle'); -- 7
+INSERT INTO event_type (title) VALUES ('naval-battle'); -- 8
+INSERT INTO event_type (title) VALUES ('aerial-battle'); -- 9
+INSERT INTO event_type (title) VALUES ('sex-woman'); -- 10
+INSERT INTO event_type (title) VALUES ('sex-other'); -- 11
+INSERT INTO event_type (title) VALUES ('expedition'); -- 12
 
 -- 1
 INSERT INTO event (slug, title, date_granularity, date_range_granularity, date_uncertain, coordinates) VALUES (
@@ -93,6 +94,35 @@ INSERT INTO event (slug, title, date_granularity, date_uncertain) VALUES (
 	'[1255-01-01 00:00 +0, 1255-12-31 00:00 +0]'
 );
 
+-- 10
+INSERT INTO event (slug, title, date_granularity, date_range_granularity, date_range, date_range_uncertain) VALUES (
+	'vasco-da-gama-s-first-voyage',
+	'Vasco da Gama''s first voyage',
+	2,
+	2,
+	'[1497-07-08 00:00 +0, 1499-09-18 00:00 +0]',
+	'[1497-07-08 00:00 +0, 1499-08-29 00:00 +0]'
+);
+
+-- 11
+INSERT INTO event (slug, title, date_granularity, date_range_granularity, date_range, date_range_uncertain) VALUES (
+	'vasco-da-gama-s-second-voyage',
+	'Vasco da Gama''s second voyage',
+	2,
+	2,
+	'[1502-02-12 00:00 +0, 1503-09-30 00:00 +0]',
+	'[1502-02-12 00:00 +0, 1503-09-01 00:00 +0]'
+);
+
+-- 12
+INSERT INTO event (slug, title, date_granularity, date_range_granularity, date_range, date_range_uncertain) VALUES (
+	'vasco-da-gama-s-third-voyage',
+	'Vasco da Gama''s third voyage',
+	2,
+	2,
+	'[1524-04-01 00:00 +0, 1525-12-31 00:00 +0]',
+	'[1524-04-30 00:00 +0, 1525-04-01 00:00 +0]'
+);
 INSERT INTO event__event (parent_event_id, child_event_id) VALUES (3, 1);
 INSERT INTO event__event (parent_event_id, child_event_id) VALUES (3, 2);
 INSERT INTO event__event (parent_event_id, child_event_id) VALUES (4, 3);
@@ -101,6 +131,9 @@ INSERT INTO event__event (parent_event_id, child_event_id) VALUES (4, 8);
 INSERT INTO event__event (parent_event_id, child_event_id) VALUES (8, 7);
 INSERT INTO event__event (parent_event_id, child_event_id) VALUES (8, 6);
 INSERT INTO event__event (parent_event_id, child_event_id) VALUES (4, 9);
+INSERT INTO event__event (parent_event_id, child_event_id) VALUES (3, 10);
+INSERT INTO event__event (parent_event_id, child_event_id) VALUES (3, 11);
+INSERT INTO event__event (parent_event_id, child_event_id) VALUES (3, 12);
 
 INSERT INTO event__event_type (event_id, event_type_id) VALUES (1, 1);
 INSERT INTO event__event_type (event_id, event_type_id) VALUES (2, 2);
@@ -112,5 +145,8 @@ INSERT INTO event__event_type (event_id, event_type_id) VALUES (6, 1);
 INSERT INTO event__event_type (event_id, event_type_id) VALUES (7, 2);
 INSERT INTO event__event_type (event_id, event_type_id) VALUES (8, 3);
 INSERT INTO event__event_type (event_id, event_type_id) VALUES (9, 5);
+INSERT INTO event__event_type (event_id, event_type_id) VALUES (10, 12);
+INSERT INTO event__event_type (event_id, event_type_id) VALUES (11, 12);
+INSERT INTO event__event_type (event_id, event_type_id) VALUES (12, 12);
 
 SELECT * FROM event;

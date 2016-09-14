@@ -4,13 +4,14 @@ import * as cx from 'classnames';
 import { EVENT_MAX_WIDTH } from '../constants';
 
 const IntervalOfTime = ({ isNewEvent = false, event }) => {
-	const { left, width } = event.boundingBox;
+	const { left, top,  width } = event.boundingBox;
 
 	return (
 		<li
 			className="interval-of-time"
 			style={{
 				left: `${left}px`,
+				top: `${top}px`,
 				width: `${width}px`,
 			}}
 			title={event.title}

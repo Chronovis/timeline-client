@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	ReactDOM.render(routes, container);
 });
 
-// TODO sort events on timeline
+// TODO check if interval-of-time has childEvents before showing
 // TODO save event to db
 // TODO get links of root to parent events
 // TODO render uncertains
