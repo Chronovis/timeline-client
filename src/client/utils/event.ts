@@ -35,7 +35,7 @@ export const parseRootEvent = (event) => {
 	return event;
 };
 
-export const setBoundingBox = (event, root) => {
+export const setBoundingBox = (root) => (event) => {
 	event.boundingBox = {
 		left: eventLeftPosition(event, root),
 		width: eventWidth(event, root),
@@ -52,7 +52,7 @@ export const parseEvent = (root) => (event) => {
 		event.dateUncertain = parseDateRange(event.dateUncertain);
 	}
 
-	event = setBoundingBox(event, root);
+	event = setBoundingBox(root)(event);
 
 	return event;
 };

@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	ReactDOM.render(routes, container);
 });
 
+// TODO sort events on timeline
 // TODO save event to db
 // TODO get links of root to parent events
-// TODO sort events on timeline
 // TODO render uncertains
 // TODO add map
 // TODO zoom

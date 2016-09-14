@@ -42,7 +42,7 @@ export default (state = defaultState, action) => {
 
 		case 'SET_EVENT_KEY_VALUES': {
 			let newEvent = Object.assign({}, state.newEvent, action.keyValues);
-			newEvent = setBoundingBox(newEvent, state.root);
+			newEvent = setBoundingBox(state.root)(newEvent);
 			nextState = Object.assign({}, state, { newEvent	});
 			break;
 		}
@@ -61,8 +61,10 @@ export default (state = defaultState, action) => {
 		}
 
 		case 'RESIZE': {
+			const root = Object.assign({}, state.root, { pixelsPerDay: pixelsPerDay(state.root) });
 			nextState = Object.assign({}, state, {
-				root: Object.assign({}, state.root, { pixelsPerDay: pixelsPerDay(state.root) }),
+				root,
+				events: state.events.map(setBoundingBox(root)),
 			});
 			break;
 		}
