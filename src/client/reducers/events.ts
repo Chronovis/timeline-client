@@ -3,6 +3,7 @@ import {parseEvent, parseRootEvent, setBoundingBox, pixelsPerDay, addTop} from '
 const defaultEvent: IEvent = {
 	body: '',
 	boundingBox: {
+		flip: false,
 		left: null,
 		top: null,
 		width: null,

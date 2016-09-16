@@ -1,5 +1,5 @@
 import {countDaysInRange, extractFrom, countDays, parseDateRange, parseDate} from './dates';
-import {timelineWidth, EVENT_MAX_WIDTH, EVENT_ROW_HEIGHT} from '../components/constants';
+import {timelineWidth, EVENT_MIN_SPACE, EVENT_ROW_HEIGHT} from '../components/constants';
 
 const leftPosition = (date: Date, root: IEvent): number =>
 	countDays(extractFrom(root), date) * root.pixelsPerDay;
@@ -10,15 +10,23 @@ export const yearLeftPosition = (year: number, root: IEvent): number =>
 export const eventLeftPosition = (event: IEvent, root: IEvent): number =>
 	leftPosition(extractFrom(event), root);
 
+// The width of an event is defined by the length of the event
+// mapped to pixels
 export const eventWidth = (event: IEvent, root: IEvent): number =>
 	countDaysInRange(event) * root.pixelsPerDay;
+
+// The space of an event is the width of the event, but adjusted to the
+// max width of an event. The space can be bigger than the event width,
+// to make room for the text.
+export const eventSpace = (width) => (width === 0 || width < EVENT_MIN_SPACE) ?
+	EVENT_MIN_SPACE :
+	width;
 
 const hasOverlap = (a, b) => {
 	const aLeft = a[0];
 	const bLeft = b[0];
-	const adjustWidth = (width) => { if (width === 0 || width < EVENT_MAX_WIDTH) return EVENT_MAX_WIDTH; }
-	const aWidth = adjustWidth(a[1]);
-	const bWidth = adjustWidth(b[1]);
+	const aWidth = eventSpace(a[1]);
+	const bWidth = eventSpace(b[1]);
 	let hasOverlap = true;
 	if (aLeft + aWidth < bLeft) hasOverlap = false;
 	if (bLeft + bWidth < aLeft) hasOverlap = false;
@@ -76,13 +84,20 @@ export const parseRootEvent = (event) => {
 };
 
 export const setBoundingBox = (root) => (event) => {
+	const left = eventLeftPosition(event, root);
+	const width = eventWidth(event, root);
+
+	const flip = (left + EVENT_MIN_SPACE > timelineWidth()) ? true : false;
+
 	event.boundingBox = {
-		left: eventLeftPosition(event, root),
-		width: eventWidth(event, root),
+		flip,
+		left,
+		width,
 	};
 
 	return event;
-}
+};
+
 export const parseEvent = (root) => (event) => {
 	event = parseBaseEvent(event);
 

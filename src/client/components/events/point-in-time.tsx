@@ -1,10 +1,11 @@
 import * as React from 'react';
 import * as cx from 'classnames';
-import {timelineWidth, EVENT_MAX_WIDTH} from "../constants";
+import {timelineWidth, EVENT_MIN_SPACE} from "../constants";
+import {eventSpace} from "../../utils/event";
 
 const flipPointInTime = (left: number): [boolean, number] => {
 	const width = timelineWidth();
-	const flip = left > (width - EVENT_MAX_WIDTH);
+	const flip = left > (width - EVENT_MIN_SPACE);
 	const distance = flip ? width - left : left;
 	return [flip, distance];
 };
@@ -16,11 +17,10 @@ interface IPointInTimeStyle {
 }
 
 const PointInTime = ({ event }) => {
-	let { left, top, width } = event.boundingBox;
-	const [flip, distance] = flipPointInTime(left);
+	let { flip, left, top, width } = event.boundingBox;
 	const style: IPointInTimeStyle = flip ?
-		{ right: `${distance}px`} :
-		{ left: `${distance}px` };
+		{ right: `${timelineWidth() - left}px` } :
+		{ left: `${left}px` };
 	style.top = `${top}px`;
 
 	if (width > 0 && width < 12) width = 12;

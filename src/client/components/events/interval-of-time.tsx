@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import * as cx from 'classnames';
-import { EVENT_MAX_WIDTH } from '../constants';
+import { EVENT_MIN_SPACE } from '../constants';
 
 const IntervalOfTime = ({ isNewEvent = false, event }) => {
 	const { left, top,  width } = event.boundingBox;
@@ -23,7 +23,7 @@ const IntervalOfTime = ({ isNewEvent = false, event }) => {
 						<div className="move-handle">
 							<div
 								className={cx('title', event.types, {
-									fill: width > EVENT_MAX_WIDTH,
+									fill: width > EVENT_MIN_SPACE,
 								})}
 							>
 								{event.title}
@@ -33,7 +33,7 @@ const IntervalOfTime = ({ isNewEvent = false, event }) => {
 					</div> :
 					<Link
 						className={cx(event.types, {
-							fill: width > EVENT_MAX_WIDTH,
+							fill: width > EVENT_MIN_SPACE,
 						})}
 						to={`/timelines/${event.slug}`}
 					>

@@ -10,6 +10,7 @@ interface IDateRange {
 interface IEvent {
 	body: string;
 	boundingBox: {
+		flip: boolean;
 		left: number;
 		top: number;
 		width: number;

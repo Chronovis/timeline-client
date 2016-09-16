@@ -1,7 +1,7 @@
 import * as React from 'react';
 import IntervalOfTime from './interval-of-time';
 import PointInTime from './point-in-time';
-import {EVENT_MAX_WIDTH, EVENT_ROW_HEIGHT} from '../constants';
+import {EVENT_MIN_SPACE, EVENT_ROW_HEIGHT} from '../constants';
 
 interface IEventsProps {
 	events: IEvent[];
