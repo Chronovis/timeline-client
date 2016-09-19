@@ -4,11 +4,11 @@ import * as cx from 'classnames';
 import { EVENT_MIN_SPACE } from '../constants';
 
 const IntervalOfTime = ({ isNewEvent = false, event }) => {
-	const { left, top,  width } = event.boundingBox;
+	const { flip, left, top,  width } = event.boundingBox;
 
 	return (
 		<li
-			className="interval-of-time"
+			className={cx('interval-of-time', { flip })}
 			style={{
 				left: `${left}px`,
 				top: `${top}px`,

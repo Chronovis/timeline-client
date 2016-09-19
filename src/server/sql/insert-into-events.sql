@@ -36,8 +36,8 @@ INSERT INTO event (slug, title, date_granularity, date_range_granularity, date_r
 	'Vasco da Gama',
 	2,
 	2,
-	'[1460-01-01, 1524-12-24]',
-	'[1469-01-01, 1524-12-24]'
+	'[1460-01-01, 1525-12-31]',
+	'[1469-01-01, 1525-12-31]'
 );
 
 -- 4
@@ -123,6 +123,16 @@ INSERT INTO event (slug, title, date_granularity, date_range_granularity, date_r
 	'[1524-04-01 00:00 +0, 1525-12-31 00:00 +0]',
 	'[1524-04-30 00:00 +0, 1525-04-01 00:00 +0]'
 );
+
+-- 13
+INSERT INTO event (slug, title, date_granularity, date, coordinates) VALUES (
+	'vasco-da-gama-lands-at-calicut--india-',
+	'Vasco da Gama lands at Calicut (India)',
+	2,
+	'1498-05-20 00:00 +0',
+	ST_GeographyFromText('SRID=4326;POINT(11.25 75.77)')
+);
+
 INSERT INTO event__event (parent_event_id, child_event_id) VALUES (3, 1);
 INSERT INTO event__event (parent_event_id, child_event_id) VALUES (3, 2);
 INSERT INTO event__event (parent_event_id, child_event_id) VALUES (4, 3);
@@ -134,6 +144,7 @@ INSERT INTO event__event (parent_event_id, child_event_id) VALUES (4, 9);
 INSERT INTO event__event (parent_event_id, child_event_id) VALUES (3, 10);
 INSERT INTO event__event (parent_event_id, child_event_id) VALUES (3, 11);
 INSERT INTO event__event (parent_event_id, child_event_id) VALUES (3, 12);
+INSERT INTO event__event (parent_event_id, child_event_id) VALUES (10, 13);
 
 INSERT INTO event__event_type (event_id, event_type_id) VALUES (1, 1);
 INSERT INTO event__event_type (event_id, event_type_id) VALUES (2, 2);
@@ -148,5 +159,6 @@ INSERT INTO event__event_type (event_id, event_type_id) VALUES (9, 5);
 INSERT INTO event__event_type (event_id, event_type_id) VALUES (10, 12);
 INSERT INTO event__event_type (event_id, event_type_id) VALUES (11, 12);
 INSERT INTO event__event_type (event_id, event_type_id) VALUES (12, 12);
+INSERT INTO event__event_type (event_id, event_type_id) VALUES (13, 5);
 
 SELECT * FROM event;

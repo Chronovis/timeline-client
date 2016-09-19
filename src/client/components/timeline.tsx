@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import * as cx from 'classnames';
 import * as debounce from 'lodash.debounce';
 import Events from './events/index';
-import Rulers from './rulers';
+import Rulers from './rulers/index';
 import { formatDate } from '../utils/dates';
 
 interface ITimelineProps {

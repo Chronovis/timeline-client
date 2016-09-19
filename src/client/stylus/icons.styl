@@ -18,3 +18,19 @@ for className, char in icons
 	.move-handle .title.{className}
 		&:before
 			content char + ' '
+
+	li.interval-of-time.flip > a.{className}
+		&:before
+			content ''
+
+		&:after
+			content char
+
+
+	li.point-in-time.{className}:not(.uncertain) .point
+			position absolute
+			left -6px
+
+	li.point-in-time.flip.{className} .point
+			left initial
+			right -6px

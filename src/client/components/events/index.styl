@@ -19,20 +19,27 @@ li.point-in-time
 	white-space nowrap
 
 li.interval-of-time
+	IOT_PADDING = 4px
 	background timelineLighestBlue
 	border-radius 2px
 	box-shadow 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
-	padding 4px 4px
+	height 26px
+	padding IOT_PADDING IOT_PADDING
 
 	&:hover
 		box-shadow 0 4px 8px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.22)
+
+	&.flip
+		a
+		.title
+			right IOT_PADDING
 
 	.w-resize-handle, .e-resize-handle
 		background timelineLighestBlue
 		bottom 0
 		position absolute
 		top 0
-		width 4px
+		width IOT_PADDING
 
 	.w-resize-handle
 		cursor w-resize
@@ -48,31 +55,42 @@ li.interval-of-time
 		background rgba(0, 0, 0, 0.4)
 		border-radius 2px
 		box-sizing border-box
-		max-width EVENT_MAX_WIDTH
+		max-width EVENT_MIN_SPACE
 		overflow: hidden
 		text-overflow ellipsis
 		padding 0 4px
+		position absolute
 
 		&.fill
 			max-width calc(100% - 8px)
 
 li.point-in-time
 	background-color timelineBlue
-	padding 4px 0
+
+	&:not(.uncertain)
+		padding-left 12px
+
+	&.flip
+		padding-right 12px
+
+	&.uncertain
+		.title
+			padding-left 12px
+
+		.point
+			background linear-gradient(to right, timelineBlue, timelineLighestBlue, timelineBlue)
 
 	.point
 		display inline-block
+		line-height 26px
 		text-align center
 		vertical-align top
 
-		&.uncertain
-			background linear-gradient(to right, timelineBlue, timelineLighestBlue, timelineBlue)
-
 	.title
 		display inline-block
-		max-width EVENT_MAX_WIDTH
+		line-height 26px
+		max-width EVENT_MIN_SPACE - 12px
 		overflow hidden
-		padding-left 8px
 		text-overflow ellipsis
 
 // Put at root level, so it won't override icons.styl

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as cx from 'classnames';
 import {timelineWidth, EVENT_MIN_SPACE} from "../constants";
-import {eventSpace} from "../../utils/event";
 
 const flipPointInTime = (left: number): [boolean, number] => {
 	const width = timelineWidth();
@@ -29,15 +28,20 @@ const PointInTime = ({ event }) => {
 
 	const point =
 		<div
-			className={cx('point', {
-				uncertain: width > 0,
-			})}
+			className="point"
 			style={pointStyle}
 		/>;
 
 	return (
 		<li
-			className={cx('point-in-time', { flip }, event.types)}
+			className={cx(
+				'point-in-time',
+				event.types,
+				{
+					flip,
+					uncertain: width > 0,
+				},
+			)}
 			style={style}
 			title={event.title}
 		>

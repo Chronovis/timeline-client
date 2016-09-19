@@ -10,50 +10,56 @@ export const yearLeftPosition = (year: number, root: IEvent): number =>
 export const eventLeftPosition = (event: IEvent, root: IEvent): number =>
 	leftPosition(extractFrom(event), root);
 
-// The width of an event is defined by the length of the event
-// mapped to pixels
+// The width of an event is it's length on screen in pixels
 export const eventWidth = (event: IEvent, root: IEvent): number =>
 	countDaysInRange(event) * root.pixelsPerDay;
 
-// The space of an event is the width of the event, but adjusted to the
-// max width of an event. The space can be bigger than the event width,
-// to make room for the text.
-export const eventSpace = (width) => (width === 0 || width < EVENT_MIN_SPACE) ?
-	EVENT_MIN_SPACE :
-	width;
+// The space of an event is defined by the left position on the screen
+// and the width it takes on the screen. Taking the label of the event into account.
+export const eventSpace = (event: IEvent): [number, number] => {
+	const minWidth = (w) => (w === 0 || w < EVENT_MIN_SPACE) ? EVENT_MIN_SPACE : w;
 
-const hasOverlap = (a, b) => {
-	const aLeft = a[0];
-	const bLeft = b[0];
-	const aWidth = eventSpace(a[1]);
-	const bWidth = eventSpace(b[1]);
-	let hasOverlap = true;
-	if (aLeft + aWidth < bLeft) hasOverlap = false;
-	if (bLeft + bWidth < aLeft) hasOverlap = false;
-	return hasOverlap;
+	let { flip, left, width } = event.boundingBox;
+	width = minWidth(width);
+
+	if (flip) {
+		return [left - width, width];
+	} else {
+		return [left, width];
+	}
+};
+
+const hasOverlap = (a: IEvent, b: IEvent): boolean => {
+	const [aLeft, aWidth] = eventSpace(a);
+	const [bLeft, bWidth] = eventSpace(b);
+
+	let overlap = true;
+	if (aLeft + aWidth < bLeft) overlap = false;
+	if (bLeft + bWidth < aLeft) overlap = false;
+
+	return overlap;
 };
 
 export const addTop = (events) => {
 	if (!events.length) return events;
 	const firstEvent = events[0];
-	const rows = [[[firstEvent.boundingBox.left, firstEvent.boundingBox.width]]];
+	const rows = [[firstEvent]];
 	const calc = (event) => {
 		if (event === firstEvent) return event;
-		const eventData = [event.boundingBox.left, event.boundingBox.width];
-		for (let rowN = 0; rowN < rows.length; rowN++) {
-			const rowData = rows[rowN];
-			const isRowWithSpace = rowData.reduce((prev, curr) => {
-				return prev && !hasOverlap(eventData, curr);
+		for (let row = 0; row < rows.length; row++) {
+			const eventsInRow = rows[row];
+			const isRowWithSpace = eventsInRow.reduce((prev, curr) => {
+				return prev && !hasOverlap(event, curr);
 			}, true);
 
 			if (isRowWithSpace) {
-				rowData.push(eventData);
-				event.boundingBox.top = rowN * EVENT_ROW_HEIGHT;
+				eventsInRow.push(event);
+				event.boundingBox.top = row * EVENT_ROW_HEIGHT;
 				break;
 			}
 		}
 		if (event.boundingBox.top == null) {
-			const newLength = rows.push([eventData]);
+			const newLength = rows.push([event]);
 			event.boundingBox.top = (newLength - 1) * EVENT_ROW_HEIGHT;
 		}
 		return event;
@@ -111,4 +117,3 @@ export const parseEvent = (root) => (event) => {
 
 	return event;
 };
-

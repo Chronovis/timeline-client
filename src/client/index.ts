@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	ReactDOM.render(routes, container);
 });
 
-// TODO sort events on timeline
+// TODO give extended info on click
+// TODO add toggle for view without text
 // TODO get links of root to parent events
 // TODO render uncertainty of ranges
 // TODO save event to db
