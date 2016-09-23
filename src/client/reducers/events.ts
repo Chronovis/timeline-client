@@ -1,31 +1,63 @@
 import {parseEvent, parseRootEvent, setBoundingBox, pixelsPerDay, addTop} from '../utils/event';
 
-const defaultEvent: IEvent = {
-	body: '',
+interface IEventDefaults {
+	body: string;
 	boundingBox: {
-		flip: false,
-		left: null,
-		top: null,
-		width: null,
-	},
-	coordinates: [],
-	date: null,
-	dateGranularity: DateGranularity.DAY,
-	dateRange: null,
-	dateRangeGranularity: null,
-	dateRangeUncertain: null,
-	dateUncertain: null,
-	isInterval: false,
-	pixelsPerDay: null,
-	slug: '',
-	title: '',
-	types: [],
-};
+		flip: boolean;
+		left: number;
+		top: number;
+		width: number;
+	};
+	coordinates: Array<any>;
+	date: Date;
+	dateGranularity: DateGranularity;
+	dateRange: IDateRange;
+	dateRangeGranularity: DateGranularity;
+	dateRangeUncertain: IDateRange;
+	dateUncertain: IDateRange;
+	isInterval: boolean;
+	pixelsPerDay: number;
+	slug: string;
+	title: string;
+	types: string[];
+}
+interface IEvent2 {
+	isInterval(): boolean;
+}
+class Event implements IEvent2 {
+	private defaults: IEventDefaults = {
+		body: '',
+		boundingBox: {
+			flip: false,
+			left: null,
+			top: null,
+			width: null,
+		},
+		coordinates: [],
+		date: null,
+		dateGranularity: DateGranularity.DAY,
+		dateRange: null,
+		dateRangeGranularity: null,
+		dateRangeUncertain: null,
+		dateUncertain: null,
+		isInterval: false,
+		pixelsPerDay: null,
+		slug: '',
+		title: '',
+		types: [],
+	};
+
+	constructor(data) {
+		data = Object.assign(this.defaults, data);
+	}
+
+	public isInterval = () => this.dateRange != null;
+}
 
 const defaultState: IDefaultState = {
 	events: [],
-	newEvent: defaultEvent,
-	root: defaultEvent,
+	newEvent: new Event(),
+	root: new Event(),
 };
 
 export default (state = defaultState, action) => {
@@ -49,14 +81,14 @@ export default (state = defaultState, action) => {
 		}
 
 		case 'RESET_EVENT': {
-			nextState = Object.assign({}, state, { newEvent: defaultEvent });
+			nextState = Object.assign({}, state, { newEvent: new Event() });
 			break;
 		}
 
 		case 'SAVE_EVENT': {
 			nextState = Object.assign({}, state, {
 				events: state.events.concat(state.newEvent),
-				newEvent: defaultEvent,
+				newEvent: new Event(),
 			});
 			break;
 		}
