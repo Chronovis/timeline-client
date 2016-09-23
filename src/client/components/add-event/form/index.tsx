@@ -2,8 +2,9 @@ import * as React from 'react';
 const Input = require('hire-forms-input').default;
 const Select = require('hire-forms-select').default;
 const AutoCompleteList = require('hire-forms-autocomplete-list').default;
-import {extractTo, extractFrom, proportionalDate} from '../../utils/dates';
-import {getEventTypes} from '../../actions/api';
+import Uncertain from './uncertain';
+import {extractTo, extractFrom, proportionalDate} from '../../../utils/dates';
+import {getEventTypes} from '../../../actions/api';
 
 class Form extends React.Component<any, any> {
 	public handleChangeEventType = (value) => {
@@ -62,22 +63,10 @@ class Form extends React.Component<any, any> {
 						/> :
 						null
 				}
-				<div className="uncertain">
-					<Input
-						value={
-							event.isInterval ?
-								event.dateRangeUncertain.from :
-								event.dateUncertain.from
-						}
-					/>
-					<Input
-						value={
-							event.isInterval ?
-								event.dateRangeUncertain.to :
-								event.dateUncertain.to
-						}
-					/>
-				</div>
+				<Uncertain
+					event={event}
+				  setEventKeyValues={setEventKeyValues}
+				/>
 			</div>
 		)
 	}

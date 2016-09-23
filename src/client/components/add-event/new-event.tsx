@@ -1,7 +1,7 @@
 import * as React from 'react';
 import history from '../../routes/history';
 import Slider from './slider';
-import Form from "./form";
+import Form from "./form/index";
 
 interface INewEventProps {
 	newEvent: IEvent;
