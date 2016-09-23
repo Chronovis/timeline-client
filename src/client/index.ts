@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // TODO give extended info on click
 // TODO add toggle for view without text
 // TODO get links of root to parent events
-// TODO render uncertainty of ranges
+// TODO store alternative titles on relations (event__event)
 // TODO save event to db
 // TODO zoom
 // TODO add map
