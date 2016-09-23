@@ -6,7 +6,6 @@ import {extractFromAndTo} from "../../utils/dates";
 
 const percentageOfDateInEvent = (date: Date, event: IEvent): number => {
 	const [from, to] = extractFromAndTo(event);
-	console.log(date, from, to)
 	return (date.getTime() - from.getTime()) / (to.getTime() - from.getTime());
 };
 
