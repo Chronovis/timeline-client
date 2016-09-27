@@ -1,8 +1,7 @@
 import * as React from 'react';
-import {extractFromAndTo, dateAtLeftPosition} from '../../utils/dates';
+import * as DateUtils from '../../utils/dates';
 import IntervalOfTime from '../events/interval-of-time';
 import PointInTime from '../events/point-in-time';
-import {eventWidth, eventLeftPosition} from '../../utils/event';
 
 interface ISliderProps {
 	event: IEvent;
@@ -58,7 +57,6 @@ class Slider extends React.Component<ISliderProps, any> {
 
 	private handleMouseDown = (ev) => {
 		const { event, root } = this.props;
-		const left = eventLeftPosition(event, root);
 		const handle = (
 			ev.target.matches('.move-handle') ||
 			ev.target.matches('.move-handle .title') ||
@@ -76,7 +74,7 @@ class Slider extends React.Component<ISliderProps, any> {
 		this.setState({
 			dragging: true,
 			handle,
-			offset: left - ev.pageX,
+			offset: event.left - ev.pageX,
 		});
 	};
 
@@ -84,15 +82,16 @@ class Slider extends React.Component<ISliderProps, any> {
 		if (this.state.dragging) {
 			const left = ev.pageX + this.state.offset;
 			const { event, root } = this.props;
-			let [from, to] = extractFromAndTo(event);
+			let from = event.from;
+			let to = event.to;
 
 			if (this.state.handle === 'move') {
-				from = dateAtLeftPosition(left, root);
-				to = dateAtLeftPosition(left + eventWidth(event, root), root);
+				from = DateUtils.dateAtLeftPosition(left, root);
+				to = DateUtils.dateAtLeftPosition(left + event.width, root);
 			} else if (this.state.handle === 'west-resize') {
-				from = dateAtLeftPosition(left, root);
+				from = DateUtils.dateAtLeftPosition(left, root);
 			} else if (this.state.handle === 'east-resize') {
-				to = dateAtLeftPosition(ev.pageX, root);
+				to = DateUtils.dateAtLeftPosition(ev.pageX, root);
 			}
 
 			const keyValues = this.props.event.isInterval ?

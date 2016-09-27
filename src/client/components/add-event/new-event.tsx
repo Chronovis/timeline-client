@@ -12,7 +12,6 @@ interface INewEventProps {
 }
 
 class NewEvent extends React.Component<INewEventProps, {}> {
-
 	public render() {
 		const {
 			newEvent,

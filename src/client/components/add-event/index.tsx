@@ -58,7 +58,7 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 	private handleKeyUp = (ev) => {
 		if (ev.keyCode === 13) {
 			this.props.setEventKeyValues({
-				date: proportionalDate(this.props.root, 0.5),
+				date: proportionalDate(this.props.root, 0.5).toISOString(),
 				title: this.state.title,
 			});
 		}

@@ -1,18 +1,19 @@
-import {timelineWidth} from "../components/constants";
+///<reference path="../models/index.d.ts"/>
+import * as Constants from '../constants';
 type DateToFormat = 'from' | 'to';
 
-const isEqualDates = (date1: Date, date2: Date): boolean =>
-	date1.getTime() === date2.getTime();
+export const countDays = (from: Date, to: Date): number => {
+	if (to == null) return 0;
+	return Math.round(to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24);
+}
 
-const oldestDate = () => new Date(-4713, 0, 1);
+export const isEqual = (date1: Date, date2: Date): boolean => date1.getTime() === date2.getTime();
 
 export const proportionalDate = (event: IEvent, proportion: number): Date => {
-	const [from, to] = extractFromAndTo(event);
 	if (proportion < 0 || proportion > 1) throw new Error('[proportionalDate] proportion should be between 0 and 1.');
-	if (from > to) throw new Error('[proportionalDate] `From date` should be lower than `to date`.');
 
-	const fromTime: number = from.getTime();
-	const toTime: number = to.getTime();
+	const fromTime: number = event.from.getTime();
+	const toTime: number = event.to.getTime();
 
 	const newTime = fromTime + ((toTime - fromTime) * proportion);
 
@@ -20,37 +21,34 @@ export const proportionalDate = (event: IEvent, proportion: number): Date => {
 };
 
 export const dateAtLeftPosition = (position: number, root: IEvent): Date =>
-	proportionalDate(root, position / timelineWidth());
+	proportionalDate(root, position / Constants.timelineWidth());
 
-export const extractFrom = (event): Date =>
-	(event.isInterval) ?
-		event.dateRange.infiniteFrom ? oldestDate() : event.dateRange.from :
-		event.date != null ?
-			event.date :
-			(event.dateUncertain != null) ?
-				event.dateUncertain.from :
-				null;
+// export const extractFrom = (event): Date =>
+// 	(event.isInterval) ?
+// 		event.dateRange.infiniteFrom ? new Date(-4700, 0, 1) : event.dateRange.from :
+// 		event.date != null ?
+// 			event.date :
+// 			(event.dateUncertain != null) ?
+// 				event.dateUncertain.from :
+// 				null;
+//
+// export const extractTo = (event): Date =>
+// 	(event.isInterval) ?
+// 		event.dateRange.infiniteTo ? new Date() : event.dateRange.to :
+// 		(event.dateUncertain != null) ?
+// 			event.dateUncertain.to :
+// 			null;
+//
+// export const extractFromAndTo = (event: IEvent): [Date, Date] =>
+// 	[extractFrom(event), extractTo(event)];
 
-export const extractTo = (event): Date =>
-	(event.isInterval) ?
-		event.dateRange.infiniteTo ? new Date() : event.dateRange.to :
-		(event.dateUncertain != null) ?
-			event.dateUncertain.to :
-			null;
+// export const countDaysInRange = (event: IEvent): number => {
+// 	const [from, to] = extractFromAndTo(event);
+// 	if (to == null) return null;
+// 	return countDays(from, to);
+// };
 
-export const extractFromAndTo = (event: IEvent): [Date, Date] =>
-	[extractFrom(event), extractTo(event)];
-
-export const countDays = (from: Date, to: Date): number =>
-	Math.round(to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24);
-
-export const countDaysInRange = (event: IEvent): number => {
-	const [from, to] = extractFromAndTo(event);
-	if (to == null) return null;
-	return countDays(from, to);
-};
-
-const format = (date: Date, granularity: DateGranularity): string => {
+export const format = (date: Date, granularity: DateGranularity): string => {
 	if (date == null) return '∞';
 
 	let displayDate = date.getFullYear().toString();
@@ -72,52 +70,3 @@ const format = (date: Date, granularity: DateGranularity): string => {
 	return displayDate;
 };
 
-export const formatDate = (event: IEvent, dateToFormat: DateToFormat): string => {
-	let date = event.date;
-	let granularity = event.dateGranularity;
-
-	if (date == null) {
-		if (event.dateUncertain != null) {
-			const from = format(event.dateUncertain.from, event.dateGranularity);
-			const to = format(event.dateUncertain.to, event.dateRangeGranularity);
-			return `${from} - ${to}`;
-		} else if (dateToFormat == null) {
-			throw new Error('[formatDate] Unknown date to format!');
-		} else {
-			granularity = (dateToFormat === 'from') ?
-				event.dateGranularity :
-				event.dateRangeGranularity;
-
-			if (event.dateRangeUncertain == null) {
-				date = event.dateRange[dateToFormat];
-			} else {
-				if (isEqualDates(event.dateRange[dateToFormat], event.dateRangeUncertain[dateToFormat])) {
-					date = event.dateRangeUncertain[dateToFormat];
-				} else {
-					const from = format(event.dateRange[dateToFormat], granularity);
-					const to = format(event.dateRangeUncertain[dateToFormat], granularity);
-					return `${from} - ${to}`;
-				}
-			}
-		}
-	}
-
-	return format(date, granularity);
-};
-
-export const parseDate = (date: string): Date => {
-	// TODO remove split('+') code. It is used to let the dates work under FF. Use different solution.
-	// Plus, there should be some sort of granularity. When a date does not need time information, the
-	// timezone can be skipped anyway.
-	date = date.split('+')[0];
-	return (date === 'infinity') ? null : new Date(date);
-};
-
-export const parseDateRange = (dateRange): IDateRange => {
-	return {
-		from: parseDate(dateRange.from),
-		infiniteFrom: dateRange.from === 'infinity',
-		infiniteTo: dateRange.to === 'infinity',
-		to: parseDate(dateRange.to),
-	};
-};

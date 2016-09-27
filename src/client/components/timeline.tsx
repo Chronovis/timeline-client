@@ -4,7 +4,6 @@ import * as cx from 'classnames';
 import * as debounce from 'lodash.debounce';
 import Events from './events/index';
 import Rulers from './rulers/index';
-import { formatDate } from '../utils/dates';
 
 interface ITimelineProps {
 	children?: any;
@@ -14,6 +13,8 @@ interface ITimelineProps {
 }
 
 class Timeline extends React.Component<ITimelineProps, null> {
+	private debouncedHandleResize = debounce(this.props.resize, 200);
+
 	public componentDidMount() {
 		window.addEventListener('resize', this.debouncedHandleResize);
 	}
@@ -24,8 +25,7 @@ class Timeline extends React.Component<ITimelineProps, null> {
 
 	public render() {
 		const { children, root } = this.props;
-
-		if (root.title === '') return null;
+		if (root == null) return null;
 
 		return (
 			<div className="timeline">
@@ -33,8 +33,8 @@ class Timeline extends React.Component<ITimelineProps, null> {
 					<div className="pre-title">TIMELINE OF</div>
 					<h2 className={cx(root.types)}>{root.title}</h2>
 					<Link to={`/timelines/${root.slug}/add-event`}>+</Link>
-					<div className="from">{formatDate(root, 'from')}</div>
-					<div className="to">{formatDate(root, 'to')}</div>
+					<div className="from">{root.formatFromDate()}</div>
+					<div className="to">{root.formatToDate()}</div>
 				</header>
 				<Rulers
 					{...this.props}
@@ -48,13 +48,6 @@ class Timeline extends React.Component<ITimelineProps, null> {
 			</div>
 		);
 	}
-
-	private handleResize = () => {
-		this.props.resize();
-		// TODO implement resize
-	};
-
-	private debouncedHandleResize = debounce(this.handleResize, 200);
 }
 
 export default Timeline;

@@ -1,25 +1,25 @@
 import * as React from 'react';
-import {extractFromAndTo} from "../../../utils/dates";
 const Input = require('hire-forms-input').default;
 const Checkbox = require('hire-forms-checkbox').default;
+
+console.log(Input, Checkbox)
 
 class Uncertain extends React.Component<any, any> {
 	public render() {
 		const { event } = this.props;
-		const isUncertain = event.dateUncertain != null || event.dateRangeUncertain != null;
 
 		return (
 			<div className="uncertain">
 				<Checkbox
 					label="Uncertain"
 					onChange={this.handleCheckboxChange}
-					value={isUncertain}
+					value={event.isUncertain()}
 				/>
 				{
-					isUncertain ?
+					event.isUncertain() ?
 						<Input
 							value={
-								event.isInterval ?
+								event.isInterval() ?
 									event.dateRangeUncertain.from.toISOString() :
 									event.dateUncertain.from.toISOString()
 							}
@@ -27,10 +27,10 @@ class Uncertain extends React.Component<any, any> {
 						null
 				}
 				{
-					isUncertain ?
+					event.isUncertain() ?
 						<Input
 							value={
-								event.isInterval ?
+								event.isInterval() ?
 									event.dateRangeUncertain.to.toISOString() :
 									event.dateUncertain.to.toISOString()
 							}
@@ -43,10 +43,12 @@ class Uncertain extends React.Component<any, any> {
 
 	private handleCheckboxChange = (): void => {
 		const { event, setEventKeyValues } = this.props;
-		if (event.isInterval) {
-			const [from, to] = extractFromAndTo(event);
+		if (event.isInterval()) {
 			setEventKeyValues({
-				dateRangeUncertain: {from, to},
+				dateRangeUncertain: {
+					from: event.from,
+					to: event.to,
+				},
 			});
 		} else {
 			setEventKeyValues({

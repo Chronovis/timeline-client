@@ -1,63 +1,25 @@
-import {parseEvent, parseRootEvent, setBoundingBox, pixelsPerDay, addTop} from '../utils/event';
+import Event from '../models/event';
+import RootEvent from '../models/root-event';
+import {addTop} from '../utils/event';
 
-interface IEventDefaults {
-	body: string;
-	boundingBox: {
-		flip: boolean;
-		left: number;
-		top: number;
-		width: number;
-	};
-	coordinates: Array<any>;
-	date: Date;
-	dateGranularity: DateGranularity;
-	dateRange: IDateRange;
-	dateRangeGranularity: DateGranularity;
-	dateRangeUncertain: IDateRange;
-	dateUncertain: IDateRange;
-	isInterval: boolean;
-	pixelsPerDay: number;
-	slug: string;
-	title: string;
-	types: string[];
+interface IDefaultState {
+	events: IEvent[];
+	newEvent: IEvent;
+	newEventData: any;
+	root: IRootEvent;
+	serverEvents: any[];
+	serverRoot: any;
 }
-interface IEvent2 {
-	isInterval(): boolean;
-}
-class Event implements IEvent2 {
-	private defaults: IEventDefaults = {
-		body: '',
-		boundingBox: {
-			flip: false,
-			left: null,
-			top: null,
-			width: null,
-		},
-		coordinates: [],
-		date: null,
-		dateGranularity: DateGranularity.DAY,
-		dateRange: null,
-		dateRangeGranularity: null,
-		dateRangeUncertain: null,
-		dateUncertain: null,
-		isInterval: false,
-		pixelsPerDay: null,
-		slug: '',
-		title: '',
-		types: [],
-	};
 
-	constructor(data) {
-		data = Object.assign(this.defaults, data);
-	}
-
-	public isInterval = () => this.dateRange != null;
-}
+const clone = (data) => JSON.parse(JSON.stringify(data));
 
 const defaultState: IDefaultState = {
 	events: [],
-	newEvent: new Event(),
-	root: new Event(),
+	newEvent: null,
+	newEventData: {},
+	root: null,
+	serverEvents: null,
+	serverRoot: null,
 };
 
 export default (state = defaultState, action) => {
@@ -65,42 +27,49 @@ export default (state = defaultState, action) => {
 
 	switch (action.type) {
 		case 'RECEIVE_EVENTS': {
-			const root = parseRootEvent(action.root);
-			const parsedEvents= action.events.map(parseEvent(root));
-			const events = addTop(parsedEvents);
+			const root = new RootEvent(clone(action.root));
+			let events = action.events.map((e) => new Event(clone(e), root));
+			events = addTop(events);
 
-			nextState = Object.assign({}, state, { events, root });
+			nextState = Object.assign({}, state, {
+				events,
+				newEvent: new Event({}, root),
+				root,
+				serverEvents: action.events,
+				serverRoot: action.root,
+			});
 			break;
 		}
 
 		case 'SET_EVENT_KEY_VALUES': {
-			let newEvent = Object.assign({}, state.newEvent, action.keyValues);
-			newEvent = setBoundingBox(state.root)(newEvent);
-			nextState = Object.assign({}, state, { newEvent	});
+			const newEventData = Object.assign({}, state.newEventData, action.keyValues);
+			const newEvent = new Event(newEventData, state.root);
+
+			nextState = Object.assign({}, state, {
+				newEvent,
+				newEventData,
+			});
 			break;
 		}
 
 		case 'RESET_EVENT': {
-			nextState = Object.assign({}, state, { newEvent: new Event() });
+			nextState = Object.assign({}, state, { newEvent: new Event({}, state.root) });
 			break;
 		}
 
 		case 'SAVE_EVENT': {
 			nextState = Object.assign({}, state, {
 				events: state.events.concat(state.newEvent),
-				newEvent: new Event(),
+				newEvent: new Event({}, state.root),
 			});
 			break;
 		}
 
 		case 'RESIZE': {
-			const root = Object.assign({}, state.root, { pixelsPerDay: pixelsPerDay(state.root) });
-			const parsedEvents = state.events.map(setBoundingBox(root));
-			const events = addTop(parsedEvents);
-			nextState = Object.assign({}, state, {
-				root,
-				events,
-			});
+			const root = new RootEvent(clone(state.serverRoot));
+			let events = state.serverEvents.map((e) => new Event(clone(e), root));
+			events = addTop(events);
+			nextState = Object.assign({}, state, { root, events });
 			break;
 		}
 

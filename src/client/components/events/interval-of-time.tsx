@@ -1,23 +1,19 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import * as cx from 'classnames';
-import {EVENT_MIN_SPACE, timelineBlue, timelineLightBlue, timelineLighestBlue} from '../constants';
-import {extractFromAndTo} from "../../utils/dates";
+import {EVENT_MIN_SPACE, timelineBlue, timelineLightBlue, timelineLighestBlue} from '../../constants';
 
 const percentageOfDateInEvent = (date: Date, event: IEvent): number => {
-	const [from, to] = extractFromAndTo(event);
-	return (date.getTime() - from.getTime()) / (to.getTime() - from.getTime());
+	return (date.getTime() - event.from.getTime()) / (event.to.getTime() - event.from.getTime());
 };
 
 
 const IntervalOfTime = ({ event, isNewEvent = false }) => {
-	const { flip, left, top,  width } = event.boundingBox;
-
 	const style = {
 		background: null,
-		left: `${left}px`,
-		top: `${top}px`,
-		width: `${width}px`,
+		left: `${event.left}px`,
+		top: `${event.top}px`,
+		width: `${event.width}px`,
 	};
 
 	if (event.dateRangeUncertain != null) {
@@ -28,7 +24,7 @@ const IntervalOfTime = ({ event, isNewEvent = false }) => {
 
 	return (
 		<li
-			className={cx('interval-of-time', { flip })}
+			className={cx('interval-of-time', { flip: event.flip })}
 			style={style}
 			title={event.title}
 		>
@@ -39,7 +35,7 @@ const IntervalOfTime = ({ event, isNewEvent = false }) => {
 						<div className="move-handle">
 							<div
 								className={cx('title', event.types, {
-									fill: width > EVENT_MIN_SPACE,
+									fill: event.width > EVENT_MIN_SPACE,
 								})}
 							>
 								{event.title}
@@ -49,7 +45,7 @@ const IntervalOfTime = ({ event, isNewEvent = false }) => {
 					</div> :
 					<Link
 						className={cx(event.types, {
-							fill: width > EVENT_MIN_SPACE,
+							fill: event.width > EVENT_MIN_SPACE,
 						})}
 						to={`/timelines/${event.slug}`}
 					>

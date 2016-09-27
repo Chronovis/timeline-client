@@ -1,10 +1,10 @@
 import * as React from 'react';
+import Uncertain from './uncertain';
+import * as DateUtils from '../../../utils/dates';
+import {getEventTypes} from '../../../actions/api';
 const Input = require('hire-forms-input').default;
 const Select = require('hire-forms-select').default;
 const AutoCompleteList = require('hire-forms-autocomplete-list').default;
-import Uncertain from './uncertain';
-import {extractTo, extractFrom, proportionalDate} from '../../../utils/dates';
-import {getEventTypes} from '../../../actions/api';
 
 class Form extends React.Component<any, any> {
 	public handleChangeEventType = (value) => {
@@ -12,7 +12,7 @@ class Form extends React.Component<any, any> {
 
 		const keyValues = (value === 'Point in time') ?
 			{
-				date: proportionalDate(root, 0.5),
+				date: DateUtils.proportionalDate(root, 0.5),
 				dateRange: null,
 				dateRangeUncertain: null,
 				dateUncertain: null,
@@ -21,8 +21,8 @@ class Form extends React.Component<any, any> {
 			{
 				date: null,
 				dateRange: {
-					from: proportionalDate(root, 0.45),
-					to: proportionalDate(root, 0.55),
+					from: DateUtils.proportionalDate(root, 0.45),
+					to: DateUtils.proportionalDate(root, 0.55),
 				},
 				dateRangeUncertain: null,
 				dateUncertain: null,
@@ -53,13 +53,13 @@ class Form extends React.Component<any, any> {
 				/>
 				<Input
 					onChange={(from: string) => console.log()}
-					value={extractFrom(event).toISOString()}
+					value={event.from.toISOString()}
 				/>
 				{
 					(event.isInterval) ?
 						<Input
 							onChange={(to: string) => console.log()}
-							value={extractTo(event).toISOString()}
+							value={event.from.toISOString()}
 						/> :
 						null
 				}
