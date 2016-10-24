@@ -3,17 +3,30 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as pg from 'pg';
+import DbConfig from './db-config';
 import parseEvent from './parse-event';
 
 // import * as slug from 'slug';
 
+// LOCAL
+// const pool = new pg.Pool({
+// 	database: 'timeline',
+// 	idleTimeoutMillis: 3000,
+// 	max: 10,
+// 	password: 'docker',
+// 	port: 5432,
+// 	user: 'docker',
+// });
+
+// REMOTE
 const pool = new pg.Pool({
-	database: 'timeline',
+	database: DbConfig.database,
+	host: DbConfig.host,
 	idleTimeoutMillis: 3000,
 	max: 10,
-	password: 'docker',
+	password: DbConfig.password,
 	port: 5432,
-	user: 'docker',
+	user: DbConfig.user,
 });
 
 const sql = (event) => {
