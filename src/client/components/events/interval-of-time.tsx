@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import * as cx from 'classnames';
-import {EVENT_MIN_SPACE, timelineBlue, timelineLightBlue, timelineLighestBlue} from '../../constants';
+import {EVENT_MIN_SPACE, timelineBlue, timelineLighestBlue} from '../../constants';
 
 const percentageOfDateInEvent = (date: Date, event: IEvent): number => {
 	return (date.getTime() - event.from.getTime()) / (event.to.getTime() - event.from.getTime());
 };
-
 
 class IntervalOfTime extends React.Component<any, any> {
 	public render() {
@@ -27,7 +26,7 @@ class IntervalOfTime extends React.Component<any, any> {
 		return (
 			<li
 				className={cx('interval-of-time', { flip: event.flip })}
-				onMouseDown={this.handleMouseDown}
+				onMouseDown={isNewEvent && this.handleMouseDown}
 				style={style}
 				title={event.title}
 			>
@@ -78,7 +77,6 @@ class IntervalOfTime extends React.Component<any, any> {
 		) {
 			handle = 'move';
 		}
-		console.log(handle, ev.target)
 
 		this.props.onHandleMouseDown(handle, ev.pageX);
 	};
