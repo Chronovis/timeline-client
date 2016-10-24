@@ -5,7 +5,7 @@ import PointInTime from '../events/point-in-time';
 
 interface ISliderProps {
 	event: IEvent;
-	root: IEvent;
+	root: IRootEvent;
 	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
 
@@ -15,8 +15,6 @@ class Slider extends React.Component<ISliderProps, any> {
 		handle: null,
 		offset: null,
 	};
-
-	private rootElement: HTMLElement = null;
 
 	public componentDidMount() {
 		document.addEventListener('mousemove', this.handleMouseMove);
@@ -34,47 +32,46 @@ class Slider extends React.Component<ISliderProps, any> {
 		return (
 			<ul
 				className="slider"
-				onMouseDown={this.handleMouseDown}
-				ref={(el) => {
-					if (el != null) {
-						this.rootElement = el;
-					}
-				}}
 			>
 				{
-					event.isInterval ?
+					event.isInterval() ?
 						<IntervalOfTime
 							event={event}
 							isNewEvent
+							onHandleMouseDown={this.handleMouseDown}
 						/> :
 						<PointInTime
 							event={event}
+						  isNewEvent
+						  onHandleMouseDown={this.handleMouseDown}
 						/>
 				}
 			</ul>
 		);
 	}
 
-	private handleMouseDown = (ev) => {
-		const { event, root } = this.props;
-		const handle = (
-			ev.target.matches('.move-handle') ||
-			ev.target.matches('.move-handle .title') ||
-			ev.target.matches('.interval-of-time') ||
-			ev.target.matches('.point-in-time') ||
-			ev.target.matches('.point-in-time .title')
-		) ?
-			'move' :
-			(ev.target.matches('.w-resize-handle')) ?
-				'west-resize' :
-				'east-resize';
+	private handleMouseDown = (handle, pageX) => {
+		const { event } = this.props;
+		// const handle = (
+		// 	ev.target.matches('.move-handle') ||
+		// 	ev.target.matches('.move-handle .title') ||
+		// 	ev.target.matches('.interval-of-time') ||
+		// 	ev.target.matches('.point-in-time') ||
+		// 	ev.target.matches('.point-in-time .point') ||
+		// 	ev.target.matches('.point-in-time .title')
+		// ) ?
+		// 	'move' :
+		// 	(ev.target.matches('.w-resize-handle')) ?
+		// 		'west-resize' :
+		// 		'east-resize';
+		console.log('h', handle)
 
 		document.body.classList.add('user-select-none', handle);
 
 		this.setState({
 			dragging: true,
 			handle,
-			offset: event.left - ev.pageX,
+			offset: event.left - pageX,
 		});
 	};
 
@@ -86,24 +83,49 @@ class Slider extends React.Component<ISliderProps, any> {
 			let to = event.to;
 
 			if (this.state.handle === 'move') {
-				from = DateUtils.dateAtLeftPosition(left, root);
-				to = DateUtils.dateAtLeftPosition(left + event.width, root);
+				from = root.dateAtLeftPosition(left);
+				to = root.dateAtLeftPosition(left + event.width);
 			} else if (this.state.handle === 'west-resize') {
-				from = DateUtils.dateAtLeftPosition(left, root);
+				from = root.dateAtLeftPosition(left);
 			} else if (this.state.handle === 'east-resize') {
-				to = DateUtils.dateAtLeftPosition(ev.pageX, root);
+				to = root.dateAtLeftPosition(ev.pageX);
 			}
 
-			const keyValues = this.props.event.isInterval ?
-				{
-					dateRange: {
-						from,
-						to,
-					},
-				} :
-				{
-					date: from,
-				};
+			// const keyValues = this.props.event.isInterval() ?
+			// 	{
+			// 		dateRange: {
+			// 			from,
+			// 			to,
+			// 		},
+			// 	} :
+			// 	{
+			// 		date: from,
+			// 	};
+			let keyValues;
+			if (event.isInterval()) {
+				// Move uncertain interval
+				if (event.isUncertain()) {
+					// TODO add dateRangeUncertain
+					keyValues = {
+						dateRange: { from, to },
+					};
+				// Move certain interval
+				} else {
+					keyValues = {
+						dateRange: { from, to },
+					};
+				}
+			} else {
+				// Move uncertain point
+				if (event.isUncertain()) {
+					keyValues = {
+						dateUncertain: { from, to },
+					};
+				// Move certain point
+				} else {
+					keyValues = { date: from };
+				}
+			}
 
 			this.props.setEventKeyValues(keyValues);
 		}

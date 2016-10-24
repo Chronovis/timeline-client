@@ -1,60 +1,5 @@
 import * as DateUtils from '../utils/dates';
 
-const parseDate = (date: string): Date => {
-	// TODO remove split('+') code. It is used to let the dates work under FF. Use different solution.
-	// Plus, there should be some sort of granularity. When a date does not need time information, the
-	// timezone can be skipped anyway.
-	date = date.split('+')[0];
-	return (date === 'infinity') ? null : new Date(date);
-};
-
-const parseDateRange = (dateRange): IDateRange => {
-	return {
-		from: parseDate(dateRange.from),
-		infiniteFrom: dateRange.from === 'infinity',
-		infiniteTo: dateRange.to === 'infinity',
-		to: parseDate(dateRange.to),
-	};
-};
-
-const parseEventData = (eventData) => {
-	if (eventData.dateRange != null) {
-		eventData.dateRange = parseDateRange(eventData.dateRange);
-	}
-
-	if (eventData.dateRangeUncertain != null) {
-		eventData.dateRangeUncertain = parseDateRange(eventData.dateRangeUncertain);
-	}
-
-	if (eventData.date != null) {
-		eventData.date = parseDate(eventData.date);
-	}
-
-	if (eventData.dateUncertain != null) {
-		eventData.dateUncertain = parseDateRange(eventData.dateUncertain);
-	}
-
-	eventData.from = (eventData.dateRange != null) ?
-		eventData.dateRange.infiniteFrom ?
-			new Date(-4713, 0, 1) : // Oldest possible date, constrained by Postgres.
-			eventData.dateRange.from :
-		eventData.date != null ?
-			eventData.date :
-			(eventData.dateUncertain != null) ?
-				eventData.dateUncertain.from :
-				null;
-
-	eventData.to = (eventData.dateRange != null) ?
-			eventData.dateRange.infiniteTo ?
-				new Date() :
-				eventData.dateRange.to :
-			(eventData.dateUncertain != null) ?
-				eventData.dateUncertain.to :
-				null;
-
-	return eventData;
-};
-
 class BaseEvent implements IBaseEvent {
 	public body = '';
 	public coordinates = [];
@@ -72,7 +17,9 @@ class BaseEvent implements IBaseEvent {
 	private dateRangeGranularity = null;
 
 	constructor(data) {
-		Object.assign(this, parseEventData(data));
+		Object.assign(this, data);
+		this.setTo();
+		this.setFrom();
 	}
 
 	public countDays() {
@@ -127,6 +74,27 @@ class BaseEvent implements IBaseEvent {
 
 		return DateUtils.format(date, granularity);
 	};
+	private setFrom(): void {
+		this.from = (this.dateRange != null) ?
+			this.dateRange.infiniteFrom ?
+				new Date(-4713, 0, 1) : // Oldest possible date, constrained by Postgres.
+				this.dateRange.from :
+			this.date != null ?
+				this.date :
+				(this.dateUncertain != null) ?
+					this.dateUncertain.from :
+					null;
+	}
+
+	private setTo(): void {
+		this.to = (this.dateRange != null) ?
+			this.dateRange.infiniteTo ?
+				new Date() :
+				this.dateRange.to :
+			(this.dateUncertain != null) ?
+				this.dateUncertain.to :
+				null;
+	}
 }
 
 export default BaseEvent;

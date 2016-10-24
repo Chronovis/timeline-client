@@ -2,24 +2,20 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import NewEvent from './new-event';
 import { setEventKeyValues, resetEvent, saveEvent } from '../../actions/events';
-import { proportionalDate } from '../../utils/dates';
 const Input = require('hire-forms-input').default;
 
 interface IAddEventProps {
 	newEvent: IEvent;
 	resetEvent: () => void;
-	root: IEvent;
+	root: IRootEvent;
 	saveEvent: () => void;
 	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
 
 class AddEvent extends React.Component<IAddEventProps, {}> {
 	public state = {
-		editTitle: true,
 		title: '',
 	};
-
-	private rootElement;
 
 	public render() {
 		const {
@@ -33,7 +29,6 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 		return (
 			<div
 				className="add-event"
-				ref={(el) => { if (el != null) this.rootElement = el; }}
 			>
 				{
 					(newEvent.title === '') ?
@@ -58,7 +53,7 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 	private handleKeyUp = (ev) => {
 		if (ev.keyCode === 13) {
 			this.props.setEventKeyValues({
-				date: proportionalDate(this.props.root, 0.5).toISOString(),
+				date: this.props.root.dateAtProportion(0.5),
 				title: this.state.title,
 			});
 		}

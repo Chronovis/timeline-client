@@ -8,7 +8,7 @@ interface IEventsProps {
 	events: IEvent[];
 	getEvents: (slug: string) => void;
 	resize: () => void;
-	root: IEvent;
+	root: IRootEvent;
 	routeParams: { slug: string };
 }
 

@@ -1,5 +1,10 @@
 declare const enum DateGranularity { YEAR, MONTH, DAY, TIME }
 
+interface IServerDateRange {
+	from: string;
+	to: string;
+}
+
 interface IDateRange {
 	from: Date;
 	infiniteFrom?: boolean;
@@ -33,5 +38,7 @@ interface IEvent extends IBaseEvent {
 }
 
 interface IRootEvent extends IBaseEvent {
+	dateAtLeftPosition(position: number): Date;
 	leftPositionAtDate(date: Date): number;
+	dateAtProportion(proportion: number): Date;
 }

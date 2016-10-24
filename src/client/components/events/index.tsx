@@ -5,7 +5,7 @@ import {EVENT_MIN_SPACE, EVENT_ROW_HEIGHT} from '../../constants';
 
 interface IEventsProps {
 	events: IEvent[];
-	root: IEvent;
+	root: IRootEvent;
 }
 
 class Events extends React.Component<IEventsProps, {}> {

@@ -6,7 +6,7 @@ import Form from "./form/index";
 interface INewEventProps {
 	newEvent: IEvent;
 	resetEvent: () => void;
-	root: IEvent;
+	root: IRootEvent;
 	saveEvent: () => void;
 	setEventKeyValues: (keyValues: IKeyValues) => void;
 }

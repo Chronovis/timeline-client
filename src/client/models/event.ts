@@ -8,8 +8,9 @@ class Event extends BaseEvent implements IEvent {
 	public width = null;
 	private root = null;
 
-	constructor(data, root) {
+	constructor(data, root: IRootEvent) {
 		super(data);
+
 		this.root = root; // TODO remove this.root? Root is only used in the constructor
 		this.left = this.root.leftPositionAtDate(this.from);
 		this.flip = (this.left + Constants.EVENT_MIN_SPACE > Constants.timelineWidth()) ? true : false;

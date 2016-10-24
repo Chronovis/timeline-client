@@ -1,9 +1,5 @@
 import * as Constants from '../constants';
 
-
-// export const eventLeftPosition = (event: IEvent, root: IEvent): number =>
-// 	leftPosition(extractFrom(event), root);
-
 const hasOverlap = (a: IEvent, b: IEvent): boolean => {
 	const [aLeft, aWidth] = a.space();
 	const [bLeft, bWidth] = b.space();
@@ -42,39 +38,43 @@ export const addTop = (events: IEvent[]) => {
 	return events.map(calc);
 };
 
-// const parseBaseEvent = (event) => {
-// 	if (event.dateRange != null) {
-// 		event.dateRange = parseDateRange(event.dateRange);
-// 		event.isInterval = true;
-// 	}
-//
-// 	if (event.dateRangeUncertain != null) {
-// 		event.dateRangeUncertain = parseDateRange(event.dateRangeUncertain);
-// 	}
-//
-// 	return event;
-// };
+const parseDate = (date: string): Date => {
+	// TODO remove split('+') code. It is used to let the dates work under FF. Use different solution.
+	// Plus, there should be some sort of granularity. When a date does not need time information, the
+	// timezone can be skipped anyway.
+	date = date.split('+')[0];
+	return (date === 'infinity') ? null : new Date(date);
+};
 
-// export const pixelsPerDay = (event: IEvent) =>
-// 	timelineWidth() / countDaysInRange(event);
-//
-// export const parseRootEvent = (event) => {
-// 	event = parseBaseEvent(event);
-// 	event.pixelsPerDay = pixelsPerDay(event);
-// 	return event;
-// };
+const parseDateRange = (dateRange: IServerDateRange): IDateRange => {
+	return {
+		from: parseDate(dateRange.from),
+		infiniteFrom: dateRange.from === 'infinity',
+		infiniteTo: dateRange.to === 'infinity',
+		to: parseDate(dateRange.to),
+	};
+};
 
+const clone = (data) => JSON.parse(JSON.stringify(data));
 
-// export const parseEvent = (root) => (event) => {
-// 	event = parseBaseEvent(event);
-//
-// 	if (event.date != null) event.date = parseDate(event.date);
-//
-// 	if (event.dateUncertain != null) {
-// 		event.dateUncertain = parseDateRange(event.dateUncertain);
-// 	}
-//
-// 	event = setBoundingBox(root)(event);
-//
-// 	return event;
-// };
+export const parseEvent = (eventData) => {
+	eventData = clone(eventData);
+
+	if (eventData.date) {
+		eventData.date = parseDate(eventData.date);
+	}
+
+	if (eventData.dateUncertain != null) {
+		eventData.dateUncertain = parseDateRange(eventData.dateUncertain);
+	}
+
+	if (eventData.dateRange != null) {
+		eventData.dateRange = parseDateRange(eventData.dateRange);
+	}
+
+	if (eventData.dateRangeUncertain != null) {
+		eventData.dateRangeUncertain = parseDateRange(eventData.dateRangeUncertain);
+	}
+
+	return eventData;
+};

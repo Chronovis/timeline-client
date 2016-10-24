@@ -1,6 +1,6 @@
 import Event from '../models/event';
 import RootEvent from '../models/root-event';
-import {addTop} from '../utils/event';
+import {addTop, parseEvent} from '../utils/event';
 
 interface IDefaultState {
 	events: IEvent[];
@@ -10,8 +10,6 @@ interface IDefaultState {
 	serverEvents: any[];
 	serverRoot: any;
 }
-
-const clone = (data) => JSON.parse(JSON.stringify(data));
 
 const defaultState: IDefaultState = {
 	events: [],
@@ -27,8 +25,8 @@ export default (state = defaultState, action) => {
 
 	switch (action.type) {
 		case 'RECEIVE_EVENTS': {
-			const root = new RootEvent(clone(action.root));
-			let events = action.events.map((e) => new Event(clone(e), root));
+			const root = new RootEvent(parseEvent(action.root));
+			let events = action.events.map((e) => new Event(parseEvent(e), root));
 			events = addTop(events);
 
 			nextState = Object.assign({}, state, {
@@ -66,8 +64,8 @@ export default (state = defaultState, action) => {
 		}
 
 		case 'RESIZE': {
-			const root = new RootEvent(clone(state.serverRoot));
-			let events = state.serverEvents.map((e) => new Event(clone(e), root));
+			const root = new RootEvent(parseEvent(state.serverRoot));
+			let events = state.serverEvents.map((e) => new Event(parseEvent(e), root));
 			events = addTop(events);
 			nextState = Object.assign({}, state, { root, events });
 			break;

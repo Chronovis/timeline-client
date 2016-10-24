@@ -1,47 +1,15 @@
 import * as React from 'react';
-import Uncertain from './uncertain';
-import * as DateUtils from '../../../utils/dates';
-import {getEventTypes} from '../../../actions/api';
-const Input = require('hire-forms-input').default;
-const Select = require('hire-forms-select').default;
 const AutoCompleteList = require('hire-forms-autocomplete-list').default;
+import {getEventTypes} from '../../../actions/api';
+import ToForm from './to';
+import FromForm from './from';
 
 class Form extends React.Component<any, any> {
-	public handleChangeEventType = (value) => {
-		const { root } = this.props;
-
-		const keyValues = (value === 'Point in time') ?
-			{
-				date: DateUtils.proportionalDate(root, 0.5),
-				dateRange: null,
-				dateRangeUncertain: null,
-				dateUncertain: null,
-				isInterval: false,
-			} :
-			{
-				date: null,
-				dateRange: {
-					from: DateUtils.proportionalDate(root, 0.45),
-					to: DateUtils.proportionalDate(root, 0.55),
-				},
-				dateRangeUncertain: null,
-				dateUncertain: null,
-				isInterval: true,
-			};
-
-		this.props.setEventKeyValues(keyValues);
-	};
-
 	public render() {
-		const { event, setEventKeyValues } = this.props;
+		const { event, root, setEventKeyValues } = this.props;
 
 		return (
 			<div className="form">
-				<Select
-					onChange={this.handleChangeEventType}
-					value={event.isInterval ? 'Interval of time' : 'Point in time'}
-					options={['Point in time', 'Interval of time']}
-				/>
 				<AutoCompleteList
 					async={getEventTypes}
 					onChange={(values) => {
@@ -51,24 +19,57 @@ class Form extends React.Component<any, any> {
 						}}
 					values={event.types.map((t) => ({key: t, value: t}))}
 				/>
-				<Input
-					onChange={(from: string) => console.log()}
-					value={event.from.toISOString()}
-				/>
-				{
-					(event.isInterval) ?
-						<Input
-							onChange={(to: string) => console.log()}
-							value={event.from.toISOString()}
-						/> :
-						null
-				}
-				<Uncertain
+				<FromForm
 					event={event}
-				  setEventKeyValues={setEventKeyValues}
+					setEventKeyValues={setEventKeyValues}
+					toggleCertainty={this.toggleCertainty}
+				/>
+				<ToForm
+					event={event}
+					root={root}
+					setEventKeyValues={setEventKeyValues}
+					toggleCertainty={this.toggleCertainty}
 				/>
 			</div>
-		)
+		);
+	}
+
+	private toggleCertainty = () => {
+		const {event, root, setEventKeyValues} = this.props;
+
+		if (event.isUncertain()) {
+			if (event.isInterval()) {
+				// Convert interval to certain
+				setEventKeyValues({
+					dateRangeUncertain: null,
+				});
+			} else {
+				// Convert point to certain
+				setEventKeyValues({
+					date: root.dateAtProportion(0.5),
+					dateUncertain: null,
+				});
+			}
+		} else {
+			if (event.isInterval()) {
+				// Convert interval to uncertain
+				setEventKeyValues({
+					dateRangeUncertain: {
+						from: root.dateAtProportion(0.4),
+						to: root.dateAtProportion(0.6),
+					}
+				});
+			} else {
+				// Convert point to uncertain
+				setEventKeyValues({
+					date: null,
+					dateUncertain: {
+						from: root.dateAtProportion(0.4),
+						to: root.dateAtProportion(0.6),
+					},
+				});
+			}
+		}
 	}
 }
 

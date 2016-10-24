@@ -5,23 +5,9 @@ type DateToFormat = 'from' | 'to';
 export const countDays = (from: Date, to: Date): number => {
 	if (to == null) return 0;
 	return Math.round(to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24);
-}
-
-export const isEqual = (date1: Date, date2: Date): boolean => date1.getTime() === date2.getTime();
-
-export const proportionalDate = (event: IEvent, proportion: number): Date => {
-	if (proportion < 0 || proportion > 1) throw new Error('[proportionalDate] proportion should be between 0 and 1.');
-
-	const fromTime: number = event.from.getTime();
-	const toTime: number = event.to.getTime();
-
-	const newTime = fromTime + ((toTime - fromTime) * proportion);
-
-	return new Date(newTime);
 };
 
-export const dateAtLeftPosition = (position: number, root: IEvent): Date =>
-	proportionalDate(root, position / Constants.timelineWidth());
+export const isEqual = (date1: Date, date2: Date): boolean => date1.getTime() === date2.getTime();
 
 // export const extractFrom = (event): Date =>
 // 	(event.isInterval) ?

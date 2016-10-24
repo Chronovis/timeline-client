@@ -18,6 +18,26 @@ li.point-in-time
 	position absolute
 	white-space nowrap
 
+	.uncertain-w-resize-handle,
+	.uncertain-e-resize-handle
+		position absolute
+		bottom -5px
+		width 0
+		height 0
+		border-left 5px solid transparent
+		border-right 5px solid transparent
+		border-bottom 5px solid black
+
+	.uncertain-w-resize-handle
+		cursor w-resize
+		left 0
+		transform translateX(-5px)
+
+	.uncertain-e-resize-handle
+		cursor e-resize
+		right 0
+		transform translateX(5px)
+
 li.interval-of-time
 	IOT_PADDING = 4px
 	background timelineLighestBlue
@@ -34,7 +54,6 @@ li.interval-of-time
 			right IOT_PADDING
 
 	.w-resize-handle, .e-resize-handle
-		background timelineLighestBlue
 		bottom 0
 		position absolute
 		top 0

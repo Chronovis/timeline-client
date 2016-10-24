@@ -4,12 +4,13 @@ import * as cx from 'classnames';
 import * as debounce from 'lodash.debounce';
 import Events from './events/index';
 import Rulers from './rulers/index';
+import * as Constants from '../constants';
 
 interface ITimelineProps {
 	children?: any;
 	events: IEvent[];
 	resize: () => void;
-	root: IEvent;
+	root: IRootEvent;
 }
 
 class Timeline extends React.Component<ITimelineProps, null> {
@@ -44,6 +45,19 @@ class Timeline extends React.Component<ITimelineProps, null> {
 					{...this.props}
 					{...this.state}
 				/>
+				<div className="dev">
+					<span style={{textDecoration: 'underline'}}>Timeline</span>
+					<br />
+					<span>{` width: ${Constants.timelineWidth().toFixed(2)}px`}</span>
+					<br />
+					<span>{` days: ${root.countDays().toFixed(0)} days`}</span>
+					<br />
+					<span>{` years: ${(root.countDays() / 365).toFixed(2)} years`}</span>
+					<br /><br />
+					<span>{`One pixel is: ${(root.countDays() / Constants.timelineWidth()).toFixed(2)} days`}</span>
+					<br />
+					<span>{`One day is: ${(Constants.timelineWidth() / root.countDays()).toFixed(4)}px`}</span>
+				</div>
 				{children}
 			</div>
 		);
