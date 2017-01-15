@@ -9,25 +9,25 @@ import parseEvent from './parse-event';
 // import * as slug from 'slug';
 
 // LOCAL
-// const pool = new pg.Pool({
-// 	database: 'timeline',
-// 	idleTimeoutMillis: 3000,
-// 	max: 10,
-// 	password: 'docker',
-// 	port: 5432,
-// 	user: 'docker',
-// });
-
-// REMOTE
 const pool = new pg.Pool({
-	database: DbConfig.database,
-	host: DbConfig.host,
+	database: 'timeline',
 	idleTimeoutMillis: 3000,
 	max: 10,
-	password: DbConfig.password,
+	password: 'docker',
 	port: 5432,
-	user: DbConfig.user,
+	user: 'docker',
 });
+
+// REMOTE
+// const pool = new pg.Pool({
+// 	database: DbConfig.database,
+// 	host: DbConfig.host,
+// 	idleTimeoutMillis: 3000,
+// 	max: 10,
+// 	password: DbConfig.password,
+// 	port: 5432,
+// 	user: DbConfig.user,
+// });
 
 const sql = (event) => {
 	const s = `

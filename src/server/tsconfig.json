@@ -10,7 +10,6 @@
   ],
   "files": [
     "./index.ts",
-    "./parse-event.ts",
-    "../../typings/index.d.ts"
+    "./parse-event.ts"
   ]
 }
