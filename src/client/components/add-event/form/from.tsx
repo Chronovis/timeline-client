@@ -1,6 +1,6 @@
 import * as React from 'react';
-const Input = require('hire-forms-input').default;
-const Checkbox = require('hire-forms-checkbox').default;
+import Input from 'hire-forms-input';
+import Checkbox from 'hire-forms-checkbox';
 
 class FromForm extends React.Component<any, any> {
 	public render() {

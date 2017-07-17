@@ -1,5 +1,5 @@
 import * as React from 'react';
-const AutoCompleteList = require('hire-forms-autocomplete-list').default;
+import AutoCompleteList from 'hire-forms-autocomplete-list';
 import {getEventTypes} from '../../../actions/api';
 import ToForm from './to';
 import FromForm from './from';

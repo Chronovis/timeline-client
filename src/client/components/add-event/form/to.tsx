@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {setEventKeyValues} from "../../../actions/events";
-const Input = require('hire-forms-input').default;
-const Checkbox = require('hire-forms-checkbox').default;
+import Input from 'hire-forms-input';
+import Checkbox from 'hire-forms-checkbox';
 
 class ToForm extends React.Component<any, any> {
 	public render() {

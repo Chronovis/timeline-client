@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import NewEvent from './new-event';
 import { setEventKeyValues, resetEvent, saveEvent } from '../../actions/events';
-const Input = require('hire-forms-input').default;
+import Input from 'hire-forms-input';
 
 interface IAddEventProps {
 	newEvent: IEvent;

@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 
-import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import * as express from 'express';
 import * as pg from 'pg';
-import DbConfig from './db-config';
+// import DbConfig from './db-config';
 import parseEvent from './parse-event';
 
 // import * as slug from 'slug';
 
 // LOCAL
 const pool = new pg.Pool({
+	host: 'db',
 	database: 'timeline',
 	idleTimeoutMillis: 3000,
 	max: 10,

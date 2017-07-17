@@ -1,25 +1,32 @@
-dev:
-  entrypoint: "./entrypoint.sh"
-  environment:
-    - SSH_AUTH_SOCK=/ssh-agent
-  image: gijsjan/webdev:1.3
-  links:
-    - db
-  ports:
-    - "3001:3001"
-  volumes:
-    - ..:/home/developer/timeline-client
-    - ../../timeline-server:/home/developer/timeline-server
-    - ./tmuxinator.yml:/home/developer/.tmuxinator/project.yml
-    - ./entrypoint.sh:/home/developer/entrypoint.sh
-    - ~/.ssh:/home/developer/.ssh
-    - ${SSH_AUTH_SOCK}:/ssh-agent
-db:
-  image: gijsjan/postgresql:1.0
-  environment:
-    - POSTGRES_PASSWORD=docker
-    - POSTGRES_USER=docker
-  ports:
-    - "5432:5432"
-  volumes:
-    - timeline-data:/var/lib/postgresql
+version: "3"
+services:
+  dev-client:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile-dev-client
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    volumes:
+      - ../:/app
+  dev-server:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile-dev-server
+    ports:
+      - "3999:3999"
+    volumes:
+      - ../:/app
+  db:
+    image: gijsjan/postgresql:1.0
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - PGDATA=/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - timeline-data:/pgdata
+volumes:
+  timeline-data:
+

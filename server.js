@@ -1,13 +1,11 @@
-#!/usr/bin/env node
+const browserSync = require('browser-sync').create();
+const modRewrite = require('connect-modrewrite');
+const debounce = require('lodash.debounce');
+const proxy = require('proxy-middleware');
+const url = require('url');
 
-var browserSync = require('browser-sync').create();
-var modRewrite = require('connect-modrewrite');
-var debounce = require('lodash.debounce');
-var proxy = require('proxy-middleware');
-var url = require('url');
-
-var baseDir = './build/client';
-var watchFiles = [
+const baseDir = './build/client';
+const watchFiles = [
 	baseDir + '/js/*.js',
 	baseDir + '/css/*.css',
 	baseDir + '/index.html'
@@ -21,7 +19,7 @@ function onFilesChanged(event, file) {
 
 browserSync.watch(watchFiles, debounce(onFilesChanged, 300));
 
-var proxyOptions = url.parse('http://localhost:3999');
+const proxyOptions = url.parse('http://dev-server:3999');
 proxyOptions.route = '/api';
 
 browserSync.init({
