@@ -9,16 +9,3 @@ services:
       - "3001:3001"
     volumes:
       - ../:/app
-  db:
-    image: gijsjan/postgresql:1.0
-    environment:
-      - POSTGRES_USER=docker
-      - POSTGRES_PASSWORD=docker
-      - PGDATA=/pgdata
-    ports:
-      - "5432:5432"
-    volumes:
-      - timeline-data:/pgdata
-volumes:
-  timeline-data:
-
