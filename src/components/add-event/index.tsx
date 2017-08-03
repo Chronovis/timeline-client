@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import NewEvent from './new-event';
 import { setEventKeyValues, resetEvent, saveEvent } from '../../actions/events';
 import Input from 'hire-forms-input';
+import {IKeyValues} from "../../reducers/index";
 
 interface IAddEventProps {
 	newEvent: IEvent;

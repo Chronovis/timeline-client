@@ -1,8 +1,0 @@
-{
-	"extends": "tslint:recommended",
-	"rules": {
-		"curly": false,
-		"indent": [true, "tabs"],
-		"quotemark": [true, "single", "jsx-double"]
-	}
-}

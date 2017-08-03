@@ -1,7 +1,8 @@
 import * as React from 'react';
-import history from '../../routes/history';
+import history from '../../store/history';
 import Slider from './slider';
 import Form from "./form/index";
+import {IKeyValues} from "../../reducers/index";
 
 interface INewEventProps {
 	newEvent: IEvent;

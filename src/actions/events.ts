@@ -1,4 +1,4 @@
-import 'whatwg-fetch';
+import {IKeyValues} from "../reducers/index";
 
 export const getEvents = (slug: string) => (dispatch, getState) =>
 	fetch('/api/events', {

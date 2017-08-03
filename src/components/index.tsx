@@ -7,19 +7,21 @@ import {resize} from "../actions/dom";
 interface IEventsProps {
 	events: IEvent[];
 	getEvents: (slug: string) => void;
+	match: any;
 	resize: () => void;
 	root: IRootEvent;
 	routeParams: { slug: string };
 }
 
-class App extends React.Component<IEventsProps, {}> {
+class App extends React.Component<IEventsProps> {
 	public componentDidMount() {
-		this.props.getEvents(this.props.routeParams.slug);
+		console.log(this.props)
+		this.props.getEvents(this.props.match.params.slug);
 	}
 
-	public componentWillReceiveProps({ routeParams }) {
-		if (routeParams.slug !== this.props.routeParams.slug) {
-			this.props.getEvents(routeParams.slug);
+	public componentWillReceiveProps(nextProps) {
+		if (nextProps.match.params.slug !== this.props.match.params.slug) {
+			this.props.getEvents(nextProps.match.params.slug);
 		}
 	}
 

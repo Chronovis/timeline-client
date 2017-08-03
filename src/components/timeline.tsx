@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import * as cx from 'classnames';
 import * as debounce from 'lodash.debounce';
 import Events from './events/index';

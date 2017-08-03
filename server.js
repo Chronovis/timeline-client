@@ -4,11 +4,10 @@ const debounce = require('lodash.debounce');
 const proxy = require('proxy-middleware');
 const url = require('url');
 
-const baseDir = './build/client';
+const baseDir = './build';
 const watchFiles = [
-	baseDir + '/js/*.js',
-	baseDir + '/css/*.css',
-	baseDir + '/index.html'
+	baseDir + '/bundle.js',
+	'index.html'
 ];
 
 function onFilesChanged(event, file) {
@@ -24,7 +23,7 @@ proxyOptions.route = '/api';
 
 browserSync.init({
 	server: {
-		baseDir: baseDir,
+		baseDir: '.',
 		middleware: [
 			proxy(proxyOptions),
 			modRewrite([

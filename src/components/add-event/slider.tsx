@@ -1,7 +1,7 @@
 import * as React from 'react';
-import * as DateUtils from '../../utils/dates';
 import IntervalOfTime from '../events/interval-of-time';
 import PointInTime from '../events/point-in-time';
+import {IKeyValues} from "../../reducers/index";
 
 interface ISliderProps {
 	event: IEvent;

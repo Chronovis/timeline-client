@@ -9,14 +9,6 @@ services:
       - "3001:3001"
     volumes:
       - ../:/app
-  dev-server:
-    build:
-      context: ../
-      dockerfile: docker/Dockerfile-dev-server
-    ports:
-      - "3999:3999"
-    volumes:
-      - ../:/app
   db:
     image: gijsjan/postgresql:1.0
     environment:

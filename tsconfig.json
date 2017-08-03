@@ -2,7 +2,7 @@
   "compilerOptions": {
     "jsx": "react",
     "module": "commonjs",
-    "outDir": "../../build/client",
+    "outDir": "./build/client",
     "removeComments": true,
     "target": "es6"
   },
@@ -10,9 +10,9 @@
     "node_modules"
   ],
   "files": [
-    "index.ts",
-    "index.d.ts",
-    "./models/index.d.ts",
+    "./src/index.tsx",
+    "../index.d.ts",
+    "../models/index.d.ts",
     "../../typings/index.d.ts"
   ]
 }

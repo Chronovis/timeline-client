@@ -12,12 +12,12 @@ class Form extends React.Component<any, any> {
 			<div className="form">
 				<AutoCompleteList
 					async={getEventTypes}
-					onChange={(values) => {
-							setEventKeyValues({
-								types: values.map((v) => v.value),
-							});
-						}}
-					values={event.types.map((t) => ({key: t, value: t}))}
+					onChange={(values) =>
+						setEventKeyValues({
+							types: values.map(v => v.value),
+						})
+					}
+					values={event.types.map(t => ({key: t, value: t}))}
 				/>
 				<FromForm
 					event={event}
