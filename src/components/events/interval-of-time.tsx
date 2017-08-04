@@ -1,35 +1,60 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import history from '../../store/history';
 import * as cx from 'classnames';
-import {EVENT_MIN_SPACE, timelineBlue, timelineLighestBlue} from '../../constants';
+import {EVENT_MIN_SPACE, timelineBlue, timelineLightestBlue} from '../../constants';
+import styled from "styled-components";
+import {eventCSS, intervalOfTimeCSS} from './event';
+import {IEvent} from "../../models/event";
 
 const percentageOfDateInEvent = (date: Date, event: IEvent): number => {
 	return (date.getTime() - event.from.getTime()) / (event.to.getTime() - event.from.getTime());
 };
 
-class IntervalOfTime extends React.Component<any, any> {
+
+interface IProps {
+	className?: string;
+	event: IEvent;
+	key?: number;
+	isNewEvent?: boolean;
+	onHandleMouseDown?: (string, number) => void;
+}
+
+const IntervalOfTimeLink = styled.a`
+	color: #DDD;
+	cursor: pointer;
+	text-decoration: none;
+	background: rgba(0, 0, 0, 0.4);
+	border-radius: 2px;
+	box-sizing: border-box;
+	max-width: ${(props: {event: IEvent}) =>
+		props.event.width > EVENT_MIN_SPACE ? 'calc(100% - 8px)' : EVENT_MIN_SPACE
+	};
+	overflow: hidden;
+	right: ${(props: {event: IEvent}) =>
+		props.event.flip ? '4px' : 'initial'
+	};
+	text-overflow: ellipsis;
+	padding: 0 4px;
+	position: absolute;
+`;
+
+// &.fill
+// max-width calc(100% - 8px)
+
+class IntervalOfTimeComp extends React.Component<IProps, null> {
 	public render() {
 		const { event, isNewEvent } = this.props;
-		const style = {
-			background: null,
-			left: `${event.left}px`,
-			top: `${event.top}px`,
-			width: `${event.width}px`,
-		};
-
-		if (event.dateRangeUncertain != null) {
-			const percFrom = percentageOfDateInEvent(event.dateRangeUncertain.from, event);
-			const percTo = percentageOfDateInEvent(event.dateRangeUncertain.to, event);
-			style.background = `linear-gradient(to right, ${timelineBlue}, ${timelineLighestBlue} ${percFrom * 100}%, ${timelineLighestBlue} ${percTo * 100}%, ${timelineBlue})`;
-		}
+		// const style = {
+		// };
+		//
+		// if (event.dateRangeUncertain != null) {
+		// 	const percFrom = percentageOfDateInEvent(event.dateRangeUncertain.from, event);
+		// 	const percTo = percentageOfDateInEvent(event.dateRangeUncertain.to, event);
+		// 	style.background = `linear-gradient(to right, ${timelineBlue}, ${timelineLightestBlue} ${percFrom * 100}%, ${timelineLightestBlue} ${percTo * 100}%, ${timelineBlue})`;
+		// }
 
 		return (
-			<li
-				className={cx('interval-of-time', { flip: event.flip })}
-				onMouseDown={isNewEvent && this.handleMouseDown}
-				style={style}
-				title={event.title}
-			>
+			<li className={this.props.className}>
 				{
 					isNewEvent ?
 						<div className="handles">
@@ -47,14 +72,12 @@ class IntervalOfTime extends React.Component<any, any> {
 							{isNewEvent && event.isUncertain() ? <div className="uncertain-e-resize-handle"/> : null}
 							<div className="e-resize-handle"/>
 						</div> :
-						<Link
-							className={cx(event.types, {
-								fill: event.width > EVENT_MIN_SPACE,
-							})}
-							to={`/timelines/${event.slug}`}
+						<IntervalOfTimeLink
+							event={event}
+							onClick={() => history.push(`/timelines/${event.slug}`)}
 						>
 							{event.title}
-						</Link>
+						</IntervalOfTimeLink>
 				}
 			</li>
 		);
@@ -82,4 +105,33 @@ class IntervalOfTime extends React.Component<any, any> {
 	};
 }
 
+const IntervalOfTime = styled(IntervalOfTimeComp)`
+	${eventCSS}
+	${intervalOfTimeCSS}
+	
+	background: ${props => {
+		if (props.event.dateRangeUncertain != null) {
+			const percFrom = percentageOfDateInEvent(props.event.dateRangeUncertain.from, props.event);
+			const percTo = percentageOfDateInEvent(props.event.dateRangeUncertain.to, props.event);
+			return `linear-gradient(to right, ${timelineBlue}, ${timelineLightestBlue} ${percFrom * 100}%, ${timelineLightestBlue} ${percTo * 100}%, ${timelineBlue})`;
+		} else {
+			return timelineLightestBlue;
+		}
+	}};
+	left: ${props => props.event.left}px;
+	top: ${props => props.event.top}px;
+	width: ${props => props.event.width}px;
+`;
+
 export default IntervalOfTime;
+// <Event
+// 	className={cx(this.props.className, 'interval-of-time', { flip: event.flip })}
+// 	onMouseDown={isNewEvent && this.handleMouseDown}
+// 	style={style}
+// 	title={event.title}
+// >
+
+
+// className={cx(event.types, {
+// 	fill: event.width > EVENT_MIN_SPACE,
+// })}

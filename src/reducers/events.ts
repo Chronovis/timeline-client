@@ -1,5 +1,5 @@
-import Event from '../models/event';
-import RootEvent from '../models/root-event';
+import Event, {IEvent} from '../models/event';
+import RootEvent, {IRootEvent} from '../models/root-event';
 import {addTop, parseEvent} from '../utils/event';
 
 interface IDefaultState {

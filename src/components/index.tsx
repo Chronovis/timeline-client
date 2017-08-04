@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { getEvents } from '../actions/events';
 import Timeline from './timeline';
 import {resize} from "../actions/dom";
+import {IEvent} from "../models/event";
+import {IRootEvent} from "../models/root-event";
 
 interface IEventsProps {
 	events: IEvent[];

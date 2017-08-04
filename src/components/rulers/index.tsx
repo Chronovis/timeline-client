@@ -1,14 +1,29 @@
 import * as React from 'react';
+import styled from 'styled-components';
+import Ruler from "./ruler";
+import {IRootEvent} from "../../models/root-event";
 
-const Ruler = ({ left, year }) => {
-	return (
-		<li style={{ left: `${left}px` }}>
-			<span className="date">{year}</span>
-		</li>
-	);
-};
+const Rulers = styled.ul`
+	top: 0;
+	bottom: 0;
+	font-size: 0.8em;
+	left: 1%;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	right: 1%;
+`;
 
-class Rulers extends React.Component<any, any> {
+interface IProps {
+	root: IRootEvent;
+}
+
+interface IState {
+	absolute: boolean;
+}
+
+class RulersComp extends React.Component<IProps, IState> {
 	public state = {
 		absolute: true,
 	};
@@ -32,30 +47,28 @@ class Rulers extends React.Component<any, any> {
 		}
 
 		return (
-			<div className="tmp">
-				<ul className="rulers"
-					onClick={(ev: any) => {
-						if (ev.target.matches('span.date')) {
-							this.setState({ absolute: !this.state.absolute });
-						}
-					}}
-				>
-					{
-						rulers.map((year: number, index: number) =>
-							<Ruler
-								key={index}
-								left={
-									this.state.absolute ?
-										root.leftPositionAtDate(new Date(year.toString())) :
-										root.leftPositionAtDate(new Date((fromYear + year).toString()))
-								}
-								year={year}
-							/>)
+			<Rulers
+				onClick={(ev: any) => {
+					if (ev.target.matches('span.date')) {
+						this.setState({ absolute: !this.state.absolute });
 					}
-				</ul>
-			</div>
+				}}
+			>
+				{
+					rulers.map((year: number, index: number) =>
+						<Ruler
+							key={index}
+							left={
+								this.state.absolute ?
+									root.leftPositionAtDate(new Date(year.toString())) :
+									root.leftPositionAtDate(new Date((fromYear + year).toString()))
+							}
+							year={year}
+						/>)
+				}
+			</Rulers>
 		);
 	}
 }
 
-export default Rulers;
+export default RulersComp;

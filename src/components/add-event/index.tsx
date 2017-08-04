@@ -4,6 +4,8 @@ import NewEvent from './new-event';
 import { setEventKeyValues, resetEvent, saveEvent } from '../../actions/events';
 import Input from 'hire-forms-input';
 import {IKeyValues} from "../../reducers/index";
+import {IEvent} from "../../models/event";
+import {IRootEvent} from "../../models/root-event";
 
 interface IAddEventProps {
 	newEvent: IEvent;

@@ -1,4 +1,6 @@
 import * as Constants from '../constants';
+import {IEvent} from "../models/event";
+import {IDateRange} from "../models/base-event";
 
 const hasOverlap = (a: IEvent, b: IEvent): boolean => {
 	const [aLeft, aWidth] = a.space();
@@ -45,6 +47,11 @@ const parseDate = (date: string): Date => {
 	date = date.split('+')[0];
 	return (date === 'infinity') ? null : new Date(date);
 };
+
+interface IServerDateRange {
+	from: string;
+	to: string;
+}
 
 const parseDateRange = (dateRange: IServerDateRange): IDateRange => {
 	return {

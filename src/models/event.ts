@@ -1,5 +1,14 @@
-import BaseEvent from './base-event';
+import BaseEvent, {IBaseEvent} from './base-event';
 import * as Constants from '../constants';
+import {IRootEvent} from "./root-event";
+
+export interface IEvent extends IBaseEvent {
+	flip: boolean;
+	left: number;
+	top: number;
+	width: number;
+	space(): [number, number];
+}
 
 class Event extends BaseEvent implements IEvent {
 	public flip = null;
@@ -28,12 +37,8 @@ class Event extends BaseEvent implements IEvent {
 	public space(): [number, number] {
 		const minWidth = (w) => (w === 0 || w < Constants.EVENT_MIN_SPACE) ? Constants.EVENT_MIN_SPACE : w;
 		const width = minWidth(this.width);
-
-		if (this.flip) {
-			return [this.left - width, width];
-		} else {
-			return [this.left, width];
-		}
+		const left = (this.flip) ? this.left - width : this.left;
+		return [left, width];
 	}
 }
 

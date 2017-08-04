@@ -1,6 +1,12 @@
 import * as Constants from '../constants';
 import * as DateUtils from '../utils/dates';
-import BaseEvent from './base-event';
+import BaseEvent, {IBaseEvent} from './base-event';
+
+export interface IRootEvent extends IBaseEvent {
+	dateAtLeftPosition(position: number): Date;
+	leftPositionAtDate(date: Date): number;
+	dateAtProportion(proportion: number): Date;
+}
 
 class RootEvent extends BaseEvent implements IRootEvent {
 	private pixelsPerDay = null;

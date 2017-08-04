@@ -2,6 +2,8 @@ import * as React from 'react';
 import IntervalOfTime from '../events/interval-of-time';
 import PointInTime from '../events/point-in-time';
 import {IKeyValues} from "../../reducers/index";
+import {IEvent} from "../../models/event";
+import {IRootEvent} from "../../models/root-event";
 
 interface ISliderProps {
 	event: IEvent;

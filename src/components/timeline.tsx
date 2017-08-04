@@ -5,6 +5,39 @@ import * as debounce from 'lodash.debounce';
 import Events from './events/index';
 import Rulers from './rulers/index';
 import * as Constants from '../constants';
+import styled from "styled-components";
+import {IEvent} from "../models/event";
+import {IRootEvent} from "../models/root-event";
+
+const Wrapper = styled.div`
+	height: 100%;
+`;
+
+const Header = styled.header`
+	margin: 0 auto;
+	text-align: center;
+	width: 50%;
+	position: relative;
+	z-index: 1;
+`;
+
+const H2 = styled.h2`
+	font-size: 3em;
+	margin: 0;
+	padding: 0;
+`;
+
+const Dev = styled.div`
+	position: fixed;
+	padding: 1%;
+	right: 0;
+	bottom: 32px;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-top-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+	color: white;
+	font-size: 0.6em;
+`;
 
 interface ITimelineProps {
 	children?: any;
@@ -29,14 +62,14 @@ class Timeline extends React.Component<ITimelineProps, null> {
 		if (root == null) return null;
 
 		return (
-			<div className="timeline">
-				<header>
+			<Wrapper>
+				<Header>
 					<div className="pre-title">TIMELINE OF</div>
-					<h2 className={cx(root.types)}>{root.title}</h2>
+					<H2 className={cx(root.types)}>{root.title}</H2>
 					<Link to={`/timelines/${root.slug}/add-event`}>+</Link>
 					<div className="from">{root.formatFromDate()}</div>
 					<div className="to">{root.formatToDate()}</div>
-				</header>
+				</Header>
 				<Rulers
 					{...this.props}
 					{...this.state}
@@ -45,7 +78,7 @@ class Timeline extends React.Component<ITimelineProps, null> {
 					{...this.props}
 					{...this.state}
 				/>
-				<div className="dev">
+				<Dev>
 					<span style={{textDecoration: 'underline'}}>Timeline</span>
 					<br />
 					<span>{` width: ${Constants.timelineWidth().toFixed(2)}px`}</span>
@@ -57,9 +90,9 @@ class Timeline extends React.Component<ITimelineProps, null> {
 					<span>{`One pixel is: ${(root.countDays() / Constants.timelineWidth()).toFixed(2)} days`}</span>
 					<br />
 					<span>{`One day is: ${(Constants.timelineWidth() / root.countDays()).toFixed(4)}px`}</span>
-				</div>
+				</Dev>
 				{children}
-			</div>
+			</Wrapper>
 		);
 	}
 }

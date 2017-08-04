@@ -3,6 +3,8 @@ import history from '../../store/history';
 import Slider from './slider';
 import Form from "./form/index";
 import {IKeyValues} from "../../reducers/index";
+import {IRootEvent} from "../../models/root-event";
+import {IEvent} from "../../models/event";
 
 interface INewEventProps {
 	newEvent: IEvent;

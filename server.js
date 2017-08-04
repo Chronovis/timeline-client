@@ -18,7 +18,7 @@ function onFilesChanged(event, file) {
 
 browserSync.watch(watchFiles, debounce(onFilesChanged, 300));
 
-const proxyOptions = url.parse('http://dev-server:3999');
+const proxyOptions = url.parse('http://server:3999');
 proxyOptions.route = '/api';
 
 browserSync.init({
