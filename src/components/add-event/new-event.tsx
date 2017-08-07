@@ -1,10 +1,11 @@
 import * as React from 'react';
 import history from '../../store/history';
-import Slider from './slider';
+import Slider from './slider/index';
 import Form from "./form/index";
 import {IKeyValues} from "../../reducers/index";
 import {IRootEvent} from "../../models/root-event";
 import {IEvent} from "../../models/event";
+import styled from "styled-components";
 
 interface INewEventProps {
 	newEvent: IEvent;
@@ -13,6 +14,19 @@ interface INewEventProps {
 	saveEvent: () => void;
 	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
+
+const SlideArea = styled.div`
+	height: 30px;
+	left: 1%;
+	margin-bottom: 20px;
+	position: relative;
+	right: 1%;
+`;
+
+const Footer = styled.footer`
+	bottom: 0;
+	position: absolute;
+`;
 
 class NewEvent extends React.Component<INewEventProps, {}> {
 	public render() {
@@ -25,20 +39,20 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 		} = this.props;
 
 		return (
-			<div className="new-event">
-				<div className="new-event-slide-area">
+			<div>
+				<SlideArea>
 					<Slider
 						event={newEvent}
 						root={root}
 						setEventKeyValues={setEventKeyValues}
 					/>
-				</div>
+				</SlideArea>
 				<Form
 					event={newEvent}
 					root={root}
 					setEventKeyValues={setEventKeyValues}
 				/>
-				<footer>
+				<Footer>
 					<button
 						onClick={() => {
 							resetEvent();
@@ -53,7 +67,7 @@ class NewEvent extends React.Component<INewEventProps, {}> {
 							history.push(`/timelines/${root.slug}`);
 						}}
 					>Save</button>
-				</footer>
+				</Footer>
 			</div>
 		);
 	}

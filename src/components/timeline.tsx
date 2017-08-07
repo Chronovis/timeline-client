@@ -8,6 +8,7 @@ import * as Constants from '../constants';
 import styled from "styled-components";
 import {IEvent} from "../models/event";
 import {IRootEvent} from "../models/root-event";
+import setIcons from "./events/set-icons";
 
 const Wrapper = styled.div`
 	height: 100%;
@@ -25,6 +26,7 @@ const H2 = styled.h2`
 	font-size: 3em;
 	margin: 0;
 	padding: 0;
+	${(props: {types: string[]}) => setIcons(props.types)}
 `;
 
 const Dev = styled.div`
@@ -65,7 +67,7 @@ class Timeline extends React.Component<ITimelineProps, null> {
 			<Wrapper>
 				<Header>
 					<div className="pre-title">TIMELINE OF</div>
-					<H2 className={cx(root.types)}>{root.title}</H2>
+					<H2 types={root.types}>{root.title}</H2>
 					<Link to={`/timelines/${root.slug}/add-event`}>+</Link>
 					<div className="from">{root.formatFromDate()}</div>
 					<div className="to">{root.formatToDate()}</div>

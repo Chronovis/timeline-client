@@ -7,12 +7,10 @@ const Rulers = styled.ul`
 	top: 0;
 	bottom: 0;
 	font-size: 0.8em;
-	left: 1%;
 	list-style: none;
 	margin: 0;
 	padding: 0;
 	position: absolute;
-	right: 1%;
 `;
 
 interface IProps {

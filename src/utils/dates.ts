@@ -46,9 +46,11 @@ export const format = (date: Date, granularity: DateGranularity): string => {
 		];
 		displayDate = `${months[date.getMonth()]} ${displayDate}`;
 	}
+	
 	if (granularity >= DateGranularity.DAY) {
-		displayDate = `${date.getDay()} ${displayDate}`;
+		displayDate = `${date.getDate()} ${displayDate}`;
 	}
+	
 	if (granularity === DateGranularity.TIME) {
 		displayDate = `${date.getHours()}:${date.getMinutes()} ${displayDate}`;
 	}

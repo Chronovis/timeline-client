@@ -1,9 +1,17 @@
 import * as React from 'react';
-import IntervalOfTime from '../events/interval-of-time';
-import PointInTime from '../events/point-in-time';
-import {IKeyValues} from "../../reducers/index";
-import {IEvent} from "../../models/event";
-import {IRootEvent} from "../../models/root-event";
+import IntervalOfTime from '../../events/interval-of-time';
+import {IKeyValues} from "../../../reducers/index";
+import {IEvent} from "../../../models/event";
+import {IRootEvent} from "../../../models/root-event";
+import styled from "styled-components";
+import PointInTime from "./point-in-time";
+
+const Ul = styled.ul`
+	cursor: move;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+`;
 
 interface ISliderProps {
 	event: IEvent;
@@ -32,9 +40,7 @@ class Slider extends React.Component<ISliderProps, any> {
 		const { event } = this.props;
 
 		return (
-			<ul
-				className="slider"
-			>
+			<Ul>
 				{
 					event.isInterval() ?
 						<IntervalOfTime
@@ -48,7 +54,7 @@ class Slider extends React.Component<ISliderProps, any> {
 						  onHandleMouseDown={this.handleMouseDown}
 						/>
 				}
-			</ul>
+			</Ul>
 		);
 	}
 
@@ -66,9 +72,9 @@ class Slider extends React.Component<ISliderProps, any> {
 		// 	(ev.target.matches('.w-resize-handle')) ?
 		// 		'west-resize' :
 		// 		'east-resize';
-		console.log('h', handle)
+		// console.log('h', handle
 
-		document.body.classList.add('user-select-none', handle);
+	document.body.classList.add('user-select-none', handle);
 
 		this.setState({
 			dragging: true,
@@ -83,7 +89,7 @@ class Slider extends React.Component<ISliderProps, any> {
 			const { event, root } = this.props;
 			let from = event.from;
 			let to = event.to;
-
+			
 			if (this.state.handle === 'move') {
 				from = root.dateAtLeftPosition(left);
 				to = root.dateAtLeftPosition(left + event.width);

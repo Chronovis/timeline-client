@@ -1,13 +1,18 @@
 import * as React from 'react';
 import Input from 'hire-forms-input';
 import Checkbox from 'hire-forms-checkbox';
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+	position absolute;
+`;
 
 class FromForm extends React.Component<any, any> {
 	public render() {
 		const { event, toggleCertainty } = this.props;
 
 		return (
-			<div className="from">
+			<Wrapper>
 				{
 					!event.isInterval() ?
 						<Checkbox
@@ -31,7 +36,7 @@ class FromForm extends React.Component<any, any> {
 							null
 					}
 				</fieldset>
-			</div>
+			</Wrapper>
 		)
 	}
 }

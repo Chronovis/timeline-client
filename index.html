@@ -11,6 +11,58 @@
 			user-scalable="no">
 		<title>Timeline</title>
 		<link href="https://fonts.googleapis.com/css?family=Roboto:400,400i" rel="stylesheet">
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+			}
+
+			body.user-select-none {
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+			}
+
+			.add-event-wrapper > .hire-forms-input {
+				position: absolute;
+				top: calc(50% - 30px);
+				left: calc(50% - 160px);
+			}
+
+			.add-event-wrapper > .hire-forms-input input {
+				border: none;
+				font-size: 1.2em;
+				height: 60px;
+				outline: none;
+				padding: 1em;
+				width: 320px;
+			}
+
+			.hire-forms-checkbox {
+				cursor: pointer;
+			}
+
+            .hire-forms-checkbox.checked g.checkmark {
+                display: block;
+            }
+
+			.hire-forms-checkbox label {
+				cursor: pointer;
+			}
+
+			.hire-forms-checkbox svg {
+				width: 12px;
+			}
+
+			.hire-forms-checkbox svg g.box {
+				stroke: black;
+			}
+
+			.hire-forms-checkbox svg g.checkmark {
+				display: none;
+				fill: lightblue;
+			}
+		</style>
 		<script src="/node_modules/react/dist/react.js"></script>
 		<script src="/node_modules/react-dom/dist/react-dom.js"></script>
 		<script src="/build/bundle.js"></script>

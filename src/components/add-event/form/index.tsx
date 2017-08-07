@@ -3,13 +3,19 @@ import AutoCompleteList from 'hire-forms-autocomplete-list';
 import {getEventTypes} from '../../../actions/api';
 import ToForm from './to';
 import FromForm from './from';
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+	padding: 1%;
+	position: relative;
+`;
 
 class Form extends React.Component<any, any> {
 	public render() {
 		const { event, root, setEventKeyValues } = this.props;
 
 		return (
-			<div className="form">
+			<Wrapper>
 				<AutoCompleteList
 					async={getEventTypes}
 					onChange={(values) =>
@@ -30,7 +36,7 @@ class Form extends React.Component<any, any> {
 					setEventKeyValues={setEventKeyValues}
 					toggleCertainty={this.toggleCertainty}
 				/>
-			</div>
+			</Wrapper>
 		);
 	}
 

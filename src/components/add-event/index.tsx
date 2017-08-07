@@ -1,19 +1,34 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import history from '../../store/history';
 import NewEvent from './new-event';
 import { setEventKeyValues, resetEvent, saveEvent } from '../../actions/events';
 import Input from 'hire-forms-input';
 import {IKeyValues} from "../../reducers/index";
 import {IEvent} from "../../models/event";
 import {IRootEvent} from "../../models/root-event";
+import styled from "styled-components";
+import {timelineBlue} from "../../constants";
 
 interface IAddEventProps {
+	match: any;
 	newEvent: IEvent;
 	resetEvent: () => void;
 	root: IRootEvent;
 	saveEvent: () => void;
 	setEventKeyValues: (keyValues: IKeyValues) => void;
 }
+
+const Wrapper = styled.div`
+	background: ${timelineBlue};
+	box-sizing: border-box;
+	height: 30%;
+	margin: 0 auto;
+	padding: 1em 0;
+	position: absolute;
+	top: 35%;
+	width: 100%;
+`;
 
 class AddEvent extends React.Component<IAddEventProps, {}> {
 	public state = {
@@ -22,6 +37,7 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 
 	public render() {
 		const {
+			match,
 			newEvent,
 			resetEvent,
 			root,
@@ -29,10 +45,10 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 			setEventKeyValues,
 		} = this.props;
 
+		if (newEvent == null) return null;
+
 		return (
-			<div
-				className="add-event"
-			>
+			<Wrapper className="add-event-wrapper">
 				{
 					(newEvent.title === '') ?
 						<Input
@@ -49,7 +65,7 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 							setEventKeyValues={setEventKeyValues}
 						/>
 				}
-			</div>
+			</Wrapper>
 		);
 	}
 
@@ -62,6 +78,7 @@ class AddEvent extends React.Component<IAddEventProps, {}> {
 		}
 	};
 }
+
 
 export default connect(
 	state => ({

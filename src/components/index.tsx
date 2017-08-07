@@ -17,7 +17,6 @@ interface IEventsProps {
 
 class App extends React.Component<IEventsProps> {
 	public componentDidMount() {
-		console.log(this.props)
 		this.props.getEvents(this.props.match.params.slug);
 	}
 

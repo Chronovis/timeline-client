@@ -1,6 +1,6 @@
 import * as React from 'react';
 import IntervalOfTime from './interval-of-time';
-import PointInTime from './point-in-time';
+import PointInTime from './point-in-time/index';
 import styled from "styled-components";
 import {IEvent} from "../../models/event";
 import {IRootEvent} from "../../models/root-event";
@@ -11,7 +11,6 @@ const Events = styled.ul`
 	margin: 0 auto;
 	padding: 0;
 	position: relative;
-	width: 98%;
 `;
 
 interface IProps {

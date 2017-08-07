@@ -98,6 +98,7 @@ class BaseEvent implements IBaseEvent {
 
 		return DateUtils.format(date, granularity);
 	};
+
 	private setFrom(): void {
 		this.from = (this.dateRange != null) ?
 			this.dateRange.infiniteFrom ?
